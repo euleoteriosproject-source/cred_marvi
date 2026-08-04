@@ -1,0 +1,1 @@
+const safeKeys=new Set(["profile","step","location","result"]); export function trackEvent(name:string,payload:Record<string,string|number|boolean>={}){if(process.env.NODE_ENV==="development")console.info("[analytics]",name,Object.fromEntries(Object.entries(payload).filter(([k])=>safeKeys.has(k))))}

@@ -1,0 +1,1 @@
+import type {MetadataRoute} from "next"; export default function manifest():MetadataRoute.Manifest{return{name:"Marvi Finance",short_name:"Marvi",description:"Soluções financeiras para pessoas e empresas",start_url:"/",display:"standalone",background_color:"#F8F7F3",theme_color:"#0B1320",icons:[]}}

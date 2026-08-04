@@ -1,0 +1,21 @@
+
+> marvi-finance@1.0.0 dev
+> next dev -p 3100
+
+   ▲ Next.js 15.5.22
+   - Local:        http://localhost:3100
+   - Network:      http://192.168.2.124:3100
+
+ ✓ Starting...
+ ✓ Ready in 24.3s
+ ○ Compiling /api/leads ...
+ ✓ Compiled /api/leads in 22.1s (309 modules)
+[lead mock] {
+  leadId: '553261e0-23ad-4fae-a832-344e886f734a',
+  protocol: 'MV-2026-000001',
+  customerType: 'PERSON',
+  createdAt: '2026-08-04T01:04:29.483Z',
+  suspicious: false
+}
+ POST /api/leads 200 in 25482ms
+ ✓ Compiled in 739ms

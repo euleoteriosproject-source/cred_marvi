@@ -1,0 +1,3 @@
+import Link from "next/link";
+export function BrandMark(){return <span className="grid h-10 w-10 place-items-center rounded-xl bg-gold font-serif text-xl font-bold text-navy" aria-hidden="true">M</span>}
+export function Logo({light=false}:{light?:boolean}){return <Link href="/" className={`inline-flex items-center gap-3 font-semibold ${light?"text-white":"text-navy"}`} aria-label="Marvi Finance — início"><BrandMark/><span className="leading-tight">Marvi <span className="text-gold">Finance</span><small className="block text-[10px] font-medium uppercase tracking-[.2em] opacity-60">Grupo Marvi</small></span></Link>}

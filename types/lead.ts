@@ -1,0 +1,3 @@
+export type CustomerType = "PERSON" | "BUSINESS";
+export type LeadStatus = "NEW";
+export interface LeadData { customerType:CustomerType; need:string; otherNeed?:string; amountRange?:string; urgency:string; businessName?:string; cnpj?:string; businessSegment?:string; businessAgeRange?:string; monthlyRevenueRange?:string; employmentType?:string; monthlyIncomeRange?:string; fullName:string; phone:string; email?:string; city:string; state:string; serviceConsent:boolean; marketingConsent:boolean; privacyNoticeVersion:string; serviceConsentAt:string; source?:string; campaign?:string; medium?:string; content?:string; status:LeadStatus; honeypot?:string; startedAt?:number; }
