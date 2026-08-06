@@ -1,6 +1,6 @@
 # Marvi Finance — MVP
 
-Aplicação Next.js para captação e qualificação inicial de leads da Marvi Finance. Inclui landing page, fluxo conversacional PF/PJ, consentimento LGPD, API mockada, protocolo e páginas institucionais.
+Aplicação Next.js para apresentar as soluções da Marvi Finance, coletar as informações essenciais de cada produto e preparar um checklist para envio pelo WhatsApp. O fluxo funciona sem backend e diferencia automaticamente Pessoa Física e Pessoa Jurídica.
 
 ## Tecnologias
 
@@ -13,31 +13,30 @@ npm install
 npm run dev
 ```
 
-Validação:
+Validação completa:
 
 ```bash
-npm run test
-npm run lint
+npm run check
 npm run build
 ```
 
 ## Configuração
 
-Copie `.env.example` para `.env.local`. Os dados ausentes aparecem como placeholders explícitos, nunca como credenciais inventadas. Textos e marca ficam em `lib/site-config.ts`; perguntas estão no componente orientado por dados `components/lead-form/LeadWizard.tsx`.
+Copie `.env.example` para `.env.local` quando precisar sobrescrever valores locais. Nunca versione `.env.local`. Textos e marca ficam em `lib/site-config.ts`; perguntas estão em `components/lead-form/LeadWizard.tsx`.
 
 ## Fluxo e estrutura
 
 - `/`: landing completa e CTAs.
-- `/analise`: wizard adaptável para pessoa física e empresa; dados mantidos apenas em memória.
-- `/api/leads`: validação server-side estrita, honeypot, marcação de envio rápido, UUID e protocolo mockado.
-- `/sucesso`: confirmação e WhatsApp sem renda, faturamento ou outros dados sensíveis.
+- `/analise`: formulário adaptável por produto e perfil; dados mantidos em memória até a abertura do WhatsApp.
+- `/api/leads` e `/sucesso`: rotas legadas preservadas, mas fora do fluxo ativo do MVP.
 - `/privacidade`, `/termos`, `/contato`: páginas institucionais.
 
-Para trocar o mock por Supabase, preserve a validação de `app/api/leads/route.ts` e substitua somente o bloco posterior à normalização por uma implementação de repositório server-side. Nunca exponha a service role no navegador. Adicione rate limiting, auditoria, criptografia, retenção e gestão operacional de consentimento antes da produção.
+## Branches e publicação
 
-## Publicação
+- `develop`: desenvolvimento e homologação.
+- `master`: produção na Netlify.
 
-Na Vercel, importe o repositório, configure as variáveis e publique como projeto Next.js. Na Cloudflare, use a integração atual compatível com Next.js/OpenNext, configure as mesmas variáveis e teste a rota dinâmica da API. Configure domínio e `NEXT_PUBLIC_SITE_URL` antes de indexar.
+Não desenvolva diretamente em `master`. O processo completo de trabalho, homologação, release e hotfix está em [`docs/RELEASE.md`](docs/RELEASE.md).
 
 ## LGPD e segurança
 
@@ -47,18 +46,16 @@ Os textos legais são minutas e exigem revisão jurídica. Defina base legal, op
 
 - [ ] Validar produtos oferecidos
 - [ ] Revisar textos com a especialista
-- [ ] Inserir foto real
+- [ ] Avaliar uma foto profissional da especialista
 - [ ] Inserir canais oficiais
 - [ ] Configurar WhatsApp
 - [ ] Revisar Aviso de Privacidade
 - [ ] Revisar Termos de Uso
 - [ ] Confirmar regras das plataformas parceiras
-- [ ] Configurar persistência segura
-- [ ] Configurar domínio
+- [ ] Configurar domínio próprio
 - [ ] Configurar analytics
 - [ ] Testar mobile
 - [ ] Testar acessibilidade
 - [ ] Testar formulário completo
-- [ ] Testar protocolo
 - [ ] Testar erros
 - [ ] Testar mensagens
