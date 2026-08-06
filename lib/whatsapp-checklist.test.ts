@@ -32,4 +32,17 @@ describe("WhatsApp lead checklist",()=>{
     expect(message).toContain("• Valor a antecipar: R$ 80.000");
     expect(message).toContain("• Perfil: Pessoa jurídica");
   });
+
+  it("uses CNPJ in a business consortium checklist",()=>{
+    const message=leadChecklistMessage({solution:"CONSORTIUM",customerType:"BUSINESS",need:"Consórcio",consortiumCategory:"Pesados",requestedAmount:"R$ 500.000",documentType:"CNPJ",buyerDocument:"12.ABC.345/01DE-35",fullName:"Ana Silva",phone:"51999999999",email:"ana@example.com",status:"NEW"});
+    expect(message).toContain("• Perfil: Pessoa jurídica");
+    expect(message).toContain("• CNPJ: 12.ABC.345/01DE-35");
+    expect(message).not.toContain("• CPF:");
+  });
+
+  it.each([["VEHICLE_PERSON","PERSON","CPF"],["VEHICLE_BUSINESS","BUSINESS","CNPJ"]] as const)("uses the correct buyer document for %s",(solution,customerType,document)=>{
+    const message=leadChecklistMessage({solution,customerType,need:"Financiamento de veículo",vehicleCondition:"USED",vehicleValue:"R$ 80.000",vehicleYear:"2024",vehiclePlate:"ABC1D23",buyerDocument:"DOCUMENTO",fullName:"Cliente",phone:"51999999999",email:"cliente@example.com",status:"NEW"});
+    expect(message).toContain(`• Perfil: ${customerType==="PERSON"?"Pessoa física":"Pessoa jurídica"}`);
+    expect(message).toContain(`• ${document} do comprador: DOCUMENTO`);
+  });
 });

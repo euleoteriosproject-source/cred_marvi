@@ -7,6 +7,7 @@ import {Logo} from "@/components/brand/Logo";
 import {maskCnpj,maskCpf,maskMoney,maskPhone,maskRg,maskVehiclePlate,maskVehicleYear} from "@/lib/formatting";
 import {leadChecklistMessage,whatsappUrl} from "@/lib/whatsapp";
 import {trackEvent} from "@/lib/analytics";
+import {documentFor,resolveAnalysisEntry} from "@/lib/analysis-entry";
 import type {LeadData} from "@/types/lead";
 
 type Values=Partial<LeadData>;
@@ -74,14 +75,10 @@ function stepsFor(v:Values,productPreselected=false):Step[]{
 
 export function LeadWizard(){
   const search=useSearchParams(),profile=search.get("profile"),product=search.get("solution");
-  const initialProfile=profile==="PERSON"||profile==="BUSINESS"?profile:undefined;
-  const directSolution=solutions.find(([id])=>id===product)?.[0];
-  const inferredProfile=directSolution?(directSolution==="CREDIT_BUSINESS"||directSolution==="RECEIVABLES_DISCOUNT"||directSolution==="VEHICLE_BUSINESS"?"BUSINESS":"PERSON"):initialProfile;
-  const sharedInitialSolution=product==="VEHICLE"&&initialProfile?(initialProfile==="PERSON"?"VEHICLE_PERSON":"VEHICLE_BUSINESS"):product==="CONSORTIUM"&&initialProfile?"CONSORTIUM":undefined;
-  const initialSolution=sharedInitialSolution||(directSolution&&solutionsFor(inferredProfile).some(([id])=>id===directSolution)?directSolution:undefined);
+  const entry=resolveAnalysisEntry(product,profile),inferredProfile=entry.customerType,initialSolution=entry.solution;
   const productPreselected=Boolean(initialSolution||product==="VEHICLE"||product==="CONSORTIUM");
   const initialProduct=initialSolution?solutions.find(([id])=>id===initialSolution):undefined;
-  const[started,setStarted]=useState(false),[index,setIndex]=useState(0),[error,setError]=useState(""),[pendingProfile,setPendingProfile]=useState<Values["customerType"]>(),[values,setValues]=useState<Values>({customerType:inferredProfile,solution:initialSolution,documentType:inferredProfile?inferredProfile==="PERSON"?"CPF":"CNPJ":undefined,need:initialProduct?.[1]});
+  const[started,setStarted]=useState(false),[index,setIndex]=useState(0),[error,setError]=useState(""),[pendingProfile,setPendingProfile]=useState<Values["customerType"]>(),[values,setValues]=useState<Values>({customerType:inferredProfile,solution:initialSolution,documentType:documentFor(inferredProfile),need:initialProduct?.[1]});
   const startedAt=useRef(Date.now());
   const steps=useMemo(()=>stepsFor(values,productPreselected),[values,productPreselected]),step=steps[index]||steps[steps.length-1];
   const choosingSharedProduct=step.id==="profile"&&(product==="VEHICLE"||product==="CONSORTIUM");
