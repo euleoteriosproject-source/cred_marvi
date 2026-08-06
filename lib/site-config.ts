@@ -1,5 +1,5 @@
 export const siteConfig = {
-  brandName: "Marvi Finance", groupName: "Grupo Marvi", specialistName: "Marlise Paiva",
+  brandName: "Marvi Finance", technologyProviderName: "Grupo Atrium", specialistName: "Marlise Paiva",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5551999740402",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "marvifinance@outlook.com",
   instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "",
