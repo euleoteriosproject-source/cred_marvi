@@ -2,7 +2,8 @@ export const digits = (value:string) => value.replace(/\D/g, "");
 export function maskPhone(value:string){ const d=digits(value).slice(0,11); return d.length<=10?d.replace(/^(\d{0,2})(\d{0,4})(\d{0,4}).*/,(_,a,b,c)=>`${a?`(${a}${a.length===2?") ":""}`:""}${b}${c?`-${c}`:""}`):d.replace(/^(\d{2})(\d{5})(\d{0,4}).*/,"($1) $2-$3"); }
 export const normalizePhone = (value:string) => digits(value);
 export function maskCpf(value:string){return digits(value).slice(0,11).replace(/^(\d{3})(\d)/,"$1.$2").replace(/^(\d{3})\.(\d{3})(\d)/,"$1.$2.$3").replace(/(\d{3})(\d{1,2})$/,"$1-$2")}
-export function maskRg(value:string){const n=value.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,9);if(n.length<=2)return n;if(n.length<=5)return `${n.slice(0,2)}.${n.slice(2)}`;if(n.length<=8)return `${n.slice(0,2)}.${n.slice(2,5)}.${n.slice(5)}`;return `${n.slice(0,2)}.${n.slice(2,5)}.${n.slice(5,8)}-${n.slice(8)}`}
+export function normalizeRg(value:string){const raw=value.toUpperCase().replace(/[^0-9X]/g,"");const numeric=raw.replace(/X/g,"").slice(0,10);return raw.includes("X")?`${numeric.slice(0,8)}X`:numeric}
+export function maskRg(value:string){const n=normalizeRg(value);if(/^\d{10}$/.test(n))return `${n.slice(0,2)}.${n.slice(2,4)}.${n.slice(4,7)}.${n.slice(7)}`;const sp=n.slice(0,9);if(sp.length<=2)return sp;if(sp.length<=5)return `${sp.slice(0,2)}.${sp.slice(2)}`;if(sp.length<=8)return `${sp.slice(0,2)}.${sp.slice(2,5)}.${sp.slice(5)}`;return `${sp.slice(0,2)}.${sp.slice(2,5)}.${sp.slice(5,8)}-${sp.slice(8)}`}
 export function maskMoney(value:string){const n=digits(value);if(!n)return "";return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0}).format(Number(n))}
 export function maskVehicleYear(value:string){return digits(value).slice(0,4)}
 export function maskVehiclePlate(value:string){const n=value.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,7);return /^[A-Z]{3}\d{1,4}$/.test(n)?`${n.slice(0,3)}-${n.slice(3)}`:n}

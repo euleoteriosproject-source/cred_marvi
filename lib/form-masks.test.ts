@@ -7,6 +7,11 @@ describe("form field masks",()=>{
     expect(maskRg("12345678x")).toBe("12.345.678-X");
   });
 
+  it("accepts and formats the ten numeric digits used in Minas Gerais",()=>{
+    expect(maskRg("3130768132")).toBe("31.30.768.132");
+    expect(maskRg("31.30.768.132")).toBe("31.30.768.132");
+  });
+
   it("formats old and Mercosul vehicle plates",()=>{
     expect(maskVehiclePlate("abc1234")).toBe("ABC-1234");
     expect(maskVehiclePlate("abc1d23")).toBe("ABC1D23");
