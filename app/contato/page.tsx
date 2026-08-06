@@ -1,16 +1,15 @@
-import {Clock,Instagram,Linkedin,Mail,MessageCircle} from "lucide-react";
+import type {Metadata} from "next";
+import {Clock,Mail,MessageCircle} from "lucide-react";
 import {Header} from "@/components/layout/Header";
 import {Footer} from "@/components/layout/Footer";
 import {Container} from "@/components/common/Container";
 import {siteConfig} from "@/lib/site-config";
 import {siteContactMessage,whatsappUrl} from "@/lib/whatsapp";
 
-export const metadata={title:"Contato"};
+export const metadata:Metadata={title:"Contato",description:"Fale com a Marvi Finance por WhatsApp ou e-mail para atendimento financeiro especializado.",alternates:{canonical:"/contato"}};
 const items=[
   {Icon:MessageCircle,title:"WhatsApp",text:"(51) 99974-0402",href:whatsappUrl(siteContactMessage())},
-  {Icon:Mail,title:"E-mail",text:siteConfig.email||"Disponível em breve",href:siteConfig.email?`mailto:${siteConfig.email}`:undefined},
-  {Icon:Instagram,title:"Instagram",text:"Perfil oficial em breve",href:siteConfig.instagramUrl||undefined},
-  {Icon:Linkedin,title:"LinkedIn",text:"Perfil oficial em breve",href:siteConfig.linkedinUrl||undefined},
+  {Icon:Mail,title:"E-mail",text:siteConfig.email,href:`mailto:${siteConfig.email}`},
   {Icon:Clock,title:"Disponibilidade",text:siteConfig.serviceHours},
 ];
 
