@@ -14,6 +14,7 @@ type Values=Partial<LeadData>;
 type Step={id:string;title:string;help?:string;kind:"choice"|"multi"|"text"|"identity"|"contact";field?:keyof Values;options?:string[];optional?:boolean};
 const solutions=[
   ["LOAN_PERSON","Empréstimo","Análise de valor, renda e garantias"],
+  ["REAL_ESTATE_FINANCING","Financiamento de imóvel","Para aquisição de imóvel por pessoa física"],
   ["INSS_PORT_REFIN","INSS — Portabilidade ou refinanciamento","Para benefício com contrato em andamento"],
   ["WORKER_CREDIT","Crédito do trabalhador","Crédito voltado ao trabalhador elegível"],
   ["INSS_NEW","INSS Novo","Nova contratação para beneficiários do INSS"],
@@ -21,14 +22,13 @@ const solutions=[
   ["INSS_CARDS","INSS Cartões","Cartões destinados a beneficiários do INSS"],
   ["PUBLIC_AGREEMENTS","Convênios públicos","Crédito para servidores de órgãos conveniados"],
   ["CREDIT_BUSINESS","Capital de giro","Crédito para apoiar o caixa da empresa"],
-  ["RECEIVABLES_DISCOUNT","Desconto de duplicatas","Antecipação de valores a receber"],
   ["VEHICLE_PERSON","Financiamento de veículo","Veículo usado ou zero km"],
   ["VEHICLE_BUSINESS","Financiamento de veículo","Veículo usado ou zero km"],
   ["CONSORTIUM","Consórcio","Serviços, imóveis, veículos ou pesados"],
 ] as const;
 const guaranteePerson=["Terreno","Imóvel","Veículo","Não possuo garantia"];
 const guaranteeBusiness=["Terreno","Imóvel","Veículo","Duplicatas","Não possuo garantia"];
-const solutionsFor=(profile:Values["customerType"])=>solutions.filter(([id])=>profile==="PERSON"?["LOAN_PERSON","INSS_PORT_REFIN","WORKER_CREDIT","INSS_NEW","FGTS_BIRTHDAY","INSS_CARDS","PUBLIC_AGREEMENTS","VEHICLE_PERSON","CONSORTIUM"].includes(id):["CREDIT_BUSINESS","RECEIVABLES_DISCOUNT","VEHICLE_BUSINESS","CONSORTIUM"].includes(id));
+const solutionsFor=(profile:Values["customerType"])=>solutions.filter(([id])=>profile==="PERSON"?["LOAN_PERSON","REAL_ESTATE_FINANCING","INSS_PORT_REFIN","WORKER_CREDIT","INSS_NEW","FGTS_BIRTHDAY","INSS_CARDS","PUBLIC_AGREEMENTS","VEHICLE_PERSON","CONSORTIUM"].includes(id):["CREDIT_BUSINESS","VEHICLE_BUSINESS","CONSORTIUM"].includes(id));
 
 function stepsFor(v:Values,productPreselected=false):Step[]{
   if(!v.customerType)return[{id:"profile",title:"A análise é para você ou para sua empresa?",help:"Essa escolha define os produtos disponíveis nas próximas etapas.",kind:"choice",field:"customerType",options:["PERSON","BUSINESS"]}];
@@ -41,6 +41,11 @@ function stepsFor(v:Values,productPreselected=false):Step[]{
     {id:"guarantees",title:"Quais garantias você pode oferecer?",help:"Selecione todas que se aplicam.",kind:"multi",field:"guarantees",options:guaranteePerson},
     {id:"income",title:"Qual é a sua renda mensal aproximada?",kind:"text",field:"income"},
     {id:"identity",title:"Informe seus dados de identificação.",help:"Digite apenas os números dos documentos. Não envie fotos nesta etapa.",kind:"identity"},contact];
+  if(v.solution==="REAL_ESTATE_FINANCING")return[...start,
+    {id:"propertyValue",title:"Qual é o valor aproximado do imóvel?",kind:"text",field:"propertyValue"},
+    {id:"amount",title:"Qual valor você pretende financiar?",kind:"text",field:"requestedAmount"},
+    {id:"income",title:"Qual é a sua renda mensal aproximada?",kind:"text",field:"income"},
+    {id:"identity",title:"Informe seus dados de identificação.",help:"Digite apenas os números dos documentos. Não envie fotos nesta etapa.",kind:"identity"},contact];
   if(v.solution==="CREDIT_BUSINESS")return[...start,
     {id:"amount",title:"Qual valor de capital de giro sua empresa precisa?",kind:"text",field:"requestedAmount"},
     {id:"company",title:"Qual é o nome da empresa?",kind:"text",field:"businessName"},
@@ -48,12 +53,6 @@ function stepsFor(v:Values,productPreselected=false):Step[]{
     {id:"guarantees",title:"Quais garantias a empresa pode oferecer?",help:"Selecione todas que se aplicam.",kind:"multi",field:"guarantees",options:guaranteeBusiness},
     {id:"revenue",title:"Qual é o faturamento mensal aproximado?",kind:"text",field:"monthlyRevenueRange"},
     {id:"identity",title:"Dados do sócio administrador.",help:"Esses dados ajudam a preparar a análise inicial.",kind:"identity"},contact];
-  if(v.solution==="RECEIVABLES_DISCOUNT")return[...start,
-    {id:"amount",title:"Qual valor você pretende antecipar?",kind:"text",field:"requestedAmount"},
-    {id:"company",title:"Qual é o nome da empresa?",kind:"text",field:"businessName"},
-    {id:"cnpj",title:"Informe o CNPJ da empresa.",help:"Aceitamos CNPJ numérico e alfanumérico.",kind:"text",field:"cnpj"},
-    {id:"revenue",title:"Qual é o faturamento mensal aproximado?",kind:"text",field:"monthlyRevenueRange"},
-    {id:"identity",title:"Dados do sócio administrador.",help:"Esses dados ajudam a preparar o atendimento inicial.",kind:"identity"},contact];
   if(["INSS_PORT_REFIN","WORKER_CREDIT","INSS_NEW","FGTS_BIRTHDAY","INSS_CARDS","PUBLIC_AGREEMENTS"].includes(String(v.solution)))return[...start,
     {id:"amount",title:"Qual valor você pretende contratar ou simular?",kind:"text",field:"requestedAmount"},
     {id:"identity",title:"Informe seus dados de identificação.",help:"Digite apenas os números dos documentos. Não envie fotos nesta etapa.",kind:"identity"},contact];
@@ -90,7 +89,7 @@ export function LeadWizard(){
     if(step.kind==="multi"&&!(values.guarantees?.length))return setError("Selecione pelo menos uma opção."),false;
     if(step.kind==="text"&&step.field&&String(values[step.field]||"").trim().length<2)return setError("Preencha esta informação para continuar."),false;
     if(step.id==="identity"){
-      const businessIdentity=values.solution==="CREDIT_BUSINESS"||values.solution==="RECEIVABLES_DISCOUNT";
+      const businessIdentity=values.solution==="CREDIT_BUSINESS";
       if(businessIdentity&&String(values.administratorName||"").trim().length<3)return setError("Informe o nome do sócio administrador."),false;
       const cpf=businessIdentity?values.administratorCpf:values.cpf,rg=businessIdentity?values.administratorRg:values.rg;
       if(String(rg||"").replace(/\W/g,"").length<5)return setError("Informe o RG."),false;
@@ -98,7 +97,7 @@ export function LeadWizard(){
     }
     if(step.id==="contact"){
       if(String(values.fullName||"").trim().length<3)return setError("Informe o nome para contato."),false;
-      const needsAddress=["LOAN_PERSON","VEHICLE_PERSON","VEHICLE_BUSINESS"].includes(String(values.solution));
+      const needsAddress=["LOAN_PERSON","REAL_ESTATE_FINANCING","VEHICLE_PERSON","VEHICLE_BUSINESS"].includes(String(values.solution));
       if(needsAddress&&String(values.address||"").trim().length<8)return setError("Informe o endereço completo."),false;
       if(String(values.phone||"").replace(/\D/g,"").length<10)return setError("Informe um telefone com DDD."),false;
       if(!values.email||!/^\S+@\S+\.\S+$/.test(values.email))return setError("Informe um e-mail válido."),false;
@@ -130,9 +129,9 @@ function StepContent({step,values,update,setSolution}:{step:Step;values:Values;u
   if(step.id==="solution")return <div><div className="mb-5 flex items-center justify-between rounded-xl bg-cream px-4 py-3 text-sm"><span className="flex items-center gap-2 font-bold">{values.customerType==="PERSON"?<UserRound size={17}/>:<Building2 size={17}/>} {values.customerType==="PERSON"?"Pessoa física":"Pessoa jurídica"}</span><button type="button" className="font-bold text-[#8b6a16] underline" onClick={()=>{update("solution",undefined);update("customerType",undefined)}}>Trocar perfil</button></div><div className="grid gap-3">{solutionsFor(values.customerType).map(([value,label,help])=><button key={value} type="button" onClick={()=>setSolution(value)} className={`option ${values.solution===value?"option-selected":""}`}><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-gold/40 bg-gold/10 text-sm font-bold text-[#8b6a16]">{values.solution===value?<Check size={17}/> : "+"}</span><span><strong className="block">{label}</strong><small className="mt-1 block font-medium text-muted">{help}</small></span></button>)}</div></div>;
   if(step.kind==="choice")return <div className="grid gap-3 sm:grid-cols-2">{step.options?.map(option=><button type="button" key={option} onClick={()=>update(step.field!,option)} className={`option ${values[step.field!]===option?"option-selected":""}`}><span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border">{values[step.field!]===option&&<Check size={16}/>}</span>{option==="USED"?"Usado":option==="NEW"?"Zero km":option}</button>)}</div>;
   if(step.kind==="multi")return <div className="grid gap-3 sm:grid-cols-2">{step.options?.map(option=>{const checked=values.guarantees?.includes(option);return <button type="button" key={option} onClick={()=>{const current=values.guarantees||[];const exclusive=option.startsWith("Não possuo");update("guarantees",checked?current.filter(x=>x!==option):exclusive?[option]:[...current.filter(x=>!x.startsWith("Não possuo")),option])}} className={`option ${checked?"option-selected":""}`}><span className="grid h-7 w-7 shrink-0 place-items-center rounded-md border">{checked&&<Check size={16}/>}</span>{option}</button>})}</div>;
-  if(step.kind==="identity"){const businessIdentity=values.solution==="CREDIT_BUSINESS"||values.solution==="RECEIVABLES_DISCOUNT";return <div className="grid gap-5 sm:grid-cols-2">{businessIdentity&&<Field label="Nome do sócio administrador *" value={values.administratorName} onChange={v=>update("administratorName",v)} wide/>}<Field label="RG *" value={businessIdentity?values.administratorRg:values.rg} onChange={v=>update(businessIdentity?"administratorRg":"rg",maskRg(v))} placeholder="00.000.000-0"/><Field label="CPF *" value={businessIdentity?values.administratorCpf:values.cpf} onChange={v=>update(businessIdentity?"administratorCpf":"cpf",maskCpf(v))} placeholder="000.000.000-00" inputMode="numeric"/></div>}
-  if(step.kind==="contact"){const needsAddress=["LOAN_PERSON","VEHICLE_PERSON","VEHICLE_BUSINESS"].includes(String(values.solution));return <div className="grid gap-5 sm:grid-cols-2"><Field label="Nome para contato *" value={values.fullName} onChange={v=>update("fullName",v)} wide/>{needsAddress&&<Field label="Endereço completo *" value={values.address} onChange={v=>update("address",v)} placeholder="Rua, número, bairro, cidade e estado" wide/>}<Field label="Telefone / WhatsApp *" value={values.phone} onChange={v=>update("phone",maskPhone(v))} placeholder="(00) 00000-0000" inputMode="tel"/><Field label="E-mail *" value={values.email} onChange={v=>update("email",v)} placeholder="voce@email.com" type="email"/></div>}
-  const money=["requestedAmount","income","monthlyRevenueRange","vehicleValue","invoiceValue"].includes(String(step.field));
+  if(step.kind==="identity"){const businessIdentity=values.solution==="CREDIT_BUSINESS";return <div className="grid gap-5 sm:grid-cols-2">{businessIdentity&&<Field label="Nome do sócio administrador *" value={values.administratorName} onChange={v=>update("administratorName",v)} wide/>}<Field label="RG *" value={businessIdentity?values.administratorRg:values.rg} onChange={v=>update(businessIdentity?"administratorRg":"rg",maskRg(v))} placeholder="00.000.000-0"/><Field label="CPF *" value={businessIdentity?values.administratorCpf:values.cpf} onChange={v=>update(businessIdentity?"administratorCpf":"cpf",maskCpf(v))} placeholder="000.000.000-00" inputMode="numeric"/></div>}
+  if(step.kind==="contact"){const needsAddress=["LOAN_PERSON","REAL_ESTATE_FINANCING","VEHICLE_PERSON","VEHICLE_BUSINESS"].includes(String(values.solution));return <div className="grid gap-5 sm:grid-cols-2"><Field label="Nome para contato *" value={values.fullName} onChange={v=>update("fullName",v)} wide/>{needsAddress&&<Field label="Endereço completo *" value={values.address} onChange={v=>update("address",v)} placeholder="Rua, número, bairro, cidade e estado" wide/>}<Field label="Telefone / WhatsApp *" value={values.phone} onChange={v=>update("phone",maskPhone(v))} placeholder="(00) 00000-0000" inputMode="tel"/><Field label="E-mail *" value={values.email} onChange={v=>update("email",v)} placeholder="voce@email.com" type="email"/></div>}
+  const money=["requestedAmount","propertyValue","income","monthlyRevenueRange","vehicleValue","invoiceValue"].includes(String(step.field));
   const cnpj=step.field==="cnpj"||(step.field==="buyerDocument"&&(values.solution==="VEHICLE_BUSINESS"||values.documentType==="CNPJ"));
   const cpf=step.field==="buyerDocument"&&!cnpj;
   return <Field label="Sua resposta *" value={String(values[step.field!]||"")} onChange={v=>update(step.field!,money?maskMoney(v):cnpj?maskCnpj(v):cpf?maskCpf(v):step.field==="vehiclePlate"?maskVehiclePlate(v):step.field==="vehicleYear"?maskVehicleYear(v):v)} placeholder={money?"R$ 0":cnpj?"00.000.000/0000-00":cpf?"000.000.000-00":step.field==="vehiclePlate"?"ABC1D23 ou ABC-1234":step.field==="vehicleYear"?"2024":"Digite aqui"} inputMode={money||cpf||step.field==="vehicleYear"?"numeric":"text"}/>;

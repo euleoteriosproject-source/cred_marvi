@@ -26,11 +26,12 @@ describe("WhatsApp lead checklist",()=>{
     expect(message).toContain("• Perfil: Pessoa física");
   });
 
-  it("creates a receivables discount checklist",()=>{
-    const message=leadChecklistMessage({solution:"RECEIVABLES_DISCOUNT",customerType:"BUSINESS",need:"Desconto de duplicatas",requestedAmount:"R$ 80.000",businessName:"Empresa Teste",cnpj:"12.ABC.345/01DE-35",monthlyRevenueRange:"R$ 150.000",administratorName:"Ana Silva",administratorRg:"12.345.678-9",administratorCpf:"000.000.000-00",fullName:"Ana Silva",phone:"51999999999",email:"ana@example.com",status:"NEW"});
-    expect(message).toContain("• Solução: Desconto de duplicatas");
-    expect(message).toContain("• Valor a antecipar: R$ 80.000");
-    expect(message).toContain("• Perfil: Pessoa jurídica");
+  it("creates a real estate financing checklist for a person",()=>{
+    const message=leadChecklistMessage({solution:"REAL_ESTATE_FINANCING",customerType:"PERSON",need:"Financiamento de imóvel",propertyValue:"R$ 500.000",requestedAmount:"R$ 350.000",income:"R$ 15.000",rg:"12.345.678-9",cpf:"000.000.000-00",fullName:"Maria Silva",phone:"51999999999",email:"maria@example.com",address:"Blumenau / SC",status:"NEW"});
+    expect(message).toContain("• Solução: Financiamento de imóvel");
+    expect(message).toContain("• Valor aproximado do imóvel: R$ 500.000");
+    expect(message).toContain("• Valor a financiar: R$ 350.000");
+    expect(message).toContain("• Perfil: Pessoa física");
   });
 
   it("uses CNPJ in a business consortium checklist",()=>{

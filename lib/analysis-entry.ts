@@ -2,8 +2,8 @@ import type {CustomerType,LeadData} from "@/types/lead";
 
 export type Solution=NonNullable<LeadData["solution"]>;
 
-const personSolutions:Solution[]=["LOAN_PERSON","INSS_PORT_REFIN","WORKER_CREDIT","INSS_NEW","FGTS_BIRTHDAY","INSS_CARDS","PUBLIC_AGREEMENTS"];
-const businessSolutions:Solution[]=["CREDIT_BUSINESS","RECEIVABLES_DISCOUNT"];
+const personSolutions:Solution[]=["LOAN_PERSON","REAL_ESTATE_FINANCING","INSS_PORT_REFIN","WORKER_CREDIT","INSS_NEW","FGTS_BIRTHDAY","INSS_CARDS","PUBLIC_AGREEMENTS"];
+const businessSolutions:Solution[]=["CREDIT_BUSINESS"];
 
 export function resolveAnalysisEntry(product:string|null,profile:string|null):{customerType?:CustomerType;solution?:Solution}{
   const selectedProfile=profile==="PERSON"||profile==="BUSINESS"?profile:undefined;
