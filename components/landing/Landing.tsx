@@ -1,35 +1,455 @@
 import Image from "next/image";
 import Link from "next/link";
-import {ArrowRight,Award,Building2,Check,ChevronDown,Handshake,Landmark,LockKeyhole,MessageCircle,Search,Users,UserRound} from "lucide-react";
-import {Container} from "@/components/common/Container";
-import {WhatsAppButton} from "@/components/common/WhatsAppButton";
+import {
+  ArrowRight,
+  Award,
+  Building2,
+  Check,
+  ChevronDown,
+  Handshake,
+  Landmark,
+  LockKeyhole,
+  MessageCircle,
+  Search,
+  Users,
+  UserRound,
+} from "lucide-react";
+import { Container } from "@/components/common/Container";
+import { WhatsAppButton } from "@/components/common/WhatsAppButton";
 
-const benefits=["Atendimento humano e personalizado","Formulário direcionado ao seu perfil","Envio direto pelo WhatsApp","Informações tratadas com transparência"];
-const products={"Para pessoa física":[
-  ["Empréstimo com garantia","LOAN_PERSON","Crédito pessoal com análise de renda, valor solicitado e garantia disponível."],
-  ["Financiamento de imóvel","REAL_ESTATE_FINANCING","Para avaliar a aquisição de um imóvel conforme o valor pretendido e a renda familiar."],
-  ["INSS — Portabilidade ou refinanciamento","INSS_PORT_REFIN","Para avaliar a transferência ou o refinanciamento de um contrato consignado existente."],
-  ["Crédito do trabalhador","WORKER_CREDIT","Crédito voltado a trabalhadores elegíveis, conforme as condições da instituição responsável."],
-  ["INSS Novo","INSS_NEW","Nova contratação de crédito consignado para beneficiários elegíveis do INSS."],
-  ["FGTS — Saque-Aniversário","FGTS_BIRTHDAY","Antecipação de parcelas futuras do Saque-Aniversário, sujeita à análise e disponibilidade."],
-  ["INSS Cartões","INSS_CARDS","Opções de cartão destinadas a beneficiários elegíveis do INSS."],
-  ["Convênios públicos","PUBLIC_AGREEMENTS","Crédito para servidores de órgãos públicos que possuam convênio disponível."],
-  ["Financiamento de veículo","VEHICLE","Para compra de veículo usado ou zero km, para pessoa física ou empresa."],
-  ["Consórcio","CONSORTIUM","Planejamento para adquirir serviços, imóveis, veículos ou pesados por meio de parcelas e contemplação."],
-],"Para empresas":[
-  ["Capital de giro","CREDIT_BUSINESS","Crédito para apoiar o caixa, as compras ou os investimentos da empresa."],
-  ["Financiamento de veículo","VEHICLE","Para aquisição de veículo usado ou zero km em nome da empresa."],
-  ["Consórcio","CONSORTIUM","Planejamento para aquisição de serviços, imóveis, veículos ou pesados pela empresa."],
-]} as const;
-const faqs=[["Quais produtos são atendidos?","Para pessoas físicas: empréstimo, financiamento de imóvel, produtos INSS, Crédito do Trabalhador, FGTS Saque-Aniversário, Convênios Públicos, financiamento de veículo e consórcio. Para empresas: capital de giro, financiamento de veículo e consórcio."],["A análise garante aprovação?","Não. O formulário organiza as informações para o atendimento inicial. Aprovação, taxas, limites e prazos dependem da análise e dos critérios das instituições responsáveis."],["Quanto tempo leva?","O formulário fica disponível 24 horas e leva poucos minutos. As solicitações são analisadas e o atendimento é realizado em horário comercial."],["Como as informações são enviadas?","Ao final, o WhatsApp abre com um checklist preenchido. Você pode revisar e editar a mensagem antes de enviá-la."],["Preciso enviar documentos?","O formulário não solicita fotos de documentos. Nesta etapa são pedidos apenas os dados necessários ao produto escolhido."],["Meus dados estão seguros?","As informações são usadas para preparar a análise e o atendimento, conforme o Aviso de Privacidade. Nunca informe senhas, códigos bancários ou dados completos de cartão."],["A Marvi Finance é um banco?","Não. A Marvi Finance presta atendimento e intermedia soluções oferecidas por instituições e plataformas parceiras, conforme cada caso."]];
+const benefits = [
+  "Atendimento humano e personalizado",
+  "Formulário direcionado ao seu perfil",
+  "Envio direto pelo WhatsApp",
+  "Informações tratadas com transparência",
+];
+const products = {
+  "Para pessoa física": [
+    [
+      "Empréstimo com garantia",
+      "LOAN_PERSON",
+      "Crédito pessoal com análise de renda, valor solicitado e garantia disponível.",
+    ],
+    [
+      "Financiamento de imóvel",
+      "REAL_ESTATE_FINANCING",
+      "Para avaliar a aquisição de um imóvel conforme o valor pretendido e a renda familiar.",
+    ],
+    [
+      "INSS — Portabilidade ou refinanciamento",
+      "INSS_PORT_REFIN",
+      "Para avaliar a transferência ou o refinanciamento de um contrato consignado existente.",
+    ],
+    [
+      "Crédito do trabalhador",
+      "WORKER_CREDIT",
+      "Crédito voltado a trabalhadores elegíveis, conforme as condições da instituição responsável.",
+    ],
+    [
+      "INSS Novo",
+      "INSS_NEW",
+      "Nova contratação de crédito consignado para beneficiários elegíveis do INSS.",
+    ],
+    [
+      "FGTS — Saque-Aniversário",
+      "FGTS_BIRTHDAY",
+      "Antecipação de parcelas futuras do Saque-Aniversário, sujeita à análise e disponibilidade.",
+    ],
+    [
+      "INSS Cartões",
+      "INSS_CARDS",
+      "Opções de cartão destinadas a beneficiários elegíveis do INSS.",
+    ],
+    [
+      "Convênios públicos",
+      "PUBLIC_AGREEMENTS",
+      "Crédito para servidores de órgãos públicos que possuam convênio disponível.",
+    ],
+    [
+      "Financiamento de veículo",
+      "VEHICLE",
+      "Para compra de veículo usado ou zero km, para pessoa física ou empresa.",
+    ],
+    [
+      "Consórcio",
+      "CONSORTIUM",
+      "Planejamento para adquirir serviços, imóveis, veículos ou pesados por meio de parcelas e contemplação.",
+    ],
+  ],
+  "Para empresas": [
+    [
+      "Capital de giro",
+      "CREDIT_BUSINESS",
+      "Crédito para apoiar o caixa, as compras ou os investimentos da empresa.",
+    ],
+    [
+      "Financiamento de veículo",
+      "VEHICLE",
+      "Para aquisição de veículo usado ou zero km em nome da empresa.",
+    ],
+    [
+      "Consórcio",
+      "CONSORTIUM",
+      "Planejamento para aquisição de serviços, imóveis, veículos ou pesados pela empresa.",
+    ],
+  ],
+} as const;
+const faqs = [
+  [
+    "Quais produtos são atendidos?",
+    "Para pessoas físicas: empréstimo, financiamento de imóvel, produtos INSS, Crédito do Trabalhador, FGTS Saque-Aniversário, Convênios Públicos, financiamento de veículo e consórcio. Para empresas: capital de giro, financiamento de veículo e consórcio.",
+  ],
+  [
+    "A análise garante aprovação?",
+    "Não. O formulário organiza as informações para o atendimento inicial. Aprovação, taxas, limites e prazos dependem da análise e dos critérios das instituições responsáveis.",
+  ],
+  [
+    "Quanto tempo leva?",
+    "O formulário fica disponível 24 horas e leva poucos minutos. As solicitações são analisadas e o atendimento é realizado em horário comercial.",
+  ],
+  [
+    "Como as informações são enviadas?",
+    "Ao final, o WhatsApp abre com um checklist preenchido. Você pode revisar e editar a mensagem antes de enviá-la.",
+  ],
+  [
+    "Preciso enviar documentos?",
+    "O formulário não solicita fotos de documentos. Nesta etapa são pedidos apenas os dados necessários ao produto escolhido.",
+  ],
+  [
+    "Meus dados estão seguros?",
+    "As informações são usadas para preparar a análise e o atendimento, conforme o Aviso de Privacidade. Nunca informe senhas, códigos bancários ou dados completos de cartão.",
+  ],
+  [
+    "A Cred Marvi é um banco?",
+    "Não. A Cred Marvi presta atendimento e intermedia soluções oferecidas por instituições e plataformas parceiras, conforme cada caso.",
+  ],
+];
 
-export function Landing(){return <main>
-<section className="relative overflow-hidden bg-navy py-16 text-white sm:py-24"><div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_25%,rgba(216,182,90,.15),transparent_35%),linear-gradient(135deg,transparent,rgba(255,255,255,.025))]"/><Container className="relative"><div className="max-w-4xl"><p className="eyebrow text-gold">Atendimento financeiro especializado</p><h1 className="mt-5 font-serif text-4xl font-semibold leading-[1.08] sm:text-6xl">Empréstimos, crédito para empresas, financiamento de imóveis e veículos e consórcios.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">Escolha se a análise é para você ou para sua empresa. A partir disso, mostramos somente os produtos e as perguntas adequadas ao seu perfil.</p><div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-2"><Link href="/analise?profile=PERSON" className="option border-gold/30 bg-white/5 text-white hover:bg-white/10"><UserRound className="text-gold"/><span><strong className="block">Para mim</strong><small className="mt-1 block text-slate-300">Pessoa física</small></span><ArrowRight className="ml-auto text-gold" size={18}/></Link><Link href="/analise?profile=BUSINESS" className="option border-gold/30 bg-white/5 text-white hover:bg-white/10"><Building2 className="text-gold"/><span><strong className="block">Para minha empresa</strong><small className="mt-1 block text-slate-300">Pessoa jurídica</small></span><ArrowRight className="ml-auto text-gold" size={18}/></Link></div><ul className="mt-8 grid gap-3 sm:grid-cols-2">{benefits.map(x=><li key={x} className="flex items-center gap-2 text-sm font-semibold text-slate-200"><Check className="text-gold" size={18}/>{x}</li>)}</ul><div className="mt-9"><WhatsAppButton className="border-gold/30 bg-transparent text-white hover:bg-white/5"/></div></div></Container></section>
-<section className="border-y border-gold/15 bg-[#fbfaf6]"><Container className="grid grid-cols-2 gap-6 py-7 text-center text-xs font-bold text-muted md:grid-cols-4"><p>Atendimento personalizado</p><p>Formulário disponível 24h</p><p>Pessoa física e empresa</p><p>Envio direto pelo WhatsApp</p></Container></section>
-<section id="solucoes" className="py-20 sm:py-28"><Container><p className="eyebrow">Conheça as soluções</p><h2 className="section-title">Entenda cada opção e escolha com segurança.</h2><p className="mt-5 max-w-2xl text-muted">Veja uma explicação rápida de cada produto. Ao escolher, você segue direto para as perguntas necessárias — e, se a solução atender pessoas e empresas, usaremos o perfil da lista escolhida.</p><div className="mt-12 grid gap-6 md:grid-cols-2">{Object.entries(products).map(([title,items],i)=>{const profile=i?"BUSINESS":"PERSON";return <article key={title} className="rounded-3xl border border-[#e6dfcc] bg-white p-7 shadow-[0_18px_60px_rgba(9,12,16,.07)] sm:p-9"><span className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold">{i?<Building2/>:<UserRound/>}</span><h3 className="mt-6 font-serif text-3xl font-semibold">{title}</h3><div className="mt-5 grid gap-3">{items.map(([label,solution,description])=><Link key={label} href={`/analise?solution=${solution}&profile=${profile}`} className="group flex items-start gap-3 rounded-xl border border-[#e6dfcc] px-4 py-4 text-navy transition hover:border-gold hover:bg-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"><Check size={17} className="mt-0.5 shrink-0 text-[#9a7611]"/><span><strong className="block text-sm">{label}</strong><small className="mt-1.5 block font-medium leading-5 text-muted">{description}</small></span><ArrowRight size={16} className="ml-auto mt-0.5 shrink-0 text-[#9a7611] transition group-hover:translate-x-1"/></Link>)}</div><Link className="mt-7 inline-flex items-center gap-2 font-bold" href={`/analise?profile=${profile}`}>Ver todas deste perfil <ArrowRight size={17}/></Link></article>})}</div><p className="mt-6 text-xs leading-5 text-muted">A disponibilidade, aprovação e condições dependem da análise e das instituições responsáveis.</p></Container></section>
-<section id="como-funciona" className="bg-navy py-20 text-white sm:py-28"><Container><p className="eyebrow text-gold">Como funciona</p><h2 className="mt-3 font-serif text-3xl font-semibold sm:text-5xl">Um fluxo curto e direcionado.</h2><div className="mt-12 grid gap-5 md:grid-cols-4">{[[UserRound,"Escolha PF ou PJ"],[Search,"Selecione o produto"],[MessageCircle,"Responda o essencial"],[Handshake,"Envie pelo WhatsApp"]].map(([Icon,title],i)=>{const I=Icon as typeof Search;return <article className="rounded-2xl border border-white/10 bg-white/5 p-6" key={String(title)}><span className="text-xs font-bold text-gold">0{i+1}</span><I className="mt-8 text-gold"/><h3 className="mt-4 font-bold">{String(title)}</h3><p className="mt-2 text-sm leading-6 text-slate-300">Você vê apenas as etapas necessárias para o perfil e o produto escolhidos.</p></article>})}</div></Container></section>
-<section id="especialista" className="py-20 sm:py-28"><Container className="grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr]"><div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-gold/25 bg-navy shadow-premium"><div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(216,182,90,.12),transparent_55%)]"/><Image src="/brand/marvi-finance-logo.png" alt="Marvi Finance" fill sizes="(min-width:1024px) 45vw, 100vw" className="object-contain p-8 opacity-90 mix-blend-lighten [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_88%)] sm:p-14"/><div className="absolute inset-x-5 bottom-5 hidden grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-black/45 p-4 text-center text-white backdrop-blur-md sm:inset-x-8 sm:bottom-8 sm:grid"><p><strong className="block text-lg text-gold sm:text-2xl">10+</strong><small className="text-[10px] leading-tight text-slate-300 sm:text-xs">anos no mercado</small></p><p><strong className="block text-lg text-gold sm:text-2xl">600+</strong><small className="text-[10px] leading-tight text-slate-300 sm:text-xs">empresas em carteira</small></p><p><strong className="block text-lg text-gold sm:text-2xl">130</strong><small className="text-[10px] leading-tight text-slate-300 sm:text-xs">pessoas lideradas</small></p></div></div><div className="grid grid-cols-3 gap-2 rounded-2xl border border-gold/20 bg-navy p-4 text-center text-white shadow-premium sm:hidden"><p><strong className="block text-xl text-gold">10+</strong><small className="text-[10px] leading-tight text-slate-300">anos no mercado</small></p><p><strong className="block text-xl text-gold">600+</strong><small className="text-[10px] leading-tight text-slate-300">empresas em carteira</small></p><p><strong className="block text-xl text-gold">130</strong><small className="text-[10px] leading-tight text-slate-300">pessoas lideradas</small></p></div><div><p className="eyebrow">Sobre a especialista</p><h2 className="section-title">Experiência bancária para orientar cada atendimento com clareza.</h2><h3 className="mt-6 text-xl font-bold">Marlise Paiva</h3><p className="mt-3 leading-7 text-muted">Administradora e profissional com mais de 10 anos de atuação no mercado financeiro, construiu sua trajetória em instituições como Santander, Itaú Unibanco e cooperativas de crédito. Reúne experiência no atendimento a pessoas e empresas, estruturação de operações de crédito, análise de risco e relacionamento consultivo.</p><p className="mt-4 leading-7 text-muted">Na área empresarial, já gerenciou uma carteira com mais de 600 empresas cooperadas e atuou com negócios de diferentes portes. Também liderou uma operação digital PJ com aproximadamente 130 profissionais, participando da formação de equipes, implantação de processos e desenvolvimento de pessoas.</p><div className="mt-7 grid gap-3 sm:grid-cols-3"><p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold"><Award size={19} className="mb-3 text-[#9a7611]"/>CPA-10 ANBIMA ativa</p><p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold"><Landmark size={19} className="mb-3 text-[#9a7611]"/>Formação em Administração</p><p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold"><Users size={19} className="mb-3 text-[#9a7611]"/>Atuação com PF e PJ</p></div><div className="mt-6 grid gap-3 sm:grid-cols-2">{["Crédito, financiamentos e consórcios","Crédito e soluções para empresas","Análise de risco e operações","Atendimento próximo e consultivo"].map(x=><p className="flex gap-2 text-sm font-semibold" key={x}><Check className="shrink-0 text-[#9a7611]" size={18}/>{x}</p>)}</div><p className="mt-6 text-sm leading-6 text-muted">Pós-graduação em Finanças e Banking em andamento, com experiência também em compliance, LGPD, prevenção à lavagem de dinheiro e governança.</p></div></Container></section>
-<section id="seguranca" className="bg-navy2 py-20 text-white"><Container className="grid gap-10 lg:grid-cols-2"><div><p className="eyebrow text-gold">Segurança e privacidade</p><h2 className="mt-3 font-serif text-4xl font-semibold">Clareza em cada etapa.</h2><p className="mt-5 leading-7 text-slate-300">Solicitamos somente as informações relacionadas ao produto escolhido para preparar o atendimento inicial.</p></div><div className="rounded-3xl border border-gold/30 bg-navy p-7"><LockKeyhole className="text-gold"/><p className="mt-5 text-lg font-bold">Nunca informe senhas bancárias, códigos de autenticação ou dados completos de cartão.</p><p className="mt-3 text-sm leading-6 text-slate-300">O formulário não solicita fotos de documentos.</p><Link href="/privacidade" className="mt-5 inline-flex font-bold text-gold">Conheça o Aviso de Privacidade</Link></div></Container></section>
-<section id="duvidas" className="py-20 sm:py-28"><Container className="max-w-4xl"><p className="eyebrow">Dúvidas frequentes</p><h2 className="section-title">Informação clara desde o início.</h2><div className="mt-10 divide-y rounded-2xl border px-5 sm:px-8">{faqs.map(([q,a])=><details className="group py-5" key={q}><summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold">{q}<ChevronDown className="shrink-0 transition group-open:rotate-180"/></summary><p className="mt-3 max-w-3xl leading-7 text-muted">{a}</p></details>)}</div></Container></section>
-<section className="border-y border-gold/20 bg-[linear-gradient(135deg,#f7f4ec,#fffdf7)] py-20 text-center"><Container><h2 className="font-serif text-4xl font-semibold">Comece pelo seu perfil.</h2><p className="mx-auto mt-4 max-w-xl text-muted">Assim, o formulário apresenta somente os produtos disponíveis para você ou sua empresa.</p><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><Link href="/analise?profile=PERSON" className="btn-primary">Sou pessoa física</Link><Link href="/analise?profile=BUSINESS" className="btn-secondary">Represento uma empresa</Link></div></Container></section>
-</main>}
+export function Landing() {
+  return (
+    <main>
+      <section className="relative overflow-hidden bg-navy py-16 text-white sm:py-24">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_25%,rgba(216,182,90,.15),transparent_35%),linear-gradient(135deg,transparent,rgba(255,255,255,.025))]" />
+        <Container className="relative">
+          <div className="max-w-4xl">
+            <p className="eyebrow text-gold">
+              Atendimento financeiro especializado
+            </p>
+            <h1 className="mt-5 font-serif text-4xl font-semibold leading-[1.08] sm:text-6xl">
+              Empréstimos, crédito para empresas, financiamento de imóveis e
+              veículos e consórcios.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+              Escolha se a análise é para você ou para sua empresa. A partir
+              disso, mostramos somente os produtos e as perguntas adequadas ao
+              seu perfil.
+            </p>
+            <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-2">
+              <Link
+                href="/analise?profile=PERSON"
+                className="option border-gold/30 bg-white/5 text-white hover:bg-white/10"
+              >
+                <UserRound className="text-gold" />
+                <span>
+                  <strong className="block">Para mim</strong>
+                  <small className="mt-1 block text-slate-300">
+                    Pessoa física
+                  </small>
+                </span>
+                <ArrowRight className="ml-auto text-gold" size={18} />
+              </Link>
+              <Link
+                href="/analise?profile=BUSINESS"
+                className="option border-gold/30 bg-white/5 text-white hover:bg-white/10"
+              >
+                <Building2 className="text-gold" />
+                <span>
+                  <strong className="block">Para minha empresa</strong>
+                  <small className="mt-1 block text-slate-300">
+                    Pessoa jurídica
+                  </small>
+                </span>
+                <ArrowRight className="ml-auto text-gold" size={18} />
+              </Link>
+            </div>
+            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+              {benefits.map((x) => (
+                <li
+                  key={x}
+                  className="flex items-center gap-2 text-sm font-semibold text-slate-200"
+                >
+                  <Check className="text-gold" size={18} />
+                  {x}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-9">
+              <WhatsAppButton className="border-gold/30 bg-transparent text-white hover:bg-white/5" />
+            </div>
+          </div>
+        </Container>
+      </section>
+      <section className="border-y border-gold/15 bg-[#fbfaf6]">
+        <Container className="grid grid-cols-2 gap-6 py-7 text-center text-xs font-bold text-muted md:grid-cols-4">
+          <p>Atendimento personalizado</p>
+          <p>Formulário disponível 24h</p>
+          <p>Pessoa física e empresa</p>
+          <p>Envio direto pelo WhatsApp</p>
+        </Container>
+      </section>
+      <section id="solucoes" className="py-20 sm:py-28">
+        <Container>
+          <p className="eyebrow">Conheça as soluções</p>
+          <h2 className="section-title">
+            Entenda cada opção e escolha com segurança.
+          </h2>
+          <p className="mt-5 max-w-2xl text-muted">
+            Veja uma explicação rápida de cada produto. Ao escolher, você segue
+            direto para as perguntas necessárias — e, se a solução atender
+            pessoas e empresas, usaremos o perfil da lista escolhida.
+          </p>
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {Object.entries(products).map(([title, items], i) => {
+              const profile = i ? "BUSINESS" : "PERSON";
+              return (
+                <article
+                  key={title}
+                  className="rounded-3xl border border-[#e6dfcc] bg-white p-7 shadow-[0_18px_60px_rgba(9,12,16,.07)] sm:p-9"
+                >
+                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold">
+                    {i ? <Building2 /> : <UserRound />}
+                  </span>
+                  <h3 className="mt-6 font-serif text-3xl font-semibold">
+                    {title}
+                  </h3>
+                  <div className="mt-5 grid gap-3">
+                    {items.map(([label, solution, description]) => (
+                      <Link
+                        key={label}
+                        href={`/analise?solution=${solution}&profile=${profile}`}
+                        className="group flex items-start gap-3 rounded-xl border border-[#e6dfcc] px-4 py-4 text-navy transition hover:border-gold hover:bg-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                      >
+                        <Check
+                          size={17}
+                          className="mt-0.5 shrink-0 text-[#9a7611]"
+                        />
+                        <span>
+                          <strong className="block text-sm">{label}</strong>
+                          <small className="mt-1.5 block font-medium leading-5 text-muted">
+                            {description}
+                          </small>
+                        </span>
+                        <ArrowRight
+                          size={16}
+                          className="ml-auto mt-0.5 shrink-0 text-[#9a7611] transition group-hover:translate-x-1"
+                        />
+                      </Link>
+                    ))}
+                  </div>
+                  <Link
+                    className="mt-7 inline-flex items-center gap-2 font-bold"
+                    href={`/analise?profile=${profile}`}
+                  >
+                    Ver todas deste perfil <ArrowRight size={17} />
+                  </Link>
+                </article>
+              );
+            })}
+          </div>
+          <p className="mt-6 text-xs leading-5 text-muted">
+            A disponibilidade, aprovação e condições dependem da análise e das
+            instituições responsáveis.
+          </p>
+        </Container>
+      </section>
+      <section id="como-funciona" className="bg-navy py-20 text-white sm:py-28">
+        <Container>
+          <p className="eyebrow text-gold">Como funciona</p>
+          <h2 className="mt-3 font-serif text-3xl font-semibold sm:text-5xl">
+            Um fluxo curto e direcionado.
+          </h2>
+          <div className="mt-12 grid gap-5 md:grid-cols-4">
+            {[
+              [UserRound, "Escolha PF ou PJ"],
+              [Search, "Selecione o produto"],
+              [MessageCircle, "Responda o essencial"],
+              [Handshake, "Envie pelo WhatsApp"],
+            ].map(([Icon, title], i) => {
+              const I = Icon as typeof Search;
+              return (
+                <article
+                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
+                  key={String(title)}
+                >
+                  <span className="text-xs font-bold text-gold">0{i + 1}</span>
+                  <I className="mt-8 text-gold" />
+                  <h3 className="mt-4 font-bold">{String(title)}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">
+                    Você vê apenas as etapas necessárias para o perfil e o
+                    produto escolhidos.
+                  </p>
+                </article>
+              );
+            })}
+          </div>
+        </Container>
+      </section>
+      <section id="especialista" className="py-20 sm:py-28">
+        <Container className="grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr]">
+          <div className="space-y-4 lg:self-start">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-gold/25 bg-navy shadow-premium">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(216,182,90,.12),transparent_55%)]" />
+              <Image
+                src="/brand/cred-marvi-primary.png"
+                alt="Cred Marvi"
+                fill
+                sizes="(min-width:1024px) 45vw, 100vw"
+                className="-translate-y-8 object-contain object-center opacity-95 mix-blend-lighten [mask-image:radial-gradient(ellipse_at_center,black_72%,transparent_100%)]"
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-gold/20 bg-navy p-4 text-center text-white shadow-premium">
+              <p>
+                <strong className="block text-xl text-gold">10+</strong>
+                <small className="text-[10px] leading-tight text-slate-300">
+                  anos no mercado
+                </small>
+              </p>
+              <p>
+                <strong className="block text-xl text-gold">600+</strong>
+                <small className="text-[10px] leading-tight text-slate-300">
+                  empresas em carteira
+                </small>
+              </p>
+              <p>
+                <strong className="block text-xl text-gold">130</strong>
+                <small className="text-[10px] leading-tight text-slate-300">
+                  pessoas lideradas
+                </small>
+              </p>
+            </div>
+          </div>
+          <div>
+            <p className="eyebrow">Sobre a especialista</p>
+            <h2 className="section-title">
+              Experiência bancária para orientar cada atendimento com clareza.
+            </h2>
+            <h3 className="mt-6 text-xl font-bold">Marlise Paiva</h3>
+            <p className="mt-3 leading-7 text-muted">
+              Administradora e profissional com mais de 10 anos de atuação no
+              mercado financeiro, construiu sua trajetória em instituições como
+              Santander, Itaú Unibanco e cooperativas de crédito. Reúne
+              experiência no atendimento a pessoas e empresas, estruturação de
+              operações de crédito, análise de risco e relacionamento
+              consultivo.
+            </p>
+            <p className="mt-4 leading-7 text-muted">
+              Na área empresarial, já gerenciou uma carteira com mais de 600
+              empresas cooperadas e atuou com negócios de diferentes portes.
+              Também liderou uma operação digital PJ com aproximadamente 130
+              profissionais, participando da formação de equipes, implantação de
+              processos e desenvolvimento de pessoas.
+            </p>
+            <div className="mt-7 grid gap-3 sm:grid-cols-3">
+              <p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold">
+                <Award size={19} className="mb-3 text-[#9a7611]" />
+                CPA-10 ANBIMA ativa
+              </p>
+              <p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold">
+                <Landmark size={19} className="mb-3 text-[#9a7611]" />
+                Formação em Administração
+              </p>
+              <p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold">
+                <Users size={19} className="mb-3 text-[#9a7611]" />
+                Atuação com PF e PJ
+              </p>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {[
+                "Crédito, financiamentos e consórcios",
+                "Crédito e soluções para empresas",
+                "Análise de risco e operações",
+                "Atendimento próximo e consultivo",
+              ].map((x) => (
+                <p className="flex gap-2 text-sm font-semibold" key={x}>
+                  <Check className="shrink-0 text-[#9a7611]" size={18} />
+                  {x}
+                </p>
+              ))}
+            </div>
+            <p className="mt-6 text-sm leading-6 text-muted">
+              Pós-graduação em Finanças e Banking em andamento, com experiência
+              também em compliance, LGPD, prevenção à lavagem de dinheiro e
+              governança.
+            </p>
+          </div>
+        </Container>
+      </section>
+      <section id="seguranca" className="bg-navy2 py-20 text-white">
+        <Container className="grid gap-10 lg:grid-cols-2">
+          <div>
+            <p className="eyebrow text-gold">Segurança e privacidade</p>
+            <h2 className="mt-3 font-serif text-4xl font-semibold">
+              Clareza em cada etapa.
+            </h2>
+            <p className="mt-5 leading-7 text-slate-300">
+              Solicitamos somente as informações relacionadas ao produto
+              escolhido para preparar o atendimento inicial.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-gold/30 bg-navy p-7">
+            <LockKeyhole className="text-gold" />
+            <p className="mt-5 text-lg font-bold">
+              Nunca informe senhas bancárias, códigos de autenticação ou dados
+              completos de cartão.
+            </p>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              O formulário não solicita fotos de documentos.
+            </p>
+            <Link
+              href="/privacidade"
+              className="mt-5 inline-flex font-bold text-gold"
+            >
+              Conheça o Aviso de Privacidade
+            </Link>
+          </div>
+        </Container>
+      </section>
+      <section id="duvidas" className="py-20 sm:py-28">
+        <Container className="max-w-4xl">
+          <p className="eyebrow">Dúvidas frequentes</p>
+          <h2 className="section-title">Informação clara desde o início.</h2>
+          <div className="mt-10 divide-y rounded-2xl border px-5 sm:px-8">
+            {faqs.map(([q, a]) => (
+              <details className="group py-5" key={q}>
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold">
+                  {q}
+                  <ChevronDown className="shrink-0 transition group-open:rotate-180" />
+                </summary>
+                <p className="mt-3 max-w-3xl leading-7 text-muted">{a}</p>
+              </details>
+            ))}
+          </div>
+        </Container>
+      </section>
+      <section className="border-y border-gold/20 bg-[linear-gradient(135deg,#f7f4ec,#fffdf7)] py-20 text-center">
+        <Container>
+          <h2 className="font-serif text-4xl font-semibold">
+            Comece pelo seu perfil.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-muted">
+            Assim, o formulário apresenta somente os produtos disponíveis para
+            você ou sua empresa.
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link href="/analise?profile=PERSON" className="btn-primary">
+              Sou pessoa física
+            </Link>
+            <Link href="/analise?profile=BUSINESS" className="btn-secondary">
+              Represento uma empresa
+            </Link>
+          </div>
+        </Container>
+      </section>
+    </main>
+  );
+}

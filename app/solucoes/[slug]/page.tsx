@@ -13,7 +13,7 @@ export function generateStaticParams(){return solutionGuides.map(({slug})=>({slu
 export async function generateMetadata({params}:Props):Promise<Metadata>{
   const guide=guideBySlug((await params).slug); if(!guide)return{};
   const path=`/solucoes/${guide.slug}`;
-  return{title:guide.title,description:guide.description,alternates:{canonical:path},openGraph:{title:`${guide.title} | Marvi Finance`,description:guide.description,url:path}};
+  return{title:guide.title,description:guide.description,alternates:{canonical:path},openGraph:{title:`${guide.title} | Cred Marvi`,description:guide.description,url:path}};
 }
 
 export default async function SolutionPage({params}:Props){

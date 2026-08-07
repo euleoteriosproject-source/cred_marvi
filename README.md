@@ -1,6 +1,6 @@
-# Marvi Finance — MVP
+# Cred Marvi — MVP
 
-Aplicação Next.js para apresentar as soluções da Marvi Finance, coletar as informações essenciais de cada produto e preparar um checklist para envio pelo WhatsApp. O fluxo funciona sem backend e diferencia automaticamente Pessoa Física e Pessoa Jurídica.
+Aplicação Next.js para apresentar as soluções da Cred Marvi, coletar as informações essenciais de cada produto e preparar um checklist para envio pelo WhatsApp. O fluxo funciona sem backend e diferencia automaticamente Pessoa Física e Pessoa Jurídica.
 
 ## Tecnologias
 
@@ -28,7 +28,7 @@ Copie `.env.example` para `.env.local` quando precisar sobrescrever valores loca
 
 - `/`: landing completa e CTAs.
 - `/analise`: formulário adaptável por produto e perfil; dados mantidos em memória até a abertura do WhatsApp.
-- `/api/leads` e `/sucesso`: rotas legadas preservadas, mas fora do fluxo ativo do MVP.
+- `/sucesso`: rota legada preservada, mas fora do fluxo ativo do MVP.
 - `/privacidade`, `/termos`, `/contato`: páginas institucionais.
 
 ## Branches e publicação

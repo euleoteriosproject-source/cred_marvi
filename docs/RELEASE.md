@@ -5,7 +5,7 @@
 | Ambiente | Branch | Uso |
 | --- | --- | --- |
 | Desenvolvimento/homologação | `develop` | Validar alterações antes da publicação |
-| Produção | `master` | Código disponível em `marvifinance.netlify.app` |
+| Produção | `master` | Código disponível em `credmarvi.netlify.app` |
 
 O Netlify usa `master` como Production branch. Ative em **Project configuration → Build & deploy → Continuous deployment → Branches and deploy contexts** os Branch deploys para `develop`. Assim, o branch ganha uma URL de homologação separada e alterações em `master` continuam publicando a produção.
 
