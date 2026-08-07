@@ -6,7 +6,7 @@ import {Container} from "@/components/common/Container";
 import {siteConfig} from "@/lib/site-config";
 import {siteContactMessage,whatsappUrl} from "@/lib/whatsapp";
 
-export const metadata:Metadata={title:"Contato",description:"Fale com a Marvi Finance por WhatsApp ou e-mail para atendimento financeiro especializado.",alternates:{canonical:"/contato"}};
+export const metadata:Metadata={title:"Contato",description:"Fale com a Cred Marvi por WhatsApp ou e-mail para atendimento financeiro especializado.",alternates:{canonical:"/contato"}};
 const items=[
   {Icon:MessageCircle,title:"WhatsApp oficial",text:"",href:whatsappUrl(siteContactMessage())},
   {Icon:Mail,title:"E-mail",text:siteConfig.email,href:`mailto:${siteConfig.email}`},
