@@ -1,0 +1,26 @@
+{
+  "name": "cred-marvi",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.4.0",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": ">=11 <12"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @cred-marvi/web dev",
+    "build": "pnpm --filter @cred-marvi/web build",
+    "start": "pnpm --filter @cred-marvi/web start",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "pnpm --filter @cred-marvi/web lint",
+    "typecheck": "pnpm --filter @cred-marvi/web typecheck",
+    "test": "pnpm --filter @cred-marvi/web test",
+    "test:e2e": "pnpm --filter @cred-marvi/web test:e2e",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14"
+  }
+}
