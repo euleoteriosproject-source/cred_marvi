@@ -17,7 +17,8 @@
     "typecheck": "pnpm --filter @cred-marvi/web typecheck",
     "test": "pnpm --filter @cred-marvi/web test",
     "test:e2e": "pnpm --filter @cred-marvi/web test:e2e",
-    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+    "check:brand": "pnpm --filter @cred-marvi/web check:brand",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm check:brand && pnpm build"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run src --environment jsdom",
     "test:watch": "vitest src --environment jsdom",
-    "test:e2e": "node scripts/run-e2e.mjs"
+    "test:e2e": "node scripts/run-e2e.mjs",
+    "check:brand": "node scripts/check-brand.mjs"
   },
   "dependencies": {
     "next": "^16.0.0",

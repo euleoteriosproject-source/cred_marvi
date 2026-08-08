@@ -5,7 +5,8 @@ Fundação técnica da aplicação cliente Cred Marvi, separada do core Atrium.
 ## Estado
 
 - **Implementado:** workspace pnpm, aplicação Next.js mínima, TypeScript strict, Tailwind CSS, qualidade, testes e CI básico.
-- **Planejado:** identidade e assets (Etapa 10), aplicação web (Etapa 11), documentação de produto (Etapa 12), integração Atrium (Etapa 13) e hardening (Etapa 14).
+- **Implementado:** brand foundation e assets de referência (Etapa 10).
+- **Planejado:** aplicação web (Etapa 11), documentação de produto (Etapa 12), integração Atrium (Etapa 13) e hardening (Etapa 14).
 - **Adiado:** formulários, WhatsApp, páginas de produto, SDKs Atrium e experiência visual definitiva.
 
 ## Requisitos

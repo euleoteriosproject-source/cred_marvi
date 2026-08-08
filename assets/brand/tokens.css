@@ -1,0 +1,105 @@
+/** Cred Marvi brand tokens — fonte canônica do design system. */
+:root {
+  color-scheme: light;
+
+  /* Colors */
+  --cm-color-background: #ffffff;
+  --cm-color-surface: #ffffff;
+  --cm-color-surface-subtle: #fbfaf6;
+  --cm-color-surface-soft: #f7f2e8;
+  --cm-color-surface-inverse: #1c1c1e;
+  --cm-color-surface-inverse-alt: #242426;
+  --cm-color-text: #151515;
+  --cm-color-text-muted: #68645f;
+  --cm-color-text-inverse: #ffffff;
+  --cm-color-text-inverse-muted: #cbd5e1;
+  --cm-color-accent: #d2a34d;
+  --cm-color-accent-hover: #e4c56d;
+  --cm-color-accent-foreground: #1c1c1e;
+  --cm-color-accent-text: #7c5d0d;
+  --cm-color-border: #e5ddce;
+  --cm-color-border-interactive: #9b9077;
+  --cm-color-focus-on-light: #7c5d0d;
+  --cm-color-focus-on-dark: #e4c56d;
+  --cm-color-success: #178a5b;
+  --cm-color-success-text: #116b45;
+  --cm-color-success-surface: #e9f8ef;
+  --cm-color-warning: #8b6a16;
+  --cm-color-warning-surface: #fff8df;
+  --cm-color-danger: #c33b43;
+  --cm-color-danger-surface: #fef2f2;
+  --cm-color-whatsapp: #25d366;
+  --cm-color-whatsapp-hover: #20bd5a;
+  --cm-color-whatsapp-accessible: #116b45;
+
+  /* Typography */
+  --cm-font-family-sans: var(--font-manrope), Arial, Helvetica, sans-serif;
+  --cm-font-family-serif:
+    var(--font-playfair), Georgia, "Times New Roman", serif;
+  --cm-font-size-caption: 0.75rem;
+  --cm-font-size-small: 0.875rem;
+  --cm-font-size-body: 1rem;
+  --cm-font-size-lead: 1.125rem;
+  --cm-font-size-heading-sm: 1.5rem;
+  --cm-font-size-heading-md: 1.875rem;
+  --cm-font-size-heading-lg: 3rem;
+  --cm-font-size-display: 3.75rem;
+  --cm-font-weight-medium: 500;
+  --cm-font-weight-semibold: 600;
+  --cm-font-weight-bold: 700;
+  --cm-font-weight-extrabold: 800;
+  --cm-line-height-tight: 1.08;
+  --cm-line-height-heading: 1.2;
+  --cm-line-height-body: 1.75;
+  --cm-line-height-small: 1.5;
+  --cm-letter-spacing-eyebrow: 0.2em;
+
+  /* Structural spacing */
+  --cm-space-gutter: 1.25rem;
+  --cm-space-gutter-wide: 2rem;
+  --cm-space-section-sm: 4rem;
+  --cm-space-section: 5rem;
+  --cm-space-section-lg: 7rem;
+
+  /* Radius */
+  --cm-radius-sm: 0.5rem;
+  --cm-radius-control: 0.75rem;
+  --cm-radius-option: 1rem;
+  --cm-radius-card: 1.5rem;
+  --cm-radius-feature: 2rem;
+  --cm-radius-round: 9999px;
+
+  /* Shadows */
+  --cm-shadow-control: 0 1px 2px rgb(10 8 5 / 8%);
+  --cm-shadow-card: 0 18px 60px rgb(9 12 16 / 7%);
+  --cm-shadow-elevated: 0 28px 80px rgb(10 8 5 / 16%);
+  --cm-shadow-accent: 0 18px 45px rgb(210 163 77 / 24%);
+
+  /* Containers */
+  --cm-container-max: 80rem;
+  --cm-container-content: 56rem;
+  --cm-container-reading: 48rem;
+
+  /* Interaction */
+  --cm-focus-width: 2px;
+  --cm-focus-offset: 3px;
+  --cm-duration-fast: 150ms;
+  --cm-duration-normal: 200ms;
+  --cm-duration-slow: 300ms;
+  --cm-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --cm-target-min: 2.75rem;
+}
+
+@media (min-width: 40rem) {
+  :root {
+    --cm-space-gutter: var(--cm-space-gutter-wide);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --cm-duration-fast: 0.01ms;
+    --cm-duration-normal: 0.01ms;
+    --cm-duration-slow: 0.01ms;
+  }
+}
