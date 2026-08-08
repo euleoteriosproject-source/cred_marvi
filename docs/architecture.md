@@ -21,9 +21,9 @@ Cred Marvi Web
   → Atrium Engine
 ```
 
-A identidade visual será definida na Etapa 10, a aplicação web na Etapa 11 e a integração Atrium na Etapa 13.
+A identidade visual técnica foi definida na Etapa 10. A aplicação web permanece planejada para a Etapa 11 e a integração Atrium para a Etapa 13.
 
-`next/font` será adotado com a tipografia aprovada na Etapa 10. O placeholder usa fontes de sistema para não antecipar a marca nem depender de downloads durante o build.
+Manrope e Playfair Display são carregadas por `next/font` e expostas pelos tokens canônicos. A home continua sendo apenas um placeholder técnico.
 
 ## Restrições
 

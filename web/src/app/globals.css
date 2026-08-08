@@ -1,8 +1,9 @@
 @import "tailwindcss";
+@import "../styles/theme.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  background: var(--cm-color-background);
+  color: var(--cm-color-text);
 }
 
 * {
@@ -16,7 +17,12 @@ body {
 
 body {
   margin: 0;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cm-color-background);
+  color: var(--cm-color-text);
+  font-family: var(--cm-font-family-sans);
+}
+
+::selection {
+  background: var(--cm-color-accent);
+  color: var(--cm-color-accent-foreground);
 }
