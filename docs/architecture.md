@@ -1,33 +1,51 @@
-# Arquitetura
+# Arquitetura e decisões
 
-## Implementado na Etapa 09
+## Estado
 
-O repositório é um workspace pnpm. O aplicativo Next.js está em `web/`, usa App Router, Server Components por padrão, TypeScript strict e uma página mínima de bootstrap.
+- **IMPLEMENTADO:** aplicação Web cliente, Brand System, conteúdo institucional e fronteira documental do Atrium.
+- **PLANEJADO:** integração com os SDKs e a API pública do Atrium na Etapa 13.
+- **ADIADO:** backend próprio da Cred Marvi, engine local, banco, leads/admin automatizados, webhooks e e-mail.
 
-```text
-cred-marvi
-└── web (aplicação cliente Next.js)
-```
-
-A Web institucional, o catálogo editorial e o shell visual de análise foram implementados na Etapa 11. Não há engine de conversa, formulário, banco de dados ou integração Atrium ativa.
-
-## Planejado
+## Contexto institucional
 
 ```text
-Cred Marvi Web
-  → Atrium SDK React
-  → Atrium SDK JS
-  → Atrium Public API
-  → Atrium Engine
+Grupo Marvi
+├── Cred Marvi
+└── Atrium
 ```
 
-A identidade visual técnica foi definida na Etapa 10 e a Web na Etapa 11. A integração Atrium permanece planejada para a Etapa 13.
+A Cred Marvi é a aplicação cliente e a experiência de atendimento. Atrium é uma plataforma separada, responsável futuramente pela jornada conversacional. O core Atrium não é copiado para este repositório.
 
-Manrope e Playfair Display são carregadas por `next/font` e expostas pelos tokens canônicos. A home continua sendo apenas um placeholder técnico.
+## Implementação atual
 
-## Restrições
+```text
+cred-marvi/
+├── assets/  Brand System e fontes de assets
+├── docs/    documentação consolidada
+└── web/     aplicação Next.js
+```
 
-- Nenhuma lógica de próxima pergunta no site.
-- Nenhum acesso direto ao Supabase.
-- Nenhum segredo público.
-- Nenhuma PII em URL, analytics ou logs.
+O repositório é um workspace pnpm. `web/` usa Next.js 16 App Router, React 19.2, TypeScript strict e Tailwind CSS 4. Server Components são o padrão; componentes client-side são usados apenas onde existe interação no navegador, como o menu responsivo.
+
+A aplicação foi escrita do zero. O projeto anterior `marvi_finance` foi consultado exclusivamente como referência de identidade, UX, copy, catálogo, posicionamento e intenção de produto. Ele não é dependência, origem arquitetural nem fonte de código da implementação atual.
+
+## Fronteiras atuais
+
+- A Web não decide a próxima pergunta.
+- Não existe question engine, branching local ou questionário.
+- Não existe acesso direto ao Supabase ou a outro banco.
+- Não existe service role no frontend.
+- Não existem SDKs Atrium instalados ou chamadas à API Atrium.
+- Não existe coleta de documentos, CPF ou CNPJ.
+- PII não deve ser colocada em URLs, analytics ou logs.
+
+## Decisões permanentes
+
+- A Cred Marvi não possui engine própria; Atrium decidirá o fluxo.
+- WhatsApp é handoff humano e fallback, não transporte de respostas.
+- O MVP não usa IA generativa.
+- Documentos não são coletados nesta versão.
+- Leads e administração automatizados permanecem adiados até existir backend aprovado.
+- A existência futura de outbox não significará, por si só, entrega de webhook.
+
+Veja [Web](web.md), [privacidade e segurança](privacy-and-security.md) e [integração Atrium](atrium-integration.md).
