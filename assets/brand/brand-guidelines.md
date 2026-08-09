@@ -2,9 +2,9 @@
 
 ## Status
 
-- **Implementado:** identidade canônica, tokens, tipografia e referências raster.
-- **Planejado:** derivados otimizados quando houver uso concreto.
-- **Adiado:** logo vetorial oficial, versões monocromáticas, peças sociais e aplicação completa da Web.
+- **IMPLEMENTADO:** identidade canônica, tokens, tipografia e referências raster.
+- **PLANEJADO:** derivados otimizados quando houver uso concreto.
+- **ADIADO:** logo vetorial oficial, versões monocromáticas e peças sociais.
 
 ## Identidade canônica
 
