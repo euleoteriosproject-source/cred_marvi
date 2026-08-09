@@ -4,7 +4,7 @@ Esta pasta marca a fronteira arquitetural entre a aplicação Cred Marvi e o Atr
 
 ## Implementado
 
-Somente esta documentação. Não há código de integração na Etapa 09.
+A Etapa 11 fornece somente um shell visual em `/analise`. Não existe contrato Atrium local, SDK, conversa, pergunta, resposta, branching ou simulação de estados.
 
 ## Etapa 13
 

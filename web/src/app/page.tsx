@@ -1,14 +1,28 @@
+import {
+  AudienceSection,
+  FaqPreview,
+  FinalCallToAction,
+  Hero,
+  HowItWorks,
+  HumanService,
+  SecurityPreview,
+  SolutionsPreview,
+} from "@/components/home/home-sections";
+import { PageShell } from "@/components/layout/page-shell";
+
 export default function Home() {
   return (
-    <main className="grid min-h-screen place-items-center bg-background px-6 py-16 text-foreground">
-      <div className="text-center">
-        <h1 className="font-serif text-3xl font-semibold tracking-tight">
-          Cred Marvi
-        </h1>
-        <p className="mt-3 text-base text-muted">
-          Base da aplicação inicializada.
-        </p>
-      </div>
-    </main>
+    <PageShell>
+      <main id="conteudo">
+        <Hero />
+        <AudienceSection />
+        <SolutionsPreview />
+        <HowItWorks />
+        <HumanService />
+        <SecurityPreview />
+        <FaqPreview />
+        <FinalCallToAction />
+      </main>
+    </PageShell>
   );
 }
