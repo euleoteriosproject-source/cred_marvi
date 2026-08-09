@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Playfair_Display } from "next/font/google";
+import { site } from "@/config/site";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -16,8 +17,18 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Cred Marvi",
-  description: "Base técnica da aplicação Cred Marvi.",
+  metadataBase: site.siteUrl ? new URL(site.siteUrl) : undefined,
+  title: { default: "Cred Marvi", template: "%s | Cred Marvi" },
+  description: site.description,
+  applicationName: site.name,
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: site.name,
+    title: site.name,
+    description: site.description,
+  },
+  robots: { index: Boolean(site.siteUrl), follow: Boolean(site.siteUrl) },
 };
 
 export default function RootLayout({
@@ -28,7 +39,12 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${manrope.variable} ${playfairDisplay.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <a href="#conteudo" className="skip-link">
+          Ir para o conteúdo principal
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

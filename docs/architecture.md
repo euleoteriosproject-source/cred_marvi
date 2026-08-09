@@ -9,7 +9,7 @@ cred-marvi
 └── web (aplicação cliente Next.js)
 ```
 
-Não há engine de conversa, formulário de análise, integração WhatsApp, banco de dados ou páginas de produto.
+A Web institucional, o catálogo editorial e o shell visual de análise foram implementados na Etapa 11. Não há engine de conversa, formulário, banco de dados ou integração Atrium ativa.
 
 ## Planejado
 
@@ -21,7 +21,7 @@ Cred Marvi Web
   → Atrium Engine
 ```
 
-A identidade visual técnica foi definida na Etapa 10. A aplicação web permanece planejada para a Etapa 11 e a integração Atrium para a Etapa 13.
+A identidade visual técnica foi definida na Etapa 10 e a Web na Etapa 11. A integração Atrium permanece planejada para a Etapa 13.
 
 Manrope e Playfair Display são carregadas por `next/font` e expostas pelos tokens canônicos. A home continua sendo apenas um placeholder técnico.
 
