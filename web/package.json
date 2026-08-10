@@ -14,6 +14,9 @@
     "check:brand": "node scripts/check-brand.mjs"
   },
   "dependencies": {
+    "@atrium/common": "file:../vendor/atrium/5e99195/atrium-common-1.0.0.tgz",
+    "@atrium/sdk-js": "file:../vendor/atrium/5e99195/atrium-sdk-js-0.1.0.tgz",
+    "@atrium/sdk-react": "file:../vendor/atrium/5e99195/atrium-sdk-react-0.1.0.tgz",
     "lucide-react": "^1.30.0",
     "next": "^16.0.0",
     "react": "^19.2.0",

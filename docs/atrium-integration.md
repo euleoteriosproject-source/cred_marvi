@@ -6,6 +6,15 @@
 - `/analise` como shell visual sem coleta ou conversa.
 - `ProgressIndicator` apresentacional, com `current` obrigatório e `total` e `percentage` opcionais.
 - Configuração versionada e não secreta de desenvolvimento para o tenant `cred-marvi` e o Flow `credit-analysis`.
+- Distribuição local reproduzível de `@atrium/common`, `@atrium/sdk-js` e `@atrium/sdk-react`, empacotados do commit Atrium `5e991956111e74e932752e06ad4a0d1769486fad`.
+
+### Distribuição transitória dos SDKs
+
+Enquanto os packages Atrium não estão publicados em registry, os tarballs oficiais ficam versionados em `vendor/atrium/5e99195/`. O arquivo `provenance.json` registra o SHA completo de origem, versões, nomes e SHA-256 dos artefatos.
+
+Os manifests da Web e o lockfile resolvem os três packages somente desses tarballs. Overrides locais garantem que as dependências internas de `sdk-js` e `sdk-react` não sejam buscadas em registry. Nenhum source, workspace cross-repo, link, symlink ou path absoluto do repositório Atrium é necessário em runtime ou CI.
+
+Essa estratégia é transitória e deverá ser substituída por packages imutáveis em registry privado, preservando versionamento e proveniência.
 
 As props do `ProgressIndicator` não constituem contrato canônico do Atrium.
 
