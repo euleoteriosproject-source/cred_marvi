@@ -3,10 +3,12 @@
 ## IMPLEMENTADO
 
 - Fronteira arquitetural documental neste arquivo e em `web/src/integrations/atrium/README.md`.
-- `/analise` como shell visual sem coleta ou conversa.
+- `/analise` integrada por um boundary cliente mínimo a `AtriumProvider` e `AtriumConversation` em modo inline.
 - `ProgressIndicator` apresentacional, com `current` obrigatório e `total` e `percentage` opcionais.
 - Configuração versionada e não secreta de desenvolvimento para o tenant `cred-marvi` e o Flow `credit-analysis`.
 - Distribuição local reproduzível de `@atrium/common`, `@atrium/sdk-js` e `@atrium/sdk-react`, empacotados do commit Atrium `5e991956111e74e932752e06ad4a0d1769486fad`.
+- Tenant local `cred-marvi` provisionado e Flow `credit-analysis` versão 1 publicado.
+- Configuração pública validada por `NEXT_PUBLIC_ATRIUM_API_URL` e `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY`, com fallback humano seguro quando ausente ou inválida.
 
 ### Distribuição transitória dos SDKs
 
@@ -18,7 +20,7 @@ Essa estratégia é transitória e deverá ser substituída por packages imutáv
 
 As props do `ProgressIndicator` não constituem contrato canônico do Atrium.
 
-## PLANEJADO — Etapa 13
+## Arquitetura implementada
 
 ```text
 Cred Marvi Web
@@ -36,11 +38,11 @@ Conversation
 WhatsApp / atendimento humano
 ```
 
-Nenhum componente desse fluxo está integrado atualmente. Public key, endpoint, conversation, respostas, eventos, completion e tratamento operacional serão definidos somente com os contratos públicos reais do Atrium.
+O código da Web está integrado aos contratos públicos reais. A página continua um Server Component e renderiza um boundary cliente restrito ao SDK. A Web não conhece perguntas, não decide branching, não calcula progresso, não antecipa completion e não persiste token ou respostas.
 
-### Flow configurado, ainda não provisionado
+### Flow local publicado
 
-`credit-analysis` possui uma definição canônica inline em `config/atrium/development.json`. O provisioning ainda não foi executado: não há afirmação de tenant, chave ou Flow publicado no ambiente local.
+`credit-analysis` possui definição canônica inline em `config/atrium/development.json` e versão 1 publicada no ambiente local Atrium. O arquivo versionado não contém a public key bruta.
 
 Sem duplicar JSON ou schema canônico, a intenção semântica é cobrir:
 
@@ -51,17 +53,24 @@ Sem duplicar JSON ou schema canônico, a intenção semântica é cobrir:
 5. consentimento provisório;
 6. conclusão sem summary.
 
-O Atrium será a única fonte de verdade para perguntas, branching, progresso e conclusão.
+O Atrium é a única fonte de verdade para perguntas, branching, progresso e conclusão.
+
+## PLANEJADO
+
+- smoke real entre `localhost:3000` e a Atrium API local na Etapa 13C2;
+- staging e produção;
+- publicação futura dos packages em registry privado.
+
+O smoke real ainda não foi executado nem é afirmado por esta documentação.
 
 ## ADIADO
 
-- instalação de `@atrium/sdk-react` e `@atrium/sdk-js`;
-- configuração de endpoint e public key;
-- conversas e eventos reais;
 - leads/admin automatizados;
 - webhooks e e-mail;
 - qualquer engine ou mock conversacional local.
+- membership/Admin owner, até existir identidade administrativa real.
+- melhoria genérica no SDK para UX de telefone; nesta versão o usuário informa E.164 com `+55`, conforme orientação do Flow.
 
-O dry-run e o apply do provisioning estão planejados para a Etapa 13B2B. Membership foi omitida até existir um `externalSubject` Supabase real; isso não bloqueia o uso público futuro.
+Membership foi omitida até existir um `externalSubject` Supabase real; isso não bloqueia o uso público.
 
-Não existem `ATRIUM_SERVER_SECRET`, `ATRIUM_API_URL` ou `ATRIUM_PUBLIC_KEY` nesta etapa.
+Não existe secret Atrium na Web. A public key é configuração pública do browser, mas não deve aparecer em logs, erros ou documentação. O consentimento configurado exige revisão jurídica antes de produção.

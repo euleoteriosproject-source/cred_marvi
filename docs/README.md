@@ -4,8 +4,8 @@ Esta documentação descreve o estado real da aplicação após as Etapas 09, 10
 
 ## Status global
 
-- **IMPLEMENTADO:** fundação técnica, Brand System, Web institucional e configuração versionada de provisioning Atrium para desenvolvimento.
-- **PLANEJADO:** execução do provisioning, integração Atrium na Etapa 13 e hardening aprofundado na Etapa 14.
+- **IMPLEMENTADO:** fundação técnica, Brand System, Web institucional, tenant/Flow locais e boundary Web com os SDKs Atrium.
+- **PLANEJADO:** smoke real Atrium na Etapa 13C2, ambientes externos e hardening aprofundado na Etapa 14.
 - **ADIADO:** recursos que dependem de backend ou decisões posteriores de produto e operação.
 
 ## Índice

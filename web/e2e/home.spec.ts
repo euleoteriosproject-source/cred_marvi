@@ -157,11 +157,27 @@ test("rotas públicas, análise e 404 respondem corretamente", async ({
 
   await page.goto("/analise");
   await expect(
-    page.getByRole("heading", { level: 1, name: /espaço preparado/i }),
+    page.getByRole("heading", {
+      level: 1,
+      name: /vamos entender o que você precisa/i,
+    }),
   ).toBeVisible();
-  await expect(
-    page.getByText(/nenhuma informação pessoal é solicitada/i),
-  ).toBeVisible();
+  await expect(page.getByText(/temporariamente indisponível/i)).toBeVisible();
+  await expect(page.getByRole("banner")).toBeVisible();
+  await expect(page.getByRole("contentinfo")).toBeVisible();
+  await expect(page).toHaveURL(/\/analise$/);
+
+  const accessibility = await new AxeBuilder({ page }).analyze();
+  expect(accessibility.violations).toEqual([]);
+
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.reload();
+  const overflow = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth >
+      document.documentElement.clientWidth,
+  );
+  expect(overflow).toBe(false);
 
   const missing = await page.goto("/pagina-inexistente");
   expect(missing?.status()).toBe(404);
