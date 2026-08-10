@@ -11,6 +11,7 @@ Este documento descreve controles técnicos atuais e orientações de produto. N
 - Não existem secrets em variáveis `NEXT_PUBLIC_*`.
 - A Web não acessa Supabase nem usa service role.
 - `/analise` é `noindex, nofollow`.
+- A configuração de provisioning versionada não contém membership, raw public key, senha de banco, JWT, service role ou conversation token.
 
 As páginas legais refletem o escopo atual e precisam de revisão jurídica antes de produção.
 
@@ -42,6 +43,8 @@ Antes de qualquer coleta pela futura jornada, definir e validar:
 - separação entre consentimento operacional e marketing.
 
 A integração Atrium exigirá revisão das políticas, avisos, contratos, fluxos de titulares e limites de logging antes de produção.
+
+O Flow de desenvolvimento configurado para a futura integração limita a coleta a classificação editorial PF/Empresa, necessidade, nome preferido, WhatsApp e consentimento. Nome e WhatsApp não entram no summary. O texto de consentimento é provisório para desenvolvimento/UAT e exige **REVISÃO JURÍDICA OBRIGATÓRIA ANTES DE PRODUÇÃO**.
 
 ## PLANEJADO — Etapa 14
 
