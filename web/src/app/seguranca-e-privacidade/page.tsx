@@ -62,9 +62,10 @@ export default function SecurityPage() {
               Comportamento atual
             </h2>
             <p className="mt-4 leading-7 text-muted">
-              O Assistente Marvi ainda não está integrado ao Atrium. A página de
-              análise não solicita respostas nem dados pessoais. O WhatsApp,
-              quando configurado, abre somente uma mensagem fixa e segura.
+              O Assistente Marvi usa o Atrium para conduzir a jornada inicial.
+              Não envie documentos, credenciais ou dados bancários. O WhatsApp,
+              quando configurado, abre somente uma mensagem fixa e segura, sem
+              transportar as respostas da análise.
             </p>
           </section>
         </Container>

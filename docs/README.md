@@ -1,11 +1,11 @@
 # Documentação Cred Marvi
 
-Esta documentação descreve o estado real da aplicação após as Etapas 09, 10 e 11.
+Esta documentação descreve o estado real da aplicação até a integração local validada na Etapa 13C2.
 
 ## Status global
 
-- **IMPLEMENTADO:** fundação técnica, Brand System, Web institucional, tenant/Flow locais e boundary Web com os SDKs Atrium.
-- **PLANEJADO:** smoke real Atrium na Etapa 13C2, ambientes externos e hardening aprofundado na Etapa 14.
+- **IMPLEMENTADO:** fundação técnica, Brand System, Web institucional, tenant/Flow locais, integração com os SDKs Atrium e smoke manual local PF/Empresa.
+- **PLANEJADO:** ambientes externos, hardening aprofundado na Etapa 14 e release readiness antes da Etapa 15.
 - **ADIADO:** recursos que dependem de backend ou decisões posteriores de produto e operação.
 
 ## Índice
@@ -28,4 +28,4 @@ Esta documentação descreve o estado real da aplicação após as Etapas 09, 10
 - CI: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 - Provisioning de desenvolvimento: [`config/atrium/development.json`](../config/atrium/development.json)
 
-Documentação nunca substitui os contratos de runtime ou um futuro Flow publicado pelo Atrium.
+Documentação nunca substitui os contratos de runtime ou a versão publicada do Flow no Atrium.

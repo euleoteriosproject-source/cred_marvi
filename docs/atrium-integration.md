@@ -9,6 +9,7 @@
 - Distribuição local reproduzível de `@atrium/common`, `@atrium/sdk-js` e `@atrium/sdk-react`, empacotados do commit Atrium `5e991956111e74e932752e06ad4a0d1769486fad`.
 - Tenant local `cred-marvi` provisionado e Flow `credit-analysis` versão 1 publicado.
 - Configuração pública validada por `NEXT_PUBLIC_ATRIUM_API_URL` e `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY`, com fallback humano seguro quando ausente ou inválida.
+- Smoke manual local aprovado para os caminhos Pessoa Física e Empresa.
 
 ### Distribuição transitória dos SDKs
 
@@ -55,13 +56,46 @@ Sem duplicar JSON ou schema canônico, a intenção semântica é cobrir:
 
 O Atrium é a única fonte de verdade para perguntas, branching, progresso e conclusão.
 
+## Smoke manual local — Etapa 13C2
+
+O smoke foi executado pelo navegador entre a Web em `http://localhost:3000` e a Atrium API em `http://localhost:8080`. Essas evidências são UAT manual local e não constituem teste automatizado nem validação de staging ou produção.
+
+### Jornada e persistência
+
+- Pessoa Física seguiu o branching correto, com Consórcio disponível e opções exclusivas de Empresa ausentes.
+- Empresa seguiu o branching correto, com Capital de giro disponível e financiamento de imóvel ausente.
+- Public Configuration, criação das conversas, cinco respostas por conversa e completion responderam com sucesso.
+- A UI entrou no estado completed somente depois da confirmação de `POST /complete`.
+- As duas conversations ficaram `COMPLETED`, com `answered_count = 5`, `transition_count = 5`, Flow `credit-analysis` versão 1 e origin `http://localhost:3000`.
+- Após os dois fluxos não restou conversation `ACTIVE`.
+- Foram criados dois eventos `conversation.completed`, para dois aggregates distintos e sem duplicidade.
+- O outbox permaneceu `PENDING`, estado esperado enquanto não existe adapter de delivery.
+
+Foram usados somente dados fictícios de smoke, que não são reproduzidos nesta documentação.
+
+### Browser e segurança
+
+- CORS aprovou a origin exata e os headers necessários, incluindo `Atrium-SDK-Version`, sem wildcard e sem credentials.
+- A CSP de `/analise` ficou restrita a `'self'`, WebSocket local do Next e a origin local Atrium, sem esquemas HTTP/HTTPS genéricos.
+- A URL permaneceu em `/analise`, sem token, query ou hash.
+- Não houve PII ou token em Local Storage, Session Storage ou cookies da aplicação. O cookie observado pertencia apenas ao HMR do Next em desenvolvimento.
+- O fallback sem configuração manteve o shell Cred Marvi, não iniciou conversa e ofereceu atendimento humano sem confirmação falsa.
+
+### Experiência validada
+
+- viewport móvel de 375 × 812 funcional, sem overflow horizontal problemático;
+- teclado, ordem de foco, foco visível e consentimento utilizáveis;
+- consentimento obrigatório antes da conclusão;
+- zoom de 200% sem perda de conteúdo essencial;
+- loading sem duplo envio evidente.
+
 ## PLANEJADO
 
-- smoke real entre `localhost:3000` e a Atrium API local na Etapa 13C2;
 - staging e produção;
-- publicação futura dos packages em registry privado.
+- publicação futura dos packages em registry privado;
+- refinamento de UX pós-conclusão descrito em [Web](web.md).
 
-O smoke real ainda não foi executado nem é afirmado por esta documentação.
+O smoke local não representa aprovação de produção.
 
 ## ADIADO
 

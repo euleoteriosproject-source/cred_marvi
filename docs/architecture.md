@@ -2,8 +2,8 @@
 
 ## Estado
 
-- **IMPLEMENTADO:** aplicação Web cliente, Brand System, conteúdo institucional e integração de `/analise` com os SDKs públicos Atrium.
-- **PLANEJADO:** smoke real local na Etapa 13C2 e ambientes de staging/produção.
+- **IMPLEMENTADO:** aplicação Web cliente, Brand System, conteúdo institucional, integração de `/analise` com os SDKs públicos Atrium e smoke manual local PF/Empresa.
+- **PLANEJADO:** ambientes de staging/produção, hardening e release readiness.
 - **ADIADO:** backend próprio da Cred Marvi, engine local, banco, leads/admin automatizados, webhooks e e-mail.
 
 ## Contexto institucional

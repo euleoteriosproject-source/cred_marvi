@@ -10,6 +10,8 @@
 
 A configuração descreve o estado local provisionado. Ela não contém raw public key nem comprova staging ou produção.
 
+O dry-run final após o apply confirmou idempotência: tenant, theme, origin, public key e Flow retornaram `NO_OP`; membership retornou `SKIP`; não houve `CREATE`, `UPDATE` ou `CONFLICT`. Existe exatamente uma public key ativa no ambiente local, cujo valor não é versionado nem documentado.
+
 ## Configuração versionada
 
 O arquivo de desenvolvimento solicita ao provisioner:

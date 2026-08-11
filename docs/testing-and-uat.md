@@ -72,18 +72,17 @@ Lighthouse, dependency review, CodeQL, Gitleaks e scanners adicionais não fazem
 - [ ] Skip link, ordem de teclado, foco visível e alvos de toque funcionam.
 - [ ] Reduced motion é respeitado.
 
-## UAT Atrium real — PLANEJADO, Etapa 13C2
+## Smoke/UAT manual local Atrium — APROVADO, Etapa 13C2
 
-Somente após integração real, validar:
+Os itens abaixo foram validados manualmente pelo navegador e não fazem parte da suíte automatizada:
 
-- [ ] jornadas PF e PJ;
-- [ ] capital de giro, financiamento e consórcio;
-- [ ] desistência e retomada aprovadas pelo contrato;
-- [ ] erro e Atrium indisponível;
-- [ ] consentimento negado;
-- [ ] conclusão e handoff seguro para WhatsApp;
-- [ ] mobile, teclado e acessibilidade da conversa;
-- [ ] origin proibida;
-- [ ] progresso somente quando fornecido pelo Atrium.
+- [x] jornadas Pessoa Física e Empresa, com branching correto;
+- [x] Consórcio no caminho PF e Capital de giro no caminho Empresa;
+- [x] Public Configuration, criação, cinco respostas e completion por conversa;
+- [x] duas conversations completadas e dois eventos canônicos sem duplicidade;
+- [x] CORS, CSP, URL e browser storage no cenário local;
+- [x] fallback sem configuração;
+- [x] mobile 375 × 812, teclado, foco, consentimento obrigatório e zoom 200%;
+- [x] loading sem duplo envio evidente.
 
-Esses cenários exigem o ambiente Atrium real. Os testes unitários atuais mockam apenas o boundary do SDK e não simulam Engine ou perguntas.
+Não foram validados nesta execução: desistência/retomada, origin proibida, falha provocada no meio de uma conversa, staging ou produção. Os testes unitários continuam mockando apenas o boundary do SDK e não simulam Engine ou perguntas.

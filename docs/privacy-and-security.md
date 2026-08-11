@@ -12,6 +12,9 @@ Este documento descreve controles técnicos atuais e orientações de produto. N
 - A Web não acessa Supabase nem usa service role.
 - `/analise` é `noindex, nofollow`.
 - A configuração de provisioning versionada não contém membership, raw public key, senha de banco, JWT, service role ou conversation token.
+- O smoke local confirmou URL sem PII/token/query/hash e ausência de PII ou token em Local Storage, Session Storage e cookies da aplicação.
+- CORS e CSP foram validados no cenário local com origins exatas e sem permissões genéricas.
+- Sem configuração Atrium, `/analise` apresenta fallback seguro e não inicia conversa.
 
 As páginas legais refletem o escopo atual e precisam de revisão jurídica antes de produção.
 
@@ -42,7 +45,7 @@ Antes de usar a jornada fora do ambiente local, definir e validar:
 - controladores, operadores e responsabilidades;
 - separação entre consentimento operacional e marketing.
 
-A integração Atrium exigirá revisão das políticas, avisos, contratos, fluxos de titulares e limites de logging antes de produção.
+A integração Atrium exige revisão das políticas, avisos, contratos, fluxos de titulares e limites de logging antes de produção.
 
 O Flow de desenvolvimento publicado limita a coleta a classificação editorial PF/Empresa, necessidade, nome preferido, WhatsApp e consentimento. Nome e WhatsApp não entram no summary. O texto de consentimento é provisório para desenvolvimento/UAT e exige **REVISÃO JURÍDICA OBRIGATÓRIA ANTES DE PRODUÇÃO**.
 

@@ -2,8 +2,8 @@
 
 ## Estado
 
-- **IMPLEMENTADO:** site institucional, conteúdo editorial, páginas públicas, integração Web com os SDKs Atrium, SEO básico e canais opcionais.
-- **PLANEJADO:** smoke real da jornada Atrium na Etapa 13C2.
+- **IMPLEMENTADO:** site institucional, conteúdo editorial, páginas públicas, integração Web com os SDKs Atrium, smoke manual local PF/Empresa, SEO básico e canais opcionais.
+- **PLANEJADO:** ambientes externos, hardening e refinamento de UX antes da release.
 - **ADIADO:** formulários locais, leads, analytics, pixels, área administrativa e backend próprio.
 
 ## Experiência atual
@@ -88,3 +88,15 @@ pnpm dev
 ```
 
 O projeto usa Node.js 24 e pnpm 11.4.0. A aplicação local fica em `http://localhost:3000` quando a porta está livre.
+
+## PLANEJADO — refinamento pós-conclusão
+
+O smoke técnico foi aprovado, mas o estado completed ainda requer polimento não bloqueante:
+
+- mensagem de conclusão mais orientativa;
+- próximo passo claro;
+- CTA humano seguro;
+- tratamento visual do progresso já concluído;
+- acabamento visual mais alinhado à marca.
+
+A recomendação é tratar esse escopo em uma etapa específica de UX/release readiness depois da Stage 14 Hardening e antes da Stage 15 Release, sem alterar a lógica de completion do Atrium.

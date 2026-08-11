@@ -18,16 +18,18 @@ export default function PrivacyPage() {
         <h2>1. Escopo desta versão</h2>
         <p>
           O site apresenta conteúdo institucional, soluções financeiras e canais
-          de contato. A conversa do Assistente Marvi ainda não está integrada e
-          a página de análise não coleta respostas.
+          de contato. Na página de análise, o Assistente Marvi usa o Atrium para
+          conduzir uma jornada inicial estruturada.
         </p>
       </section>
       <section>
-        <h2>2. Dados informados voluntariamente</h2>
+        <h2>2. Dados informados na análise</h2>
         <p>
-          Esta versão não possui formulário de contato, cadastro ou upload. Um
-          contato por e-mail ou WhatsApp ocorre fora do site e somente após uma
-          ação do próprio usuário.
+          A jornada solicita classificação como Pessoa Física ou Empresa,
+          necessidade, nome preferido, WhatsApp e consentimento. Não há upload
+          de documentos, formulário de contato ou cadastro independente nesta
+          versão. O tratamento dessas informações e deste texto exige revisão
+          jurídica antes da produção.
         </p>
       </section>
       <section>
@@ -55,11 +57,12 @@ export default function PrivacyPage() {
         </p>
       </section>
       <section>
-        <h2>6. Integrações futuras</h2>
+        <h2>6. Integração Atrium</h2>
         <p>
-          Uma futura integração com o Atrium exigirá atualização desta política
-          antes de entrar em produção, refletindo finalidades, dados, bases
-          legais e agentes envolvidos.
+          O Atrium conduz a jornada de análise e mantém o estado da conversa. A
+          Web não decide a próxima pergunta e não armazena respostas em URL,
+          Local Storage ou Session Storage. Finalidades, bases legais, retenção
+          e agentes envolvidos precisam de validação jurídica antes da produção.
         </p>
       </section>
       <section>
