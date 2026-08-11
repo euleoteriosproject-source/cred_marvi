@@ -4,14 +4,17 @@ Este documento descreve controles técnicos atuais e orientações de produto. N
 
 ## IMPLEMENTADO
 
-- `/analise` não coleta informações.
+- `/analise` delega coleta e estado da conversa ao SDK Atrium, sem persistência, logs ou engine local na Web.
 - Não há formulário, banco próprio da Web, analytics ou pixel.
 - CPF, CNPJ e documentos não são solicitados nesta versão.
 - WhatsApp usa mensagem fixa e não transporta respostas ou PII.
-- Não existem secrets em variáveis `NEXT_PUBLIC_*`.
+- A public key Atrium é própria para browser, mas não aparece em logs, erros ou documentação; secrets continuam proibidos em `NEXT_PUBLIC_*`.
 - A Web não acessa Supabase nem usa service role.
 - `/analise` é `noindex, nofollow`.
 - A configuração de provisioning versionada não contém membership, raw public key, senha de banco, JWT, service role ou conversation token.
+- O smoke local confirmou URL sem PII/token/query/hash e ausência de PII ou token em Local Storage, Session Storage e cookies da aplicação.
+- CORS e CSP foram validados no cenário local com origins exatas e sem permissões genéricas.
+- Sem configuração Atrium, `/analise` apresenta fallback seguro e não inicia conversa.
 
 As páginas legais refletem o escopo atual e precisam de revisão jurídica antes de produção.
 
@@ -27,11 +30,11 @@ As páginas legais refletem o escopo atual e precisam de revisão jurídica ante
 - `frame-ancestors 'none'` na CSP;
 - remoção de `X-Powered-By`.
 
-HSTS (`max-age=31536000; includeSubDomains`) só é enviado em produção quando `SITE_URL` começa com HTTPS. A CSP permite scripts e styles inline necessários à versão atual; em desenvolvimento também permite `unsafe-eval` e conexões locais/HMR.
+HSTS (`max-age=31536000; includeSubDomains`) só é enviado em produção quando `SITE_URL` começa com HTTPS. A CSP permite scripts e styles inline necessários à versão atual; em desenvolvimento também permite `unsafe-eval`, WebSocket exato do Next local e a origin Atrium somente quando seu endpoint passa pela validação. `connect-src` não usa os esquemas genéricos `http:` e `https:`.
 
 ## PLANEJADO — validação jurídica e de produto
 
-Antes de qualquer coleta pela futura jornada, definir e validar:
+Antes de usar a jornada fora do ambiente local, definir e validar:
 
 - finalidade de cada dado;
 - base legal aplicável;
@@ -42,9 +45,9 @@ Antes de qualquer coleta pela futura jornada, definir e validar:
 - controladores, operadores e responsabilidades;
 - separação entre consentimento operacional e marketing.
 
-A integração Atrium exigirá revisão das políticas, avisos, contratos, fluxos de titulares e limites de logging antes de produção.
+A integração Atrium exige revisão das políticas, avisos, contratos, fluxos de titulares e limites de logging antes de produção.
 
-O Flow de desenvolvimento configurado para a futura integração limita a coleta a classificação editorial PF/Empresa, necessidade, nome preferido, WhatsApp e consentimento. Nome e WhatsApp não entram no summary. O texto de consentimento é provisório para desenvolvimento/UAT e exige **REVISÃO JURÍDICA OBRIGATÓRIA ANTES DE PRODUÇÃO**.
+O Flow de desenvolvimento publicado limita a coleta a classificação editorial PF/Empresa, necessidade, nome preferido, WhatsApp e consentimento. Nome e WhatsApp não entram no summary. O texto de consentimento é provisório para desenvolvimento/UAT e exige **REVISÃO JURÍDICA OBRIGATÓRIA ANTES DE PRODUÇÃO**.
 
 ## PLANEJADO — Etapa 14
 

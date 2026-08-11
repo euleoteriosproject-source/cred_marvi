@@ -2,8 +2,8 @@
 
 ## Estado
 
-- **IMPLEMENTADO:** site institucional, conteúdo editorial, páginas públicas, shell de análise, SEO básico e canais opcionais.
-- **PLANEJADO:** jornada Atrium real na Etapa 13.
+- **IMPLEMENTADO:** site institucional, conteúdo editorial, páginas públicas, integração Web com os SDKs Atrium, smoke manual local PF/Empresa, SEO básico e canais opcionais.
+- **PLANEJADO:** ambientes externos, hardening e refinamento de UX antes da release.
 - **ADIADO:** formulários locais, leads, analytics, pixels, área administrativa e backend próprio.
 
 ## Experiência atual
@@ -17,7 +17,7 @@ O catálogo apresenta modalidades editoriais e quatro páginas detalhadas. Conte
 | Rota                                 | Finalidade                                   |
 | ------------------------------------ | -------------------------------------------- |
 | `/`                                  | Home institucional                           |
-| `/analise`                           | Shell visual futuro do Assistente Marvi      |
+| `/analise`                           | Jornada inline do Assistente Marvi           |
 | `/contato`                           | Canais públicos configurados, sem formulário |
 | `/faq`                               | Dúvidas frequentes                           |
 | `/politica-de-privacidade`           | Texto atual sujeito a revisão jurídica       |
@@ -39,12 +39,14 @@ Não existe rota `/sucesso`.
 ```text
 /analise
    ↓
-shell visual
+shell Cred Marvi (Server Component)
    ↓
-future Atrium boundary
+boundary cliente mínimo
+   ↓
+AtriumProvider → AtriumConversation
 ```
 
-A página informa que a conversa está indisponível e não solicita dados. Não existe questionário, question engine, branching, token de conversa ou progresso vindo do Atrium. O `ProgressIndicator` existente é apenas apresentacional e não deve ser tratado como contrato Atrium.
+A página monta o SDK somente com endpoint e public key válidos. Sem configuração, exibe fallback seguro para atendimento humano sem afirmar que uma solicitação foi registrada. O `ProgressIndicator` legado não envolve o SDK; progresso e conclusão são exibidos exclusivamente conforme o contrato Atrium.
 
 ## WhatsApp e contato
 
@@ -58,13 +60,15 @@ Quando ausente ou inválido, o CTA aponta para `/contato`. O link não recebe CP
 
 ## Variáveis de ambiente
 
-| Variável                      | Exposição   | Obrigatória | Comportamento quando ausente                                    |
-| ----------------------------- | ----------- | ----------- | --------------------------------------------------------------- |
-| `SITE_URL`                    | server-side | Não         | Sem base pública confirmada; site e robots ficam não indexáveis |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER` | browser     | Não         | CTAs usam `/contato`                                            |
-| `NEXT_PUBLIC_CONTACT_EMAIL`   | browser     | Não         | E-mail não é exibido                                            |
+| Variável                        | Exposição   | Obrigatória  | Comportamento quando ausente                                    |
+| ------------------------------- | ----------- | ------------ | --------------------------------------------------------------- |
+| `SITE_URL`                      | server-side | Não          | Sem base pública confirmada; site e robots ficam não indexáveis |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER`   | browser     | Não          | CTAs usam `/contato`                                            |
+| `NEXT_PUBLIC_CONTACT_EMAIL`     | browser     | Não          | E-mail não é exibido                                            |
+| `NEXT_PUBLIC_ATRIUM_API_URL`    | browser     | Para jornada | Fallback seguro do Assistente Marvi                             |
+| `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY` | browser     | Para jornada | Fallback seguro; valor nunca aparece em erro ou log             |
 
-Não existem variáveis Atrium nesta etapa.
+O endpoint aceita somente HTTP/HTTPS, sem credentials, query ou fragment, e tem trailing slash normalizado. `credit-analysis` é constante de produto, não variável de ambiente.
 
 ## SEO atual
 
@@ -84,3 +88,15 @@ pnpm dev
 ```
 
 O projeto usa Node.js 24 e pnpm 11.4.0. A aplicação local fica em `http://localhost:3000` quando a porta está livre.
+
+## PLANEJADO — refinamento pós-conclusão
+
+O smoke técnico foi aprovado, mas o estado completed ainda requer polimento não bloqueante:
+
+- mensagem de conclusão mais orientativa;
+- próximo passo claro;
+- CTA humano seguro;
+- tratamento visual do progresso já concluído;
+- acabamento visual mais alinhado à marca.
+
+A recomendação é tratar esse escopo em uma etapa específica de UX/release readiness depois da Stage 14 Hardening e antes da Stage 15 Release, sem alterar a lógica de completion do Atrium.

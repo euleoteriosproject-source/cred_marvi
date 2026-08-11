@@ -2,8 +2,8 @@
 
 ## Estado
 
-- **IMPLEMENTADO:** aplicação Web cliente, Brand System, conteúdo institucional e fronteira documental do Atrium.
-- **PLANEJADO:** integração com os SDKs e a API pública do Atrium na Etapa 13.
+- **IMPLEMENTADO:** aplicação Web cliente, Brand System, conteúdo institucional, integração de `/analise` com os SDKs públicos Atrium e smoke manual local PF/Empresa.
+- **PLANEJADO:** ambientes de staging/produção, hardening e release readiness.
 - **ADIADO:** backend próprio da Cred Marvi, engine local, banco, leads/admin automatizados, webhooks e e-mail.
 
 ## Contexto institucional
@@ -14,7 +14,7 @@ Grupo Marvi
 └── Atrium
 ```
 
-A Cred Marvi é a aplicação cliente e a experiência de atendimento. Atrium é uma plataforma separada, responsável futuramente pela jornada conversacional. O core Atrium não é copiado para este repositório.
+A Cred Marvi é a aplicação cliente e a experiência de atendimento. Atrium é uma plataforma separada, responsável pela jornada conversacional. O core Atrium não é copiado para este repositório.
 
 ## Implementação atual
 
@@ -35,7 +35,7 @@ A aplicação foi escrita do zero. O projeto anterior `marvi_finance` foi consul
 - Não existe question engine, branching local ou questionário.
 - Não existe acesso direto ao Supabase ou a outro banco.
 - Não existe service role no frontend.
-- Não existem SDKs Atrium instalados ou chamadas à API Atrium.
+- Os SDKs Atrium estão instalados por artefatos versionados; chamadas só ocorrem no browser quando endpoint e public key públicos são configurados.
 - Não existe coleta de documentos, CPF ou CNPJ.
 - PII não deve ser colocada em URLs, analytics ou logs.
 

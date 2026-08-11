@@ -332,8 +332,8 @@ export function SecurityPreview() {
           </SectionTitle>
           <p className="mt-5 max-w-2xl leading-7 text-inverse-muted">
             A Cred Marvi adota minimização de dados e canais claros. Nesta
-            versão, o site não coleta documentos nem conduz uma conversa
-            financeira.
+            versão, o site não coleta documentos nem decide aprovação, taxa ou
+            resultado financeiro.
           </p>
         </div>
         <article className="rounded-card border border-accent/30 bg-surface-inverse-alt p-7">
@@ -398,8 +398,8 @@ export function FinalCallToAction() {
           Um próximo passo mais claro começa aqui.
         </h2>
         <p className="mx-auto mt-4 max-w-xl leading-7 text-muted">
-          Conheça o espaço preparado para o Assistente Marvi ou continue com
-          atendimento humano.
+          Inicie a jornada com o Assistente Marvi ou continue com atendimento
+          humano.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <ButtonLink href="/analise">Iniciar análise</ButtonLink>

@@ -4,11 +4,13 @@
 
 - **IMPLEMENTADO:** o Atrium possui um comando genérico de provisioning com validação, dry-run, idempotência, auditoria e ações explícitas por recurso.
 - **IMPLEMENTADO:** a configuração não secreta de desenvolvimento da Cred Marvi está versionada em [`config/atrium/development.json`](../config/atrium/development.json).
-- **PLANEJADO — 13B2B:** executar o dry-run, aplicar o provisioning local, capturar a public key criada e verificar os recursos persistidos.
-- **PLANEJADO — 13C:** integrar a Web e `/analise` aos SDKs públicos do Atrium.
+- **IMPLEMENTADO:** provisioning local aplicado, com tenant `cred-marvi`, origin única, public key ativa e `credit-analysis` versão 1 publicada.
+- **IMPLEMENTADO:** Web e `/analise` integradas aos SDKs públicos do Atrium.
 - **ADIADO:** membership administrativa inicial, até existir um `externalSubject` Supabase real e confirmado.
 
-A presença da configuração no repositório não significa que tenant, theme, origin, public key ou Flow já existam no PostgreSQL.
+A configuração descreve o estado local provisionado. Ela não contém raw public key nem comprova staging ou produção.
+
+O dry-run final após o apply confirmou idempotência: tenant, theme, origin, public key e Flow retornaram `NO_OP`; membership retornou `SKIP`; não houve `CREATE`, `UPDATE` ou `CONFLICT`. Existe exatamente uma public key ativa no ambiente local, cujo valor não é versionado nem documentado.
 
 ## Configuração versionada
 
@@ -78,24 +80,24 @@ O texto configurado para desenvolvimento e UAT é:
 
 ## Progress
 
-O Flow possui branching. A Web deverá exibir somente o progresso fornecido pelo Atrium:
+O Flow possui branching. A Web exibe somente o progresso fornecido pelo Atrium:
 
 - `current` obrigatório;
 - `total` somente quando exato;
 - `percentage` somente quando exato;
 - conclusão conforme o contrato canônico.
 
-Não será criado cálculo ou percentual estimado na Cred Marvi.
+Não existe cálculo ou percentual estimado na Cred Marvi.
 
 ## Public key e secrets
 
 `publicKey.ensure: true` solicita que exista uma chave ativa. O JSON não contém a chave bruta nem qualquer secret.
 
-No futuro apply, a primeira criação deve usar explicitamente `--reveal-created-public-key`. O operador copiará o valor diretamente para `web/.env.local` durante a 13C. A saída não deve ser persistida em logs ou CI. Dry-run nunca gera raw material e rerun com chave ativa retorna `NO_OP`, sem revelar novamente o valor.
+Na primeira criação foi necessário usar explicitamente `--reveal-created-public-key`. O operador armazena o valor somente em `web/.env.local`. A saída não deve ser persistida em logs ou CI. Dry-run nunca gera raw material e rerun com chave ativa retorna `NO_OP`, sem revelar novamente o valor.
 
 Não versionar public key bruta, senha de banco, JWT, service role, conversation token ou credenciais operacionais.
 
-## Runbook futuro — 13B2B
+## Runbook local — 13B2B
 
 1. Subir o PostgreSQL Atrium.
 2. Inicializar a Atrium API e aplicar as migrations, inclusive a role `atrium_provisioner`.
@@ -109,9 +111,9 @@ Não versionar public key bruta, senha de banco, JWT, service role, conversation
 
 O comando precisa de banco migrado mesmo em dry-run e sempre executa `SET LOCAL ROLE atrium_provisioner`. O principal operacional deve ter autorização para assumir essa role. O runtime comum não recebe esse privilégio.
 
-## Critérios da execução futura
+## Estado verificado da execução local
 
-Após a 13B2B, deverá ser possível provar que:
+O estado local verificado registra que:
 
 - o tenant `cred-marvi` existe e está ativo;
 - `tenant_theme` contém `Cred Marvi`, `pt-BR` e `pt-BR` como locale suportado;

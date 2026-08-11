@@ -1,5 +1,8 @@
 packages:
   - web
+overrides:
+  "@atrium/common": "file:vendor/atrium/5e99195/atrium-common-1.0.0.tgz"
+  "@atrium/sdk-js": "file:vendor/atrium/5e99195/atrium-sdk-js-0.1.0.tgz"
 allowBuilds:
   esbuild: true
   sharp: true

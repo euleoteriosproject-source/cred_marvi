@@ -1,7 +1,6 @@
-import { MessageCircle, Sparkles } from "lucide-react";
-import { ButtonLink } from "@/components/ui/button-link";
+import { Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { whatsappHref } from "@/lib/whatsapp";
+import { AtriumAnalysis } from "@/integrations/atrium/atrium-analysis";
 
 export function AnalysisShell() {
   return (
@@ -15,31 +14,14 @@ export function AnalysisShell() {
             Assistente Marvi
           </p>
           <h1 className="mt-3 font-serif text-3xl font-semibold sm:text-4xl">
-            Um espaço preparado para uma jornada guiada.
+            Vamos entender o que você precisa.
           </h1>
           <p className="mt-5 leading-7 text-muted">
-            A conversa digital ainda não está disponível nesta versão. A
-            integração futura será conduzida pelo Atrium, responsável pelas
-            perguntas e pelo andamento da jornada.
+            Responda uma pergunta por vez. O Assistente Marvi conduz a etapa
+            inicial e nossa equipe pode continuar o atendimento com você.
           </p>
-          <div
-            className="mt-8 rounded-card border border-border bg-surface-subtle p-6"
-            aria-label="Área futura do Assistente Marvi"
-          >
-            <h2 className="font-bold">Integração em preparação</h2>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              Nenhuma informação pessoal é solicitada ou armazenada por esta
-              página neste momento.
-            </p>
-          </div>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={whatsappHref()}>
-              <MessageCircle size={18} aria-hidden="true" /> Falar com
-              especialista
-            </ButtonLink>
-            <ButtonLink href="/solucoes" variant="secondary">
-              Conhecer soluções
-            </ButtonLink>
+          <div className="mt-8 min-h-80" aria-label="Assistente Marvi">
+            <AtriumAnalysis />
           </div>
         </section>
       </Container>

@@ -4,7 +4,7 @@ import { PageShell } from "@/components/layout/page-shell";
 
 export const metadata: Metadata = {
   title: "Iniciar análise",
-  description: "Conheça o espaço preparado para a jornada do Assistente Marvi.",
+  description: "Inicie a jornada guiada do Assistente Marvi.",
   robots: { index: false, follow: false },
 };
 

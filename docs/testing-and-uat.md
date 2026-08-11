@@ -6,7 +6,9 @@
 - Tokens: presença e contraste das combinações principais.
 - WhatsApp: normalização, fallback e mensagem sem PII.
 - `ProgressIndicator`: total/percentage opcionais e ausência de percentual inventado.
-- Playwright: Home, rotas, 404, Header, Hero, CTA e shell de análise.
+- Configuração Atrium: presença, protocolos, credentials, query, fragment, trailing slash e mensagens sem public key.
+- Boundary Atrium: Provider, Conversation, Flow, locale, modo inline, mensagens, theme e fallback seguro por mocks.
+- Playwright: Home, rotas, 404, Header, Hero, CTA e fallback de análise sem ambiente real.
 - axe: auditoria automatizada da Home.
 - Responsividade: 320, 375, 768, 1024 e 1440px.
 - Zoom 200%, teclado, foco, skip link e ausência de overflow horizontal.
@@ -45,7 +47,7 @@ Lighthouse, dependency review, CodeQL, Gitleaks e scanners adicionais não fazem
 - [ ] Header e símbolo permanecem compactos, proporcionais e legíveis.
 - [ ] Hero, dourado, grafite, tipografia e espaçamento seguem o Brand System.
 - [ ] Não existem taxas, garantias, urgência artificial ou promessas de aprovação.
-- [ ] Assistente Marvi é apresentado como experiência futura, não conversa ativa.
+- [ ] Assistente Marvi preserva a identidade Cred Marvi e não aparenta ferramenta administrativa.
 
 ### Navegação e páginas
 
@@ -57,7 +59,7 @@ Lighthouse, dependency review, CodeQL, Gitleaks e scanners adicionais não fazem
 
 ### Análise, contato e WhatsApp
 
-- [ ] `/analise` não exibe questionário nem coleta informação.
+- [ ] Sem configuração Atrium, `/analise` exibe fallback seguro sem iniciar conversa.
 - [ ] Sem número configurado, CTAs humanos direcionam para `/contato`.
 - [ ] Com número válido, `wa.me` contém somente a mensagem fixa aprovada.
 - [ ] Nenhum dado pessoal, resposta ou URL atual aparece no link.
@@ -70,18 +72,17 @@ Lighthouse, dependency review, CodeQL, Gitleaks e scanners adicionais não fazem
 - [ ] Skip link, ordem de teclado, foco visível e alvos de toque funcionam.
 - [ ] Reduced motion é respeitado.
 
-## UAT futuro Atrium — PLANEJADO, Etapa 13
+## Smoke/UAT manual local Atrium — APROVADO, Etapa 13C2
 
-Somente após integração real, validar:
+Os itens abaixo foram validados manualmente pelo navegador e não fazem parte da suíte automatizada:
 
-- [ ] jornadas PF e PJ;
-- [ ] capital de giro, financiamento e consórcio;
-- [ ] desistência e retomada aprovadas pelo contrato;
-- [ ] erro e Atrium indisponível;
-- [ ] consentimento negado;
-- [ ] conclusão e handoff seguro para WhatsApp;
-- [ ] mobile, teclado e acessibilidade da conversa;
-- [ ] origin proibida;
-- [ ] progresso somente quando fornecido pelo Atrium.
+- [x] jornadas Pessoa Física e Empresa, com branching correto;
+- [x] Consórcio no caminho PF e Capital de giro no caminho Empresa;
+- [x] Public Configuration, criação, cinco respostas e completion por conversa;
+- [x] duas conversations completadas e dois eventos canônicos sem duplicidade;
+- [x] CORS, CSP, URL e browser storage no cenário local;
+- [x] fallback sem configuração;
+- [x] mobile 375 × 812, teclado, foco, consentimento obrigatório e zoom 200%;
+- [x] loading sem duplo envio evidente.
 
-Esses cenários não são executáveis na Web atual e não autorizam a criação de mocks ou engine local.
+Não foram validados nesta execução: desistência/retomada, origin proibida, falha provocada no meio de uma conversa, staging ou produção. Os testes unitários continuam mockando apenas o boundary do SDK e não simulam Engine ou perguntas.

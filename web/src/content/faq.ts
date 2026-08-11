@@ -17,7 +17,7 @@ export const faqItems = [
   {
     question: "Como funciona o Assistente Marvi?",
     answer:
-      "O Assistente Marvi será o ponto de entrada para uma jornada guiada. A integração responsável pelas perguntas e pelo andamento será realizada pelo Atrium em uma etapa posterior.",
+      "O Assistente Marvi conduz uma jornada inicial guiada pelo Atrium. O Atrium apresenta as perguntas e controla o andamento; o site não decide aprovação, taxa ou resultado.",
   },
   {
     question: "Posso falar com uma especialista?",

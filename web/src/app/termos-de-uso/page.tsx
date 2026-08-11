@@ -32,8 +32,9 @@ export default function TermsPage() {
       <section>
         <h2>3. Assistente Marvi</h2>
         <p>
-          Nesta versão, a área de análise é apenas uma preparação visual. Não
-          existe conversa, coleta de respostas ou integração ativa com o Atrium.
+          A área de análise oferece uma jornada inicial conduzida pelo Atrium. A
+          jornada organiza informações para atendimento e não representa
+          aprovação, proposta, contratação ou decisão de crédito.
         </p>
       </section>
       <section>
