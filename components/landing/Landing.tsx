@@ -1,455 +1,62 @@
-import Image from "next/image";
+"use client";
+import {useEffect,useState} from "react";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Award,
-  Building2,
-  Check,
-  ChevronDown,
-  Handshake,
-  Landmark,
-  LockKeyhole,
-  MessageCircle,
-  Search,
-  Users,
-  UserRound,
-} from "lucide-react";
-import { Container } from "@/components/common/Container";
-import { WhatsAppButton } from "@/components/common/WhatsAppButton";
+import {ArrowRight,Building2,Check,ChevronDown,HeartPulse,Landmark,Lightbulb,LockKeyhole,MessageCircle,Plane,ShieldCheck,Sparkles,TrendingUp,UserRound,WalletCards} from "lucide-react";
+import {Container} from "@/components/common/Container";
+import {SpecialistSection} from "@/components/landing/SpecialistSection";
+import {categories,publicProducts} from "@/lib/domain/catalog";
+import {objectivesFor} from "@/lib/domain/objectives";
+import {trackEvent} from "@/lib/analytics";
 
-const benefits = [
-  "Atendimento humano e personalizado",
-  "Formulário direcionado ao seu perfil",
-  "Envio direto pelo WhatsApp",
-  "Informações tratadas com transparência",
+const trust=["Atendimento personalizado","Pessoa física e empresa","Especialista com experiência bancária","Processo simples e direcionado"];
+const categoryCopy:Record<string,string>={credit:"Alternativas para diferentes necessidades financeiras.",financing:"Imóveis, veículos e outras aquisições disponíveis.",consortium:"Planejamento para diferentes tipos de conquista.",insurance:"Proteção para pessoas, patrimônio e negócios.",business:"Alternativas para operação, investimento e crescimento.",energy:"Soluções disponíveis relacionadas à eficiência energética.",health:"Alternativas relacionadas a cuidado, conveniência e benefícios.",travel:"Soluções disponíveis para planejamento de viagens.",other:"Atendimento para necessidades que pedem avaliação individual."};
+const categoryIcons={credit:WalletCards,financing:Landmark,consortium:Sparkles,insurance:ShieldCheck,business:TrendingUp,energy:Lightbulb,health:HeartPulse,travel:Plane,other:MessageCircle} as const;
+const how=[
+ ["Conte o que precisa","Comece pelo seu objetivo, não pelo nome de um produto."],
+ ["Responda somente o necessário","Mostramos apenas as perguntas relacionadas ao seu perfil e à sua necessidade."],
+ ["Nós organizamos o contexto","As respostas preparam o atendimento e ajudam a especialista a começar entendendo seu cenário."],
+ ["Continue com uma pessoa","O atendimento segue diretamente com a Marlise pelo WhatsApp."],
 ];
-const products = {
-  "Para pessoa física": [
-    [
-      "Empréstimo com garantia",
-      "LOAN_PERSON",
-      "Crédito pessoal com análise de renda, valor solicitado e garantia disponível.",
-    ],
-    [
-      "Financiamento de imóvel",
-      "REAL_ESTATE_FINANCING",
-      "Para avaliar a aquisição de um imóvel conforme o valor pretendido e a renda familiar.",
-    ],
-    [
-      "INSS — Portabilidade ou refinanciamento",
-      "INSS_PORT_REFIN",
-      "Para avaliar a transferência ou o refinanciamento de um contrato consignado existente.",
-    ],
-    [
-      "Crédito do trabalhador",
-      "WORKER_CREDIT",
-      "Crédito voltado a trabalhadores elegíveis, conforme as condições da instituição responsável.",
-    ],
-    [
-      "INSS Novo",
-      "INSS_NEW",
-      "Nova contratação de crédito consignado para beneficiários elegíveis do INSS.",
-    ],
-    [
-      "FGTS — Saque-Aniversário",
-      "FGTS_BIRTHDAY",
-      "Antecipação de parcelas futuras do Saque-Aniversário, sujeita à análise e disponibilidade.",
-    ],
-    [
-      "INSS Cartões",
-      "INSS_CARDS",
-      "Opções de cartão destinadas a beneficiários elegíveis do INSS.",
-    ],
-    [
-      "Convênios públicos",
-      "PUBLIC_AGREEMENTS",
-      "Crédito para servidores de órgãos públicos que possuam convênio disponível.",
-    ],
-    [
-      "Financiamento de veículo",
-      "VEHICLE",
-      "Para compra de veículo usado ou zero km, para pessoa física ou empresa.",
-    ],
-    [
-      "Consórcio",
-      "CONSORTIUM",
-      "Planejamento para adquirir serviços, imóveis, veículos ou pesados por meio de parcelas e contemplação.",
-    ],
-  ],
-  "Para empresas": [
-    [
-      "Capital de giro",
-      "CREDIT_BUSINESS",
-      "Crédito para apoiar o caixa, as compras ou os investimentos da empresa.",
-    ],
-    [
-      "Financiamento de veículo",
-      "VEHICLE",
-      "Para aquisição de veículo usado ou zero km em nome da empresa.",
-    ],
-    [
-      "Consórcio",
-      "CONSORTIUM",
-      "Planejamento para aquisição de serviços, imóveis, veículos ou pesados pela empresa.",
-    ],
-  ],
-} as const;
-const faqs = [
-  [
-    "Quais produtos são atendidos?",
-    "Para pessoas físicas: empréstimo, financiamento de imóvel, produtos INSS, Crédito do Trabalhador, FGTS Saque-Aniversário, Convênios Públicos, financiamento de veículo e consórcio. Para empresas: capital de giro, financiamento de veículo e consórcio.",
-  ],
-  [
-    "A análise garante aprovação?",
-    "Não. O formulário organiza as informações para o atendimento inicial. Aprovação, taxas, limites e prazos dependem da análise e dos critérios das instituições responsáveis.",
-  ],
-  [
-    "Quanto tempo leva?",
-    "O formulário fica disponível 24 horas e leva poucos minutos. As solicitações são analisadas e o atendimento é realizado em horário comercial.",
-  ],
-  [
-    "Como as informações são enviadas?",
-    "Ao final, o WhatsApp abre com um checklist preenchido. Você pode revisar e editar a mensagem antes de enviá-la.",
-  ],
-  [
-    "Preciso enviar documentos?",
-    "O formulário não solicita fotos de documentos. Nesta etapa são pedidos apenas os dados necessários ao produto escolhido.",
-  ],
-  [
-    "Meus dados estão seguros?",
-    "As informações são usadas para preparar a análise e o atendimento, conforme o Aviso de Privacidade. Nunca informe senhas, códigos bancários ou dados completos de cartão.",
-  ],
-  [
-    "A Cred Marvi é um banco?",
-    "Não. A Cred Marvi presta atendimento e intermedia soluções oferecidas por instituições e plataformas parceiras, conforme cada caso.",
-  ],
+const faqs=[
+ ["Preciso saber qual produto quero?","Não. Você pode começar pelo seu objetivo e a Cred Marvi ajuda a identificar os caminhos que podem fazer sentido."],
+ ["Quais tipos de solução vocês atendem?","O atendimento abrange categorias como crédito, financiamentos, consórcios e soluções empresariais. Outras categorias são exibidas somente quando estiverem confirmadas."],
+ ["Posso falar diretamente com a Marlise?","Sim. Para continuar direto com ela, pedimos apenas nome, WhatsApp, assunto e consentimento."],
+ ["A análise garante aprovação?","Não. Aprovação, taxas, limites e prazos dependem da análise e dos critérios das instituições responsáveis."],
+ ["As taxas são definidas pela Cred Marvi?","Não. Taxas e condições são definidas pelas instituições responsáveis e variam conforme a modalidade e a análise."],
+ ["Preciso enviar documentos agora?","Não nesta triagem inicial. Se forem necessários depois, a especialista explicará a finalidade e o canal apropriado."],
+ ["A Cred Marvi é um banco?","Não. A Cred Marvi presta atendimento e intermedia soluções oferecidas por instituições e plataformas conforme cada caso."],
+ ["Como meus dados são usados?","Os dados ficam temporariamente no navegador para preparar o atendimento. O link do WhatsApp não leva respostas financeiras detalhadas."],
+ ["Vocês pedem senha?","Nunca. Não informe senha, token, código SMS, CVV ou login bancário."],
 ];
 
-export function Landing() {
-  return (
-    <main>
-      <section className="relative overflow-hidden bg-navy py-16 text-white sm:py-24">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_25%,rgba(216,182,90,.15),transparent_35%),linear-gradient(135deg,transparent,rgba(255,255,255,.025))]" />
-        <Container className="relative">
-          <div className="max-w-4xl">
-            <p className="eyebrow text-gold">
-              Atendimento financeiro especializado
-            </p>
-            <h1 className="mt-5 font-serif text-4xl font-semibold leading-[1.08] sm:text-6xl">
-              Empréstimos, crédito para empresas, financiamento de imóveis e
-              veículos e consórcios.
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              Escolha se a análise é para você ou para sua empresa. A partir
-              disso, mostramos somente os produtos e as perguntas adequadas ao
-              seu perfil.
-            </p>
-            <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-2">
-              <Link
-                href="/analise?profile=PERSON"
-                className="option border-gold/30 bg-white/5 text-white hover:bg-white/10"
-              >
-                <UserRound className="text-gold" />
-                <span>
-                  <strong className="block">Para mim</strong>
-                  <small className="mt-1 block text-slate-300">
-                    Pessoa física
-                  </small>
-                </span>
-                <ArrowRight className="ml-auto text-gold" size={18} />
-              </Link>
-              <Link
-                href="/analise?profile=BUSINESS"
-                className="option border-gold/30 bg-white/5 text-white hover:bg-white/10"
-              >
-                <Building2 className="text-gold" />
-                <span>
-                  <strong className="block">Para minha empresa</strong>
-                  <small className="mt-1 block text-slate-300">
-                    Pessoa jurídica
-                  </small>
-                </span>
-                <ArrowRight className="ml-auto text-gold" size={18} />
-              </Link>
-            </div>
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {benefits.map((x) => (
-                <li
-                  key={x}
-                  className="flex items-center gap-2 text-sm font-semibold text-slate-200"
-                >
-                  <Check className="text-gold" size={18} />
-                  {x}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-9">
-              <WhatsAppButton className="border-gold/30 bg-transparent text-white hover:bg-white/5" />
-            </div>
-          </div>
-        </Container>
-      </section>
-      <section className="border-y border-gold/15 bg-[#fbfaf6]">
-        <Container className="grid grid-cols-2 gap-6 py-7 text-center text-xs font-bold text-muted md:grid-cols-4">
-          <p>Atendimento personalizado</p>
-          <p>Formulário disponível 24h</p>
-          <p>Pessoa física e empresa</p>
-          <p>Envio direto pelo WhatsApp</p>
-        </Container>
-      </section>
-      <section id="solucoes" className="py-20 sm:py-28">
-        <Container>
-          <p className="eyebrow">Conheça as soluções</p>
-          <h2 className="section-title">
-            Entenda cada opção e escolha com segurança.
-          </h2>
-          <p className="mt-5 max-w-2xl text-muted">
-            Veja uma explicação rápida de cada produto. Ao escolher, você segue
-            direto para as perguntas necessárias — e, se a solução atender
-            pessoas e empresas, usaremos o perfil da lista escolhida.
-          </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {Object.entries(products).map(([title, items], i) => {
-              const profile = i ? "BUSINESS" : "PERSON";
-              return (
-                <article
-                  key={title}
-                  className="rounded-3xl border border-[#e6dfcc] bg-white p-7 shadow-[0_18px_60px_rgba(9,12,16,.07)] sm:p-9"
-                >
-                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold">
-                    {i ? <Building2 /> : <UserRound />}
-                  </span>
-                  <h3 className="mt-6 font-serif text-3xl font-semibold">
-                    {title}
-                  </h3>
-                  <div className="mt-5 grid gap-3">
-                    {items.map(([label, solution, description]) => (
-                      <Link
-                        key={label}
-                        href={`/analise?solution=${solution}&profile=${profile}`}
-                        className="group flex items-start gap-3 rounded-xl border border-[#e6dfcc] px-4 py-4 text-navy transition hover:border-gold hover:bg-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                      >
-                        <Check
-                          size={17}
-                          className="mt-0.5 shrink-0 text-[#9a7611]"
-                        />
-                        <span>
-                          <strong className="block text-sm">{label}</strong>
-                          <small className="mt-1.5 block font-medium leading-5 text-muted">
-                            {description}
-                          </small>
-                        </span>
-                        <ArrowRight
-                          size={16}
-                          className="ml-auto mt-0.5 shrink-0 text-[#9a7611] transition group-hover:translate-x-1"
-                        />
-                      </Link>
-                    ))}
-                  </div>
-                  <Link
-                    className="mt-7 inline-flex items-center gap-2 font-bold"
-                    href={`/analise?profile=${profile}`}
-                  >
-                    Ver todas deste perfil <ArrowRight size={17} />
-                  </Link>
-                </article>
-              );
-            })}
-          </div>
-          <p className="mt-6 text-xs leading-5 text-muted">
-            A disponibilidade, aprovação e condições dependem da análise e das
-            instituições responsáveis.
-          </p>
-        </Container>
-      </section>
-      <section id="como-funciona" className="bg-navy py-20 text-white sm:py-28">
-        <Container>
-          <p className="eyebrow text-gold">Como funciona</p>
-          <h2 className="mt-3 font-serif text-3xl font-semibold sm:text-5xl">
-            Um fluxo curto e direcionado.
-          </h2>
-          <div className="mt-12 grid gap-5 md:grid-cols-4">
-            {[
-              [UserRound, "Escolha PF ou PJ"],
-              [Search, "Selecione o produto"],
-              [MessageCircle, "Responda o essencial"],
-              [Handshake, "Envie pelo WhatsApp"],
-            ].map(([Icon, title], i) => {
-              const I = Icon as typeof Search;
-              return (
-                <article
-                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
-                  key={String(title)}
-                >
-                  <span className="text-xs font-bold text-gold">0{i + 1}</span>
-                  <I className="mt-8 text-gold" />
-                  <h3 className="mt-4 font-bold">{String(title)}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">
-                    Você vê apenas as etapas necessárias para o perfil e o
-                    produto escolhidos.
-                  </p>
-                </article>
-              );
-            })}
-          </div>
-        </Container>
-      </section>
-      <section id="especialista" className="py-20 sm:py-28">
-        <Container className="grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr]">
-          <div className="space-y-4 lg:self-start">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-gold/25 bg-navy shadow-premium">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(216,182,90,.12),transparent_55%)]" />
-              <Image
-                src="/brand/cred-marvi-primary.png"
-                alt="Cred Marvi"
-                fill
-                sizes="(min-width:1024px) 45vw, 100vw"
-                className="-translate-y-8 object-contain object-center opacity-95 mix-blend-lighten [mask-image:radial-gradient(ellipse_at_center,black_72%,transparent_100%)]"
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-gold/20 bg-navy p-4 text-center text-white shadow-premium">
-              <p>
-                <strong className="block text-xl text-gold">10+</strong>
-                <small className="text-[10px] leading-tight text-slate-300">
-                  anos no mercado
-                </small>
-              </p>
-              <p>
-                <strong className="block text-xl text-gold">600+</strong>
-                <small className="text-[10px] leading-tight text-slate-300">
-                  empresas em carteira
-                </small>
-              </p>
-              <p>
-                <strong className="block text-xl text-gold">130</strong>
-                <small className="text-[10px] leading-tight text-slate-300">
-                  pessoas lideradas
-                </small>
-              </p>
-            </div>
-          </div>
-          <div>
-            <p className="eyebrow">Sobre a especialista</p>
-            <h2 className="section-title">
-              Experiência bancária para orientar cada atendimento com clareza.
-            </h2>
-            <h3 className="mt-6 text-xl font-bold">Marlise Paiva</h3>
-            <p className="mt-3 leading-7 text-muted">
-              Administradora e profissional com mais de 10 anos de atuação no
-              mercado financeiro, construiu sua trajetória em instituições como
-              Santander, Itaú Unibanco e cooperativas de crédito. Reúne
-              experiência no atendimento a pessoas e empresas, estruturação de
-              operações de crédito, análise de risco e relacionamento
-              consultivo.
-            </p>
-            <p className="mt-4 leading-7 text-muted">
-              Na área empresarial, já gerenciou uma carteira com mais de 600
-              empresas cooperadas e atuou com negócios de diferentes portes.
-              Também liderou uma operação digital PJ com aproximadamente 130
-              profissionais, participando da formação de equipes, implantação de
-              processos e desenvolvimento de pessoas.
-            </p>
-            <div className="mt-7 grid gap-3 sm:grid-cols-3">
-              <p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold">
-                <Award size={19} className="mb-3 text-[#9a7611]" />
-                CPA-10 ANBIMA ativa
-              </p>
-              <p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold">
-                <Landmark size={19} className="mb-3 text-[#9a7611]" />
-                Formação em Administração
-              </p>
-              <p className="rounded-xl border border-[#e6dfcc] bg-cream p-4 text-sm font-bold">
-                <Users size={19} className="mb-3 text-[#9a7611]" />
-                Atuação com PF e PJ
-              </p>
-            </div>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {[
-                "Crédito, financiamentos e consórcios",
-                "Crédito e soluções para empresas",
-                "Análise de risco e operações",
-                "Atendimento próximo e consultivo",
-              ].map((x) => (
-                <p className="flex gap-2 text-sm font-semibold" key={x}>
-                  <Check className="shrink-0 text-[#9a7611]" size={18} />
-                  {x}
-                </p>
-              ))}
-            </div>
-            <p className="mt-6 text-sm leading-6 text-muted">
-              Pós-graduação em Finanças e Banking em andamento, com experiência
-              também em compliance, LGPD, prevenção à lavagem de dinheiro e
-              governança.
-            </p>
-          </div>
-        </Container>
-      </section>
-      <section id="seguranca" className="bg-navy2 py-20 text-white">
-        <Container className="grid gap-10 lg:grid-cols-2">
-          <div>
-            <p className="eyebrow text-gold">Segurança e privacidade</p>
-            <h2 className="mt-3 font-serif text-4xl font-semibold">
-              Clareza em cada etapa.
-            </h2>
-            <p className="mt-5 leading-7 text-slate-300">
-              Solicitamos somente as informações relacionadas ao produto
-              escolhido para preparar o atendimento inicial.
-            </p>
-          </div>
-          <div className="rounded-3xl border border-gold/30 bg-navy p-7">
-            <LockKeyhole className="text-gold" />
-            <p className="mt-5 text-lg font-bold">
-              Nunca informe senhas bancárias, códigos de autenticação ou dados
-              completos de cartão.
-            </p>
-            <p className="mt-3 text-sm leading-6 text-slate-300">
-              O formulário não solicita fotos de documentos.
-            </p>
-            <Link
-              href="/privacidade"
-              className="mt-5 inline-flex font-bold text-gold"
-            >
-              Conheça o Aviso de Privacidade
-            </Link>
-          </div>
-        </Container>
-      </section>
-      <section id="duvidas" className="py-20 sm:py-28">
-        <Container className="max-w-4xl">
-          <p className="eyebrow">Dúvidas frequentes</p>
-          <h2 className="section-title">Informação clara desde o início.</h2>
-          <div className="mt-10 divide-y rounded-2xl border px-5 sm:px-8">
-            {faqs.map(([q, a]) => (
-              <details className="group py-5" key={q}>
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold">
-                  {q}
-                  <ChevronDown className="shrink-0 transition group-open:rotate-180" />
-                </summary>
-                <p className="mt-3 max-w-3xl leading-7 text-muted">{a}</p>
-              </details>
-            ))}
-          </div>
-        </Container>
-      </section>
-      <section className="border-y border-gold/20 bg-[linear-gradient(135deg,#f7f4ec,#fffdf7)] py-20 text-center">
-        <Container>
-          <h2 className="font-serif text-4xl font-semibold">
-            Comece pelo seu perfil.
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted">
-            Assim, o formulário apresenta somente os produtos disponíveis para
-            você ou sua empresa.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link href="/analise?profile=PERSON" className="btn-primary">
-              Sou pessoa física
-            </Link>
-            <Link href="/analise?profile=BUSINESS" className="btn-secondary">
-              Represento uma empresa
-            </Link>
-          </div>
-        </Container>
-      </section>
-    </main>
-  );
+export function Landing(){
+ const[profile,setProfile]=useState<"PERSON"|"BUSINESS">("PERSON"),[expanded,setExpanded]=useState(false);
+ const[showMobileCta,setShowMobileCta]=useState(false);
+ useEffect(()=>{const update=()=>setShowMobileCta(window.scrollY>window.innerHeight*.75&&!(["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName||"")));update();window.addEventListener("scroll",update,{passive:true});window.addEventListener("focusin",update);window.addEventListener("focusout",update);return()=>{window.removeEventListener("scroll",update);window.removeEventListener("focusin",update);window.removeEventListener("focusout",update)}},[]);
+ const visible=objectivesFor(profile).slice(0,expanded?99:6);
+ const choose=(value:"PERSON"|"BUSINESS")=>{setProfile(value);setExpanded(false);trackEvent("profile_selected",{profile:value})};
+ return <main id="conteudo" className="bg-canvas pb-20 md:pb-0">
+  <section className="relative overflow-hidden bg-navy py-16 text-white sm:py-24">
+   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_22%,rgba(210,163,77,.17),transparent_32%),linear-gradient(135deg,transparent,rgba(255,255,255,.025))]"/>
+   <Container className="relative grid max-w-[100vw] grid-cols-1 items-center gap-12 overflow-hidden lg:max-w-7xl lg:grid-cols-[1.15fr_.85fr]">
+    <div><p className="eyebrow text-gold">Atendimento financeiro especializado</p><h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.08] sm:text-6xl">A solução certa começa entendendo o que você realmente precisa.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">Conte seu objetivo. A Cred Marvi organiza sua necessidade e direciona seu atendimento entre diferentes soluções para você ou sua empresa.</p><p className="mt-3 font-semibold text-white">Você não precisa descobrir sozinho qual produto procurar.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Link onClick={()=>trackEvent("hero_cta_clicked",{location:"hero"})} href="/analise" className="btn-primary">Encontrar uma solução <ArrowRight size={18}/></Link><Link onClick={()=>trackEvent("specialist_clicked",{location:"hero"})} href="/analise?quick=1" className="btn-secondary border-gold/30 bg-transparent text-white hover:bg-white/5">Falar com a Marlise</Link></div><ul className="mt-8 grid gap-3 sm:grid-cols-2">{trust.map(item=><li className="flex items-center gap-2 text-sm font-semibold text-slate-200" key={item}><Check className="text-gold" size={18}/>{item}</li>)}</ul></div>
+    <aside className="rounded-[2rem] border border-gold/25 bg-white/[.06] p-6 shadow-premium backdrop-blur sm:p-8"><p className="eyebrow text-gold">Como podemos ajudar?</p><h2 className="mt-3 font-serif text-3xl font-semibold">Comece pelo seu perfil.</h2><div className="mt-7 grid gap-3"><HeroChoice icon={<UserRound/>} title="Para mim" text="Pessoa física" href="/analise?profile=PERSON"/><HeroChoice icon={<Building2/>} title="Para minha empresa" text="Pessoa jurídica" href="/analise?profile=BUSINESS"/></div><Link href="/analise?objective=unsure-person" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-gold">Não sei qual solução preciso <ArrowRight size={16}/></Link><p className="mt-7 border-t border-white/10 pt-5 text-xs leading-5 text-slate-400">Poucas perguntas, sem documentos ou dados bancários nesta etapa.</p></aside>
+   </Container>
+  </section>
+  <section className="border-y border-border-subtle bg-surface"><Container className="grid grid-cols-2 gap-6 py-8 text-center text-xs font-bold text-muted md:grid-cols-4">{trust.map((item,index)=><p className="relative md:after:absolute md:after:-right-3 md:after:top-0 md:after:h-full md:after:w-px md:after:bg-border-subtle md:last:after:hidden" key={item}><span className="mb-2 block font-serif text-lg text-[#8b6a16]">0{index+1}</span>{item}</p>)}</Container></section>
+  <SpecialistSection/>
+  <section id="objetivos" className="bg-[#fbfaf6] py-20 sm:py-28"><Container><div className="max-w-3xl"><p className="eyebrow">Começamos pelo seu objetivo</p><h2 className="section-title">O que você precisa resolver hoje?</h2><p className="mt-5 text-lg leading-8 text-muted">Escolha seu objetivo. Nós ajudamos a identificar quais alternativas podem fazer sentido.</p></div><div className="mt-9 inline-flex rounded-xl border bg-white p-1.5"><button onClick={()=>choose("PERSON")} className={`min-h-12 rounded-lg px-5 text-sm font-bold ${profile==="PERSON"?"bg-navy text-gold":"text-muted"}`}>Para mim</button><button onClick={()=>choose("BUSINESS")} className={`min-h-12 rounded-lg px-5 text-sm font-bold ${profile==="BUSINESS"?"bg-navy text-gold":"text-muted"}`}>Para minha empresa</button></div><div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{visible.map(item=><Link onClick={()=>trackEvent("objective_selected",{profile})} href={`/analise?profile=${profile}&objective=${item.id}`} key={item.id} className="group rounded-2xl border bg-white p-6 shadow-[0_14px_40px_rgba(9,12,16,.05)] transition hover:-translate-y-1 hover:border-gold hover:shadow-lg"><span className="grid h-10 w-10 place-items-center rounded-xl bg-gold/15 text-[#8b6a16]"><ArrowRight size={18}/></span><h3 className="mt-5 font-serif text-xl font-semibold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.shortDescription}</p></Link>)}</div>{objectivesFor(profile).length>6&&<button onClick={()=>setExpanded(value=>!value)} className="btn-secondary mt-8">{expanded?"Mostrar menos":"Ver mais objetivos"}<ChevronDown className={expanded?"rotate-180":""} size={18}/></button>}</Container></section>
+  <section className="py-20"><Container><div className="overflow-hidden rounded-[2rem] bg-navy p-8 text-white shadow-premium sm:p-12 lg:flex lg:items-center lg:justify-between"><div className="max-w-2xl"><p className="eyebrow text-gold">Não sei o que preciso</p><h2 className="mt-3 font-serif text-3xl font-semibold sm:text-4xl">Tudo bem. Você não precisa conhecer o nome do produto.</h2><p className="mt-5 leading-7 text-slate-300">Responda algumas perguntas rápidas e vamos preparar seu atendimento para a especialista entender por onde começar.</p></div><Link href="/analise?objective=unsure-person" className="btn-primary mt-8 shrink-0 lg:ml-10 lg:mt-0">Preparar atendimento <ArrowRight size={18}/></Link></div></Container></section>
+  <section className="bg-cream py-20 sm:py-28"><Container><p className="eyebrow">Soluções para diferentes momentos</p><h2 className="section-title">Uma necessidade pode ter mais de um caminho.</h2><p className="mt-5 max-w-3xl text-lg leading-8 text-muted">A Cred Marvi está ampliando seu portfólio para oferecer um atendimento cada vez mais completo para pessoas e empresas.</p><div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{categories.filter(([id])=>id!=="other").map(([id,name])=>{const Icon=categoryIcons[id];return <article className="rounded-2xl border bg-white p-6" key={id}><Icon className="text-[#8b6a16]"/><h3 className="mt-5 font-serif text-xl font-semibold">{name}</h3><p className="mt-2 text-sm leading-6 text-muted">{categoryCopy[id]}</p></article>})}</div><Link href="/solucoes" className="btn-secondary mt-8">Ver todas as soluções <ArrowRight size={18}/></Link></Container></section>
+  <section className="py-20 text-center sm:py-28"><Container className="max-w-4xl"><p className="font-serif text-3xl font-semibold leading-tight sm:text-5xl">Você não precisa falar com vários lugares para descobrir por onde começar.</p><p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-muted">Conte sua necessidade uma vez. Nós organizamos as informações e preparamos o atendimento.</p><Link href="/analise" className="btn-primary mt-8">Quero encontrar uma solução</Link></Container></section>
+  <section id="como-funciona" className="bg-navy py-20 text-white sm:py-28"><Container><p className="eyebrow text-gold">Como funciona</p><h2 className="mt-3 font-serif text-3xl font-semibold sm:text-5xl">Simples para começar. Humano para decidir.</h2><div className="mt-12 grid gap-5 md:grid-cols-4">{how.map(([title,text],i)=><article className="rounded-2xl border border-white/10 bg-white/5 p-6" key={title}><span className="text-xs font-bold text-gold">0{i+1}</span><h3 className="mt-8 font-bold">{title}</h3><p className="mt-3 text-sm leading-6 text-slate-300">{text}</p></article>)}</div></Container></section>
+  <section id="seguranca" className="relative overflow-hidden bg-[#14171a] py-20 text-white sm:py-28"><div className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full border border-gold/10"/><Container className="relative grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-20"><div><p className="eyebrow text-gold">Segurança e privacidade</p><h2 className="mt-4 max-w-xl font-serif text-4xl font-semibold leading-tight sm:text-5xl">Confiança também faz parte do atendimento.</h2><p className="mt-6 max-w-md leading-7 text-slate-300">Transparência, cuidado com seus dados e atendimento humano em todas as etapas.</p><div className="mt-10 h-px w-20 bg-gold"/></div><div className="grid border-t border-white/15 sm:grid-cols-2"> <Security icon={<LockKeyhole/>} title="Dados essenciais" text="Pedimos apenas informações relacionadas à preparação inicial do atendimento."/><Security icon={<ShieldCheck/>} title="Nunca informe senhas" text="A Cred Marvi nunca solicita senha bancária ou código de autenticação."/><Security icon={<UserRound/>} title="Atendimento humano" text="Antes de qualquer contratação, você pode esclarecer condições com a especialista."/><Security icon={<Landmark/>} title="Transparência" text="Aprovação, taxas, limites e condições dependem das instituições responsáveis."/></div></Container></section>
+  <section id="duvidas" className="border-y border-border-subtle bg-surface-muted py-20 sm:py-28"><Container className="grid gap-12 lg:grid-cols-[.68fr_1.32fr] lg:gap-20"><div className="lg:sticky lg:top-28 lg:self-start"><p className="eyebrow">Dúvidas frequentes</p><h2 className="section-title max-w-md">Informação clara desde o início.</h2><p className="mt-6 max-w-sm leading-7 text-muted">Entenda como funciona o atendimento, o uso dos seus dados e o papel da Cred Marvi antes de começar.</p></div><div className="divide-y divide-border-subtle border-y border-border-subtle">{faqs.map(([question,answer])=><details onToggle={event=>event.currentTarget.open&&trackEvent("faq_opened",{location:"home"})} className="group transition-colors open:bg-white/55 hover:bg-white/40" key={question}><summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 px-3 py-4 font-bold sm:px-5">{question}<span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border-subtle bg-white"><ChevronDown className="transition group-open:rotate-180" size={17}/></span></summary><p className="max-w-2xl px-3 pb-6 leading-7 text-muted sm:px-5">{answer}</p></details>)}</div></Container></section>
+  <section className="relative overflow-hidden border-y border-gold/20 bg-[#181b1e] py-20 text-center text-white sm:py-24"><div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(210,163,77,.2),transparent_45%)]"/><Container className="relative"><p className="eyebrow text-gold">Começar é simples</p><h2 className="mx-auto mt-4 max-w-3xl font-serif text-4xl font-semibold leading-tight sm:text-5xl">Conte o que você precisa.<br className="hidden sm:block"/> O próximo passo começa aqui.</h2><p className="mx-auto mt-6 max-w-xl leading-7 text-slate-300">Em poucos minutos, você organiza as informações iniciais e prepara seu atendimento.</p><div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row"><Link href="/analise" className="btn-primary">Encontrar uma solução</Link><Link href="/analise?quick=1" className="btn-secondary border-white/20 bg-transparent text-white hover:bg-white/10">Falar com a Marlise</Link></div></Container></section>
+  <section className="py-20 sm:py-28"><Container><div className="max-w-2xl"><p className="eyebrow">Já sabe o que procura?</p><h2 className="section-title">Comece diretamente pela solução.</h2><p className="mt-5 leading-7 text-muted">O contexto do produto acompanha você. Não perguntaremos novamente o que já sabemos.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{publicProducts.map(product=><Link onClick={()=>trackEvent("solution_clicked",{location:"popular"})} href={`/analise?product=${product.slug}`} key={product.id} className="group rounded-2xl border bg-white p-6 transition hover:-translate-y-0.5 hover:border-gold hover:shadow-lg"><p className="text-xs font-bold uppercase tracking-wider text-[#8b6a16]">Solução</p><h3 className="mt-4 font-serif text-xl font-semibold">{product.name}</h3><p className="mt-2 text-sm leading-6 text-muted">{product.description}</p><span className="mt-5 inline-flex items-center gap-2 text-sm font-bold">Preparar atendimento <ArrowRight size={16}/></span></Link>)}</div><Link href="/solucoes" className="btn-secondary mt-8">Ver todas <ArrowRight size={17}/></Link></Container></section>
+  <section className="bg-[#fbfaf6] py-20 sm:py-28"><Container><p className="eyebrow">Para diferentes momentos</p><h2 className="section-title max-w-3xl">Uma relação que pode continuar depois da primeira solução.</h2><p className="mt-5 max-w-3xl text-lg leading-8 text-muted">Sua necessidade muda com o tempo. A Marvi foi criada para continuar ajudando você e sua empresa em diferentes momentos.</p><div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">{["Comprar","Crescer","Planejar","Proteger","Organizar","Economizar"].map(moment=><div key={moment} className="rounded-2xl border bg-white p-5 text-center font-serif text-lg font-semibold">{moment}</div>)}</div></Container></section>
+  {showMobileCta&&<div className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 md:hidden"><Link href="/analise" className="btn-primary w-full shadow-premium">Encontrar uma solução <ArrowRight size={18}/></Link></div>}
+ </main>
 }
+function HeroChoice({icon,title,text,href}:{icon:React.ReactNode;title:string;text:string;href:string}){return <Link href={href} className="flex min-h-20 items-center gap-4 rounded-2xl border border-white/15 bg-white/[.07] p-4 transition hover:border-gold hover:bg-white/10"><span className="grid h-11 w-11 place-items-center rounded-xl bg-gold/15 text-gold">{icon}</span><span><strong className="block">{title}</strong><small className="mt-1 block text-slate-300">{text}</small></span><ArrowRight className="ml-auto text-gold" size={18}/></Link>}
+function Security({icon,title,text}:{icon:React.ReactNode;title:string;text:string}){return <article className="border-b border-white/15 p-6 first:border-l-0 sm:min-h-52 sm:border-l sm:odd:border-l-0 sm:[&:nth-last-child(-n+2)]:border-b-0"><span className="text-gold">{icon}</span><h3 className="mt-7 font-serif text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-slate-300">{text}</p></article>}

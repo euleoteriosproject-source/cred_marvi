@@ -17,6 +17,9 @@ export function successMessage(
 ) {
   return `Olá! Acabei de enviar uma solicitação pelo site da Cred Marvi.\n\nProtocolo: ${protocol}\nNome: ${firstName}\nNecessidade: ${need}`;
 }
+export function handoffMessage(protocol:string,profile:string,objective:string){
+  return `Olá! Fiz uma análise pelo site da Cred Marvi e gostaria de continuar o atendimento.\n\nProtocolo: ${protocol}\nPerfil: ${profile}\nAssunto: ${objective}`;
+}
 
 const solutionNames: Record<NonNullable<LeadData["solution"]>, string> = {
   LOAN_PERSON: "Empréstimo",
