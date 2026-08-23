@@ -1,7 +1,7 @@
 import type {NextConfig} from "next";
 
 const nextConfig:NextConfig={
-  allowedDevOrigins:["192.168.2.105"],
+  allowedDevOrigins:["192.168.2.109","192.168.2.105","localhost"],
   async headers(){return[{source:"/:path*",headers:[
     {key:"X-Content-Type-Options",value:"nosniff"},
     {key:"Referrer-Policy",value:"strict-origin-when-cross-origin"},

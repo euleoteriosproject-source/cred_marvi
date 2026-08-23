@@ -1,142 +1,51 @@
 "use client";
-import {useMemo,useRef,useState} from "react";
+import {useEffect,useMemo,useState} from "react";
 import {useSearchParams} from "next/navigation";
 import Link from "next/link";
-import {ArrowLeft,ArrowRight,Building2,Check,Clock,Landmark,LockKeyhole,MessageCircle,ShieldCheck,UserRound} from "lucide-react";
+import {ArrowLeft,ArrowRight,Building2,Check,Clock,LockKeyhole,MessageCircle,ShieldCheck,UserRound} from "lucide-react";
 import {Logo} from "@/components/brand/Logo";
-import {maskCnpj,maskCpf,maskMoney,maskPhone,maskRg,maskVehiclePlate,maskVehicleYear} from "@/lib/formatting";
-import {leadChecklistMessage,whatsappUrl} from "@/lib/whatsapp";
+import {maskPhone} from "@/lib/formatting";
+import {objectivesFor,objectiveById} from "@/lib/domain/objectives";
+import {contextFromSearch,flowLabel,flowSteps,setFlowProfile,type FlowAnswers,type FlowState,type FlowStepId} from "@/lib/flow-engine";
+import {createProtocol} from "@/lib/protocol";
+import {handoffMessage,whatsappUrl} from "@/lib/whatsapp";
 import {trackEvent} from "@/lib/analytics";
-import {documentFor,resolveAnalysisEntry} from "@/lib/analysis-entry";
-import type {LeadData} from "@/types/lead";
 
-type Values=Partial<LeadData>;
-type Step={id:string;title:string;help?:string;kind:"choice"|"multi"|"text"|"identity"|"contact";field?:keyof Values;options?:string[];optional?:boolean};
-const solutions=[
-  ["LOAN_PERSON","Empréstimo","Análise de valor, renda e garantias"],
-  ["REAL_ESTATE_FINANCING","Financiamento de imóvel","Para aquisição de imóvel por pessoa física"],
-  ["INSS_PORT_REFIN","INSS — Portabilidade ou refinanciamento","Para benefício com contrato em andamento"],
-  ["WORKER_CREDIT","Crédito do trabalhador","Crédito voltado ao trabalhador elegível"],
-  ["INSS_NEW","INSS Novo","Nova contratação para beneficiários do INSS"],
-  ["FGTS_BIRTHDAY","FGTS — Saque-Aniversário","Antecipação vinculada ao Saque-Aniversário"],
-  ["INSS_CARDS","INSS Cartões","Cartões destinados a beneficiários do INSS"],
-  ["PUBLIC_AGREEMENTS","Convênios públicos","Crédito para servidores de órgãos conveniados"],
-  ["CREDIT_BUSINESS","Capital de giro","Crédito para apoiar o caixa da empresa"],
-  ["VEHICLE_PERSON","Financiamento de veículo","Veículo usado ou zero km"],
-  ["VEHICLE_BUSINESS","Financiamento de veículo","Veículo usado ou zero km"],
-  ["CONSORTIUM","Consórcio","Serviços, imóveis, veículos ou pesados"],
-] as const;
-const guaranteePerson=["Terreno","Imóvel","Veículo","Não possuo garantia"];
-const guaranteeBusiness=["Terreno","Imóvel","Veículo","Duplicatas","Não possuo garantia"];
-const solutionsFor=(profile:Values["customerType"])=>solutions.filter(([id])=>profile==="PERSON"?["LOAN_PERSON","REAL_ESTATE_FINANCING","INSS_PORT_REFIN","WORKER_CREDIT","INSS_NEW","FGTS_BIRTHDAY","INSS_CARDS","PUBLIC_AGREEMENTS","VEHICLE_PERSON","CONSORTIUM"].includes(id):["CREDIT_BUSINESS","VEHICLE_BUSINESS","CONSORTIUM"].includes(id));
-
-function stepsFor(v:Values,productPreselected=false):Step[]{
-  if(!v.customerType)return[{id:"profile",title:"A análise é para você ou para sua empresa?",help:"Essa escolha define os produtos disponíveis nas próximas etapas.",kind:"choice",field:"customerType",options:["PERSON","BUSINESS"]}];
-  const select:Step={id:"solution",title:v.customerType==="PERSON"?"Qual produto você procura para você?":"Qual produto sua empresa procura?",help:"Mostramos somente as opções disponíveis para o perfil escolhido.",kind:"choice",field:"solution",options:solutionsFor(v.customerType).map(x=>x[0])};
-  if(!v.solution)return[select];
-  const start=productPreselected?[]:[select];
-  const contact:Step={id:"contact",title:"Como podemos falar com você?",help:"Confira os dados antes de abrir a conversa no WhatsApp.",kind:"contact"};
-  if(v.solution==="LOAN_PERSON")return[...start,
-    {id:"amount",title:"Qual valor de empréstimo você precisa?",kind:"text",field:"requestedAmount"},
-    {id:"guarantees",title:"Quais garantias você pode oferecer?",help:"Selecione todas que se aplicam.",kind:"multi",field:"guarantees",options:guaranteePerson},
-    {id:"income",title:"Qual é a sua renda mensal aproximada?",kind:"text",field:"income"},
-    {id:"identity",title:"Informe seus dados de identificação.",help:"Digite apenas os números dos documentos. Não envie fotos nesta etapa.",kind:"identity"},contact];
-  if(v.solution==="REAL_ESTATE_FINANCING")return[...start,
-    {id:"propertyValue",title:"Qual é o valor aproximado do imóvel?",kind:"text",field:"propertyValue"},
-    {id:"amount",title:"Qual valor você pretende financiar?",kind:"text",field:"requestedAmount"},
-    {id:"income",title:"Qual é a sua renda mensal aproximada?",kind:"text",field:"income"},
-    {id:"identity",title:"Informe seus dados de identificação.",help:"Digite apenas os números dos documentos. Não envie fotos nesta etapa.",kind:"identity"},contact];
-  if(v.solution==="CREDIT_BUSINESS")return[...start,
-    {id:"amount",title:"Qual valor de capital de giro sua empresa precisa?",kind:"text",field:"requestedAmount"},
-    {id:"company",title:"Qual é o nome da empresa?",kind:"text",field:"businessName"},
-    {id:"cnpj",title:"Informe o CNPJ da empresa.",help:"Aceitamos CNPJ numérico e alfanumérico.",kind:"text",field:"cnpj"},
-    {id:"guarantees",title:"Quais garantias a empresa pode oferecer?",help:"Selecione todas que se aplicam.",kind:"multi",field:"guarantees",options:guaranteeBusiness},
-    {id:"revenue",title:"Qual é o faturamento mensal aproximado?",kind:"text",field:"monthlyRevenueRange"},
-    {id:"identity",title:"Dados do sócio administrador.",help:"Esses dados ajudam a preparar a análise inicial.",kind:"identity"},contact];
-  if(["INSS_PORT_REFIN","WORKER_CREDIT","INSS_NEW","FGTS_BIRTHDAY","INSS_CARDS","PUBLIC_AGREEMENTS"].includes(String(v.solution)))return[...start,
-    {id:"amount",title:"Qual valor você pretende contratar ou simular?",kind:"text",field:"requestedAmount"},
-    {id:"identity",title:"Informe seus dados de identificação.",help:"Digite apenas os números dos documentos. Não envie fotos nesta etapa.",kind:"identity"},contact];
-  if(v.solution==="VEHICLE_PERSON"||v.solution==="VEHICLE_BUSINESS"){
-    const used=v.vehicleCondition==="USED",business=v.solution==="VEHICLE_BUSINESS";
-    return[...start,
-      {id:"condition",title:"O veículo é usado ou zero km?",kind:"choice",field:"vehicleCondition",options:["USED","NEW"]},
-      ...(v.vehicleCondition?[used?
-        {id:"vehicleValue",title:"Qual é o valor do veículo?",kind:"text",field:"vehicleValue"} as Step:
-        {id:"invoiceValue",title:"Qual é o valor da nota fiscal?",kind:"text",field:"invoiceValue"} as Step,
-        ...(used?[{id:"year",title:"Qual é o ano do veículo?",kind:"text",field:"vehicleYear"} as Step,{id:"plate",title:"Qual é a placa do veículo?",kind:"text",field:"vehiclePlate"} as Step]:[{id:"brand",title:"Qual é a marca do veículo?",kind:"text",field:"vehicleBrand"} as Step,{id:"model",title:"Qual é o modelo do veículo?",kind:"text",field:"vehicleModel"} as Step]),
-        {id:"buyer",title:`Informe o ${business?"CNPJ da empresa":"CPF do comprador"}.`,kind:"text",field:"buyerDocument"} as Step]:[]),contact];
-  }
-  return[...start,
-    {id:"category",title:"Qual tipo de consórcio você procura?",kind:"choice",field:"consortiumCategory",options:["Serviços","Imóvel","Veículo","Pesados"]},
-    {id:"assetValue",title:"Qual é o valor aproximado do bem ou serviço?",kind:"text",field:"requestedAmount"},
-    {id:"buyer",title:`Informe o ${v.customerType==="PERSON"?"CPF":"CNPJ"}.`,kind:"text",field:"buyerDocument"},contact];
-}
+const answerLabels:Record<string,string>={UP_TO_50:"Até R$ 50 mil","50_TO_200":"R$ 50 mil a R$ 200 mil","200_TO_500":"R$ 200 mil a R$ 500 mil",ABOVE_500:"Acima de R$ 500 mil",UNSURE:"Ainda não sei",NOW:"O quanto antes","30_DAYS":"Nos próximos 30 dias","3_MONTHS":"Em até 3 meses",PLANNING:"Estou apenas planejando",FIRST:"Comprar meu primeiro veículo",TRADE:"Trocar o veículo atual",CHOSEN:"Financiar um veículo que já escolhi",RESEARCH:"Ainda estou pesquisando",HOME:"Imóvel",VEHICLE:"Veículo",HEAVY:"Veículo pesado",SERVICE:"Serviço"};
 
 export function LeadWizard(){
-  const search=useSearchParams(),profile=search.get("profile"),product=search.get("solution");
-  const entry=resolveAnalysisEntry(product,profile),inferredProfile=entry.customerType,initialSolution=entry.solution;
-  const productPreselected=Boolean(initialSolution||product==="VEHICLE"||product==="CONSORTIUM");
-  const initialProduct=initialSolution?solutions.find(([id])=>id===initialSolution):undefined;
-  const[started,setStarted]=useState(false),[index,setIndex]=useState(0),[error,setError]=useState(""),[submittedUrl,setSubmittedUrl]=useState(""),[pendingProfile,setPendingProfile]=useState<Values["customerType"]>(),[values,setValues]=useState<Values>({customerType:inferredProfile,solution:initialSolution,documentType:documentFor(inferredProfile),need:initialProduct?.[1]});
-  const startedAt=useRef(Date.now());
-  const steps=useMemo(()=>stepsFor(values,productPreselected),[values,productPreselected]),step=steps[index]||steps[steps.length-1];
-  const choosingSharedProduct=step.id==="profile"&&(product==="VEHICLE"||product==="CONSORTIUM");
-  const update=(field:keyof Values,value:unknown)=>{setValues(v=>({...v,[field]:value}));setError("")};
-  const setSolution=(solution:string)=>{const selected=solutions.find(x=>x[0]===solution)!;setValues(v=>({solution:solution as Values["solution"],customerType:v.customerType,documentType:v.customerType==="PERSON"?"CPF":"CNPJ",need:selected[1]}));setError("")};
-  function validate(){
-    setError("");
-    if(step.kind==="choice"&&step.field&&!(choosingSharedProduct?pendingProfile:values[step.field]))return setError("Selecione uma opção para continuar."),false;
-    if(step.kind==="multi"&&!(values.guarantees?.length))return setError("Selecione pelo menos uma opção."),false;
-    if(step.kind==="text"&&step.field&&String(values[step.field]||"").trim().length<2)return setError("Preencha esta informação para continuar."),false;
-    if(step.id==="identity"){
-      const businessIdentity=values.solution==="CREDIT_BUSINESS";
-      if(businessIdentity&&String(values.administratorName||"").trim().length<3)return setError("Informe o nome do sócio administrador."),false;
-      const cpf=businessIdentity?values.administratorCpf:values.cpf,rg=businessIdentity?values.administratorRg:values.rg;
-      if(String(rg||"").replace(/\W/g,"").length<5)return setError("Informe o RG."),false;
-      if(String(cpf||"").replace(/\D/g,"").length!==11)return setError("Informe um CPF com 11 dígitos."),false;
-    }
-    if(step.id==="contact"){
-      if(String(values.fullName||"").trim().length<3)return setError("Informe o nome para contato."),false;
-      const needsAddress=["LOAN_PERSON","REAL_ESTATE_FINANCING","VEHICLE_PERSON","VEHICLE_BUSINESS"].includes(String(values.solution));
-      if(needsAddress&&String(values.address||"").trim().length<8)return setError("Informe o endereço completo."),false;
-      if(String(values.phone||"").replace(/\D/g,"").length<10)return setError("Informe um telefone com DDD."),false;
-      if(!values.email||!/^\S+@\S+\.\S+$/.test(values.email))return setError("Informe um e-mail válido."),false;
-    }
-    return true;
-  }
-  function next(){
-    if(!validate())return;
-    if(step.id==="profile"&&(product==="VEHICLE"||product==="CONSORTIUM")){
-      const solution=product==="VEHICLE"?(pendingProfile==="PERSON"?"VEHICLE_PERSON":"VEHICLE_BUSINESS"):"CONSORTIUM";
-      const selected=solutions.find(([id])=>id===solution)!;
-      setValues(v=>({...v,customerType:pendingProfile,solution,documentType:pendingProfile==="PERSON"?"CPF":"CNPJ",need:selected[1]}));
-      trackEvent("wizard_step_completed",{step:step.id});
-      window.scrollTo({top:0,behavior:"smooth"});
-      return;
-    }
-    trackEvent("wizard_step_completed",{step:step.id});setIndex(i=>Math.min(i+1,steps.length-1));window.scrollTo({top:0,behavior:"smooth"})
-  }
-  function back(){if(index===0)return setStarted(false);setIndex(i=>i-1);setError("")}
-  function submit(){const payload:Values={...values,status:"NEW",startedAt:startedAt.current},url=whatsappUrl(leadChecklistMessage(payload));trackEvent("lead_submit_success",{result:"whatsapp"});setSubmittedUrl(url);window.open(url,"_blank","noopener,noreferrer")}
-  const selectedDescription=initialProduct?.[2]||(product==="VEHICLE"?"Para compra de veículo usado ou zero km, por pessoa física ou empresa.":product==="CONSORTIUM"?"Planejamento para adquirir serviços, imóveis, veículos ou pesados.":undefined);
-  if(!started)return <Shell><div className="text-center"><span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-gold/15 text-[#9a7611]"><Landmark/></span><p className="eyebrow mt-7">Análise inicial</p><h1 className="mx-auto mt-3 max-w-xl font-serif text-3xl font-semibold sm:text-4xl">{initialProduct?initialProduct[1]:product==="VEHICLE"?"Financiamento de veículo":product==="CONSORTIUM"?"Consórcio":"Encontre o caminho mais adequado para o que você precisa."}</h1><p className="mx-auto mt-4 max-w-xl leading-7 text-muted">{selectedDescription||"Responda apenas às perguntas relacionadas à solução escolhida. No final, você revisa tudo e envia diretamente pelo WhatsApp."}</p>{selectedDescription&&<p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-muted">Vamos pedir somente as informações necessárias e preparar o checklist para envio pelo WhatsApp.</p>}<div className="mt-7 flex items-center justify-center gap-2 text-sm font-semibold text-muted"><ShieldCheck size={18} className="text-[#9a7611]"/>Leva poucos minutos e não exige envio de documentos.</div><button className="btn-primary mt-8" onClick={()=>{setStarted(true);trackEvent("analysis_started")}}>Começar <ArrowRight size={18}/></button></div></Shell>;
-  if(submittedUrl)return <Shell><div className="text-center"><span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-[#e9f8ef] text-[#16834f]"><Check size={34}/></span><p className="eyebrow mt-7">Próximo passo</p><h1 className="mx-auto mt-3 max-w-xl font-serif text-3xl font-semibold sm:text-4xl">Seu atendimento está pronto no WhatsApp.</h1><p className="mx-auto mt-4 max-w-xl leading-7 text-muted">Abrimos uma nova aba com o checklist preenchido. Revise as informações e toque em enviar para iniciar a conversa com a especialista.</p><div className="mx-auto mt-7 max-w-lg rounded-2xl border border-gold/25 bg-cream p-5 text-left"><p className="flex gap-3 text-sm leading-6 text-muted"><ShieldCheck size={20} className="mt-0.5 shrink-0 text-[#9a7611]"/><span>O envio só é concluído quando você confirma a mensagem no WhatsApp. Se a nova aba não abriu, use o botão abaixo.</span></p></div><div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><a className="btn-primary" href={submittedUrl} target="_blank" rel="noopener noreferrer"><MessageCircle size={18}/>Abrir WhatsApp</a><Link className="btn-secondary" href="/">Voltar ao início</Link></div></div></Shell>;
-  const progress=Math.round(((index+1)/steps.length)*100);
-  return <Shell><div className="mb-8"><div className="flex justify-between text-xs font-bold text-muted"><span>Etapa {index+1} de {steps.length}</span><span>{progress}%</span></div><div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200"><div className="h-full bg-gold transition-all" style={{width:`${progress}%`}}/></div></div><section key={step.id}><h1 className="font-serif text-3xl font-semibold leading-tight sm:text-4xl">{step.title}</h1>{step.help&&<p className="mt-3 text-sm leading-6 text-muted">{step.help}</p>}<div className="mt-8"><StepContent step={step} values={choosingSharedProduct?{...values,customerType:pendingProfile}:values} update={choosingSharedProduct?(field,value)=>{if(field==="customerType")setPendingProfile(value as Values["customerType"]);setError("")}:update} setSolution={setSolution}/></div>{error&&<p role="alert" className="mt-5 rounded-xl bg-red-50 p-4 text-sm font-semibold text-[#C33B43]">{error}</p>}<div className="mt-9 flex items-center justify-between gap-3"><button className="btn-secondary" onClick={back}><ArrowLeft size={18}/>Voltar</button>{step.id==="contact"?<button className="btn-primary" onClick={()=>{if(validate())submit()}}><MessageCircle size={18}/>Enviar pelo WhatsApp</button>:<button className="btn-primary" onClick={next}>Continuar <ArrowRight size={18}/></button>}</div></section></Shell>
+ const search=useSearchParams(),quick=search.get("quick")==="1";
+ const initialContext=useMemo(()=>contextFromSearch(search),[search]);
+ const[state,setState]=useState<FlowState>({context:initialContext,answers:{},completed:[]}),[history,setHistory]=useState<FlowStepId[]>([]),[error,setError]=useState(""),[selectedKey,setSelectedKey]=useState(""),[done,setDone]=useState<{protocol:string;url:string}>();
+ useEffect(()=>{trackEvent("flow_started",{entryPoint:initialContext.entryPoint});trackEvent("flow_context_loaded",{entryPoint:initialContext.entryPoint,profile:initialContext.profile||"unknown",objective:initialContext.objectiveId||"unknown",product:initialContext.productId||"unknown"})},[initialContext]);
+ const steps=flowSteps(state),current=quick?(state.answers.name&&state.answers.phone&&state.answers.serviceConsent?steps.find(step=>step.id==="review")!:steps.find(step=>step.id==="contact")!):steps[0];
+ const progress=current.id==="review"?100:Math.max(20,Math.round(((history.length+1)/(history.length+steps.length))*100));
+ const updateAnswer=<K extends keyof FlowAnswers>(key:K,value:FlowAnswers[K])=>{setState(old=>({...old,answers:{...old.answers,[key]:value}}));setError("")};
+ function advance(id:FlowStepId,delay=0){setState(old=>({...old,completed:[...(old.completed||[]),id]}));setHistory(old=>[...old,id]);trackEvent("wizard_step_completed",{step:id});if(delay)window.setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),delay);else window.scrollTo({top:0,behavior:"smooth"})}
+ function choose(stepId:FlowStepId,value:string){
+  if(selectedKey)return;setSelectedKey(`${stepId}:${value}`);setError("");
+  window.setTimeout(()=>{if(stepId==="profile"){setState(old=>setFlowProfile(old,value as "PERSON"|"BUSINESS"));trackEvent("profile_selected",{profile:value});}else if(stepId==="objective"){setState(old=>({...old,context:{...old.context,objectiveId:value},answers:{...old.answers}}));trackEvent("objective_selected",{profile:state.context.profile||"unknown"});}else setState(old=>({...old,answers:{...old.answers,[stepId]:value}}));setState(old=>({...old,completed:[...(old.completed||[]),stepId]}));setHistory(old=>[...old,stepId]);setSelectedKey("");window.scrollTo({top:0,behavior:"smooth"})},180);
+ }
+ function validateAndAdvance(){
+  if(current.id==="context"&&(!state.answers.context||state.answers.context.trim().length<5))return setError("Conte um pouco mais para prepararmos o atendimento.");
+  if(current.id==="contact"){if(!state.answers.name||state.answers.name.trim().length<3)return setError("Informe seu nome.");if((state.answers.phone||"").replace(/\D/g,"").length<10)return setError("Informe um WhatsApp com DDD.");if(!state.answers.serviceConsent)return setError("Aceite o Aviso de Privacidade para continuar.")}
+  advance(current.id);
+ }
+ function back(){const previous=history.at(-1);if(!previous)return window.history.back();setHistory(old=>old.slice(0,-1));setState(old=>{const answers={...old.answers};if(previous in answers)delete answers[previous as keyof FlowAnswers];const completed=(old.completed||[]).filter(id=>id!==previous);if(previous==="objective")return{context:{...old.context,objectiveId:undefined,productId:undefined,categoryId:undefined},answers,completed};if(previous==="profile")return{context:{...old.context,profile:undefined,objectiveId:undefined,productId:undefined,categoryId:undefined},answers:{},completed};return{...old,answers,completed}});setError("")}
+ function submit(){const protocol=createProtocol(),profile=state.context.profile==="BUSINESS"?"Empresa":state.context.profile==="PERSON"?"Pessoa física":"Não informado",subject=flowLabel(state.context),url=whatsappUrl(handoffMessage(protocol,profile,subject));trackEvent("lead_submit_success",{result:"whatsapp"});setDone({protocol,url});window.open(url,"_blank","noopener,noreferrer")}
+ if(done)return <Shell progress={100} onBack={()=>undefined}><div className="text-center"><span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-gold/15 text-[#8b6a16]"><Check size={32}/></span><p className="eyebrow mt-7">Atendimento preparado</p><h1 className="mt-3 font-serif text-4xl font-semibold">Pronto. A Marlise já pode começar conhecendo seu contexto.</h1><p className="mx-auto mt-4 max-w-xl leading-7 text-muted">Seu protocolo identifica o atendimento sem expor informações financeiras na URL.</p><div className="mx-auto mt-7 max-w-sm rounded-2xl border bg-cream p-5"><span className="text-xs font-bold uppercase tracking-wider text-muted">Protocolo</span><strong className="mt-2 block text-xl">{done.protocol}</strong></div><a href={done.url} target="_blank" rel="noopener noreferrer" className="btn-primary mt-8"><MessageCircle size={18}/>Continuar com a Marlise</a><div className="mt-12 border-t pt-8"><p className="text-sm font-bold">A Marvi também pode ajudar em outros momentos.</p><div className="mt-4 flex flex-wrap justify-center gap-2"><Link className="rounded-full border px-4 py-2 text-sm" href="/analise?profile=PERSON&objective=plan-purchase">Planejar uma aquisição</Link><Link className="rounded-full border px-4 py-2 text-sm" href="/analise?profile=PERSON&objective=protect-family">Proteger patrimônio</Link><Link className="rounded-full border px-4 py-2 text-sm" href="/analise?profile=BUSINESS">Soluções para sua empresa</Link></div></div></div></Shell>;
+ return <Shell progress={progress} onBack={back}><div className="mb-7"><p className="eyebrow">{flowLabel(state.context)}</p>{state.context.objectiveId&&current.id!=="review"&&<p className="mt-2 text-sm font-semibold text-muted">Entendi. Vamos preparar seu atendimento sem repetir o que você já informou.</p>}</div><section key={current.id} className="animate-[flowIn_.2s_ease-out]"><h1 className="max-w-2xl font-serif text-3xl font-semibold leading-tight sm:text-4xl">{current.question}</h1>{current.helper&&<p className="mt-3 max-w-xl text-sm leading-6 text-muted">{current.helper}</p>}<div className="mt-8"><StepContent stepId={current.id} state={state} options={current.options} choose={choose} update={updateAnswer}/></div>{error&&<p role="alert" aria-live="polite" className="mt-5 rounded-xl bg-red-50 p-4 text-sm font-semibold text-[#a52d34]">{error}</p>}<div className="mt-9 flex items-center justify-end">{current.type==="TEXT"||current.type==="CONTACT"?<button className="btn-primary" onClick={validateAndAdvance}>Preparar atendimento <ArrowRight size={18}/></button>:current.type==="REVIEW"?<button className="btn-primary" onClick={submit}><MessageCircle size={18}/>Continuar com a Marlise</button>:null}</div>{!quick&&current.id!=="contact"&&current.id!=="review"&&<Link href="/analise?quick=1&entryPoint=SPECIALIST" className="mt-7 block text-center text-sm font-bold text-[#80600f] underline">Prefiro falar direto com a Marlise</Link>}</section></Shell>
 }
 
-function StepContent({step,values,update,setSolution}:{step:Step;values:Values;update:(f:keyof Values,v:unknown)=>void;setSolution:(v:string)=>void}){
-  if(step.id==="profile")return <div className="grid gap-3 sm:grid-cols-2"><button type="button" onClick={()=>{update("solution",undefined);update("customerType","PERSON")}} className={`option ${values.customerType==="PERSON"?"option-selected":""}`}><UserRound className="text-[#9a7611]"/><span><strong className="block">Para mim</strong><small className="mt-1 block font-medium text-muted">Pessoa física</small></span></button><button type="button" onClick={()=>{update("solution",undefined);update("customerType","BUSINESS")}} className={`option ${values.customerType==="BUSINESS"?"option-selected":""}`}><Building2 className="text-[#9a7611]"/><span><strong className="block">Para minha empresa</strong><small className="mt-1 block font-medium text-muted">Pessoa jurídica</small></span></button></div>;
-  if(step.id==="solution")return <div><div className="mb-5 flex items-center justify-between rounded-xl bg-cream px-4 py-3 text-sm"><span className="flex items-center gap-2 font-bold">{values.customerType==="PERSON"?<UserRound size={17}/>:<Building2 size={17}/>} {values.customerType==="PERSON"?"Pessoa física":"Pessoa jurídica"}</span><button type="button" className="font-bold text-[#8b6a16] underline" onClick={()=>{update("solution",undefined);update("customerType",undefined)}}>Trocar perfil</button></div><div className="grid gap-3">{solutionsFor(values.customerType).map(([value,label,help])=><button key={value} type="button" onClick={()=>setSolution(value)} className={`option ${values.solution===value?"option-selected":""}`}><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-gold/40 bg-gold/10 text-sm font-bold text-[#8b6a16]">{values.solution===value?<Check size={17}/> : "+"}</span><span><strong className="block">{label}</strong><small className="mt-1 block font-medium text-muted">{help}</small></span></button>)}</div></div>;
-  if(step.kind==="choice")return <div className="grid gap-3 sm:grid-cols-2">{step.options?.map(option=><button type="button" key={option} onClick={()=>update(step.field!,option)} className={`option ${values[step.field!]===option?"option-selected":""}`}><span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border">{values[step.field!]===option&&<Check size={16}/>}</span>{option==="USED"?"Usado":option==="NEW"?"Zero km":option}</button>)}</div>;
-  if(step.kind==="multi")return <div className="grid gap-3 sm:grid-cols-2">{step.options?.map(option=>{const checked=values.guarantees?.includes(option);return <button type="button" key={option} onClick={()=>{const current=values.guarantees||[];const exclusive=option.startsWith("Não possuo");update("guarantees",checked?current.filter(x=>x!==option):exclusive?[option]:[...current.filter(x=>!x.startsWith("Não possuo")),option])}} className={`option ${checked?"option-selected":""}`}><span className="grid h-7 w-7 shrink-0 place-items-center rounded-md border">{checked&&<Check size={16}/>}</span>{option}</button>})}</div>;
-  if(step.kind==="identity"){const businessIdentity=values.solution==="CREDIT_BUSINESS";return <div className="grid gap-5 sm:grid-cols-2">{businessIdentity&&<Field label="Nome do sócio administrador *" value={values.administratorName} onChange={v=>update("administratorName",v)} wide/>}<Field label="RG *" value={businessIdentity?values.administratorRg:values.rg} onChange={v=>update(businessIdentity?"administratorRg":"rg",maskRg(v))} placeholder="00.000.000-X ou 00.00.000.000"/><Field label="CPF *" value={businessIdentity?values.administratorCpf:values.cpf} onChange={v=>update(businessIdentity?"administratorCpf":"cpf",maskCpf(v))} placeholder="000.000.000-00" inputMode="numeric"/></div>}
-  if(step.kind==="contact"){const needsAddress=["LOAN_PERSON","REAL_ESTATE_FINANCING","VEHICLE_PERSON","VEHICLE_BUSINESS"].includes(String(values.solution));return <div className="grid gap-5 sm:grid-cols-2"><Field label="Nome para contato *" value={values.fullName} onChange={v=>update("fullName",v)} wide/>{needsAddress&&<Field label="Endereço completo *" value={values.address} onChange={v=>update("address",v)} placeholder="Rua, número, bairro, cidade e estado" wide/>}<Field label="Telefone / WhatsApp *" value={values.phone} onChange={v=>update("phone",maskPhone(v))} placeholder="(00) 00000-0000" inputMode="tel"/><Field label="E-mail *" value={values.email} onChange={v=>update("email",v)} placeholder="voce@email.com" type="email"/></div>}
-  const money=["requestedAmount","propertyValue","income","monthlyRevenueRange","vehicleValue","invoiceValue"].includes(String(step.field));
-  const cnpj=step.field==="cnpj"||(step.field==="buyerDocument"&&(values.solution==="VEHICLE_BUSINESS"||values.documentType==="CNPJ"));
-  const cpf=step.field==="buyerDocument"&&!cnpj;
-  return <Field label="Sua resposta *" value={String(values[step.field!]||"")} onChange={v=>update(step.field!,money?maskMoney(v):cnpj?maskCnpj(v):cpf?maskCpf(v):step.field==="vehiclePlate"?maskVehiclePlate(v):step.field==="vehicleYear"?maskVehicleYear(v):v)} placeholder={money?"R$ 0":cnpj?"00.000.000/0000-00":cpf?"000.000.000-00":step.field==="vehiclePlate"?"ABC1D23 ou ABC-1234":step.field==="vehicleYear"?"2024":"Digite aqui"} inputMode={money||cpf||step.field==="vehicleYear"?"numeric":"text"}/>;
+function StepContent({stepId,state,options,choose,update}:{stepId:FlowStepId;state:FlowState;options?:{value:string;label:string}[];choose:(id:FlowStepId,value:string)=>void;update:<K extends keyof FlowAnswers>(key:K,value:FlowAnswers[K])=>void}){
+ if(stepId==="profile")return <div className="grid gap-3 sm:grid-cols-2"><Option icon={<UserRound/>} label="Para mim" onClick={()=>choose("profile","PERSON")}/><Option icon={<Building2/>} label="Para minha empresa" onClick={()=>choose("profile","BUSINESS")}/></div>;
+ if(stepId==="objective"){const profile=state.context.profile||"PERSON";return <div className="grid gap-3">{objectivesFor(profile).map(item=><Option key={item.id} label={item.title} text={item.shortDescription} onClick={()=>choose("objective",item.id)}/>)}</div>}
+ if(options)return <div className="grid gap-3 sm:grid-cols-2">{options.map(item=><Option key={item.value} label={item.label} onClick={()=>choose(stepId,item.value)}/>)}</div>;
+ if(stepId==="context")return <label><span className="sr-only">Explique sua necessidade</span><textarea autoFocus className="field min-h-32 py-3" maxLength={500} value={state.answers.context||""} onChange={event=>update("context",event.target.value)} placeholder="Ex.: quero organizar uma aquisição para os próximos meses"/><span className="mt-2 block text-right text-xs text-muted">{state.answers.context?.length||0}/500</span></label>;
+ if(stepId==="contact")return <div><div className="grid gap-5 sm:grid-cols-2"><Field label="Nome *" value={state.answers.name} onChange={value=>update("name",value)} autoComplete="name"/><Field label="WhatsApp com DDD *" value={state.answers.phone} onChange={value=>update("phone",maskPhone(value))} autoComplete="tel" inputMode="tel" placeholder="(00) 00000-0000"/></div><label className="mt-6 flex cursor-pointer items-start gap-3 rounded-xl border bg-cream p-4 text-sm leading-6"><input className="mt-1 h-5 w-5 accent-[#D2A34D]" type="checkbox" checked={Boolean(state.answers.serviceConsent)} onChange={event=>update("serviceConsent",event.target.checked)}/><span>Li o <Link className="font-bold underline" href="/privacidade" target="_blank">Aviso de Privacidade</Link> e autorizo a Cred Marvi a utilizar as informações fornecidas para preparar meu atendimento e entrar em contato comigo.</span></label><label className="mt-3 flex cursor-pointer items-start gap-3 px-4 text-sm leading-6 text-muted"><input className="mt-1 h-5 w-5 accent-[#D2A34D]" type="checkbox" checked={Boolean(state.answers.marketingConsent)} onChange={event=>update("marketingConsent",event.target.checked)}/><span>Quero receber novidades e informações da Cred Marvi.</span></label></div>;
+ const objective=objectiveById(state.context.objectiveId)?.title||flowLabel(state.context);return <div className="divide-y rounded-2xl border bg-cream px-5"><Review label="Perfil" value={state.context.profile==="BUSINESS"?"Empresa":state.context.profile==="PERSON"?"Pessoa física":"Não informado"}/><Review label="Objetivo" value={objective}/>{state.answers.vehicleIntent&&<Review label="Contexto" value={answerLabels[state.answers.vehicleIntent]}/>} {state.answers.consortiumGoal&&<Review label="Conquista" value={answerLabels[state.answers.consortiumGoal]}/>} {state.answers.amountRange&&<Review label="Faixa aproximada" value={answerLabels[state.answers.amountRange]}/>} {state.answers.urgency&&<Review label="Prazo" value={answerLabels[state.answers.urgency]}/>}<Review label="Contato" value={`${state.answers.name} · ${state.answers.phone}`}/><p className="py-4 text-sm leading-6 text-muted"><ShieldCheck className="mr-2 inline text-[#8b6a16]" size={17}/>A mensagem do WhatsApp contém apenas protocolo, perfil e assunto.</p></div>
 }
-
-function Field({label,value,onChange,placeholder,type="text",inputMode="text",wide=false}:{label:string;value?:string;onChange:(v:string)=>void;placeholder?:string;type?:string;inputMode?:"text"|"numeric"|"tel";wide?:boolean}){return <label className={wide?"sm:col-span-2":""}><span className="mb-2 block text-sm font-bold">{label}</span><input className="field" value={value||""} onChange={e=>onChange(e.target.value)} placeholder={placeholder} type={type} inputMode={inputMode} autoComplete="off"/></label>}
-function Shell({children}:{children:React.ReactNode}){return <main className="min-h-screen bg-cream"><header className="border-b bg-white"><div className="mx-auto flex h-20 max-w-5xl items-center justify-between px-5"><Logo/><div className="flex items-center gap-4"><span className="hidden items-center gap-2 text-xs font-bold text-muted sm:flex"><Clock size={16}/>Leva poucos minutos</span><Link href="/" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-slate-200 px-3 text-sm font-bold text-navy transition hover:border-gold hover:bg-cream"><ArrowLeft size={16}/>Início</Link></div></div></header><div className="mx-auto max-w-3xl px-5 py-10 sm:py-16"><div className="rounded-3xl border bg-white p-5 shadow-premium sm:p-10">{children}</div><div className="mt-6 flex justify-center gap-2 text-xs text-muted"><LockKeyhole size={15}/><Link href="/privacidade" target="_blank" className="underline">Seus dados e sua privacidade</Link></div></div></main>}
+function Option({icon,label,text,onClick}:{icon?:React.ReactNode;label:string;text?:string;onClick:()=>void}){return <button type="button" onClick={onClick} className="option group"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-gold/35 bg-gold/10 text-[#8b6a16]">{icon||<ArrowRight size={16}/>}</span><span><strong className="block">{label}</strong>{text&&<small className="mt-1 block font-medium leading-5 text-muted">{text}</small>}</span></button>}
+function Field({label,value,onChange,placeholder,autoComplete,inputMode="text"}:{label:string;value?:string;onChange:(value:string)=>void;placeholder?:string;autoComplete:string;inputMode?:"text"|"tel"}){return <label><span className="mb-2 block text-sm font-bold">{label}</span><input className="field" value={value||""} onChange={event=>onChange(event.target.value)} placeholder={placeholder} autoComplete={autoComplete} inputMode={inputMode}/></label>}
+function Review({label,value}:{label:string;value:string}){return <p className="py-4"><span className="block text-xs font-bold uppercase tracking-wider text-muted">{label}</span><strong className="mt-1 block">{value}</strong></p>}
+function Shell({children,progress,onBack}:{children:React.ReactNode;progress:number;onBack:()=>void}){return <main id="conteudo" className="min-h-screen bg-canvas"><header className="border-b border-border-subtle bg-canvas/95 backdrop-blur-md"><div className="mx-auto flex h-[72px] max-w-5xl items-center justify-between gap-3 px-5"><button onClick={onBack} className="inline-flex min-h-11 items-center gap-2 rounded-xl px-2 text-sm font-bold text-navy transition hover:bg-white"><ArrowLeft size={17}/>Voltar</button><div className="scale-90"><Logo/></div><span className="flex min-w-11 items-center justify-end gap-2 text-xs font-bold text-muted"><Clock className="hidden sm:block" size={16}/>{progress}%</span></div><div className="h-1 bg-[#ebe8df]" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-label={`Progresso do atendimento: ${progress}%`}><div className="h-full rounded-r-full bg-gold transition-all duration-200" style={{width:`${progress}%`}}/></div></header><div className="mx-auto max-w-3xl px-5 py-10 sm:py-16 lg:py-20"><div className="rounded-[2rem] border border-border-subtle bg-white p-6 shadow-subtle sm:p-10">{children}</div><div className="mt-6 flex justify-center gap-2 text-xs text-muted"><LockKeyhole size={15}/><Link href="/privacidade" target="_blank" className="underline underline-offset-4">Seus dados e sua privacidade</Link></div></div></main>}
