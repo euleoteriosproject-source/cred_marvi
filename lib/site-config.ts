@@ -1,6 +1,6 @@
 export const siteConfig = {
   brand: {name: "Cred Marvi", descriptor: "Soluções em Negócios"},
-  brandName: "Cred Marvi", technologyProviderName: "Grupo Atrium", specialistName: "Marlise Paiva",
+  brandName: "Cred Marvi", technologyProviderName: "Grupo Atrium", specialistName: "Marlise Euleoterio",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5551999740402",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "credmarvi@outlook.com",
   instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "",
