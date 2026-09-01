@@ -97,6 +97,70 @@ Na primeira criação foi necessário usar explicitamente `--reveal-created-publ
 
 Não versionar public key bruta, senha de banco, JWT, service role, conversation token ou credenciais operacionais.
 
+## Provisioning não é rotation management
+
+O provisioning da Cred Marvi continua sendo bootstrap/ensure. Ele não deve ser
+usado como procedimento normal para rotação, substituição ou revogação de public
+keys.
+
+Semântica atual do `publicKey.ensure: true` no Atrium:
+
+| Estado      | Resultado do provisioning |
+| ----------- | ------------------------- |
+| `0 ACTIVE`  | `CREATE`                  |
+| `1 ACTIVE`  | `NO_OP`                   |
+| `2 ACTIVE`  | `NO_OP`                   |
+| `>2 ACTIVE` | `NO_OP`                   |
+
+Isso cria um hazard operacional importante: se o tenant estiver deliberadamente
+em `0 ACTIVE` como kill switch ou suspensão, não execute provisioning apply,
+salvo se a restauração de acesso público for intencional.
+
+Lifecycle operacional deve ser feito pelo Atrium Admin, conforme o runbook
+genérico do Atrium em `docs/runbooks/public-key-operations.md`.
+
+## Configuração do consumer
+
+A Web usa somente os nomes de variáveis:
+
+- `NEXT_PUBLIC_ATRIUM_API_URL`
+- `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY`
+
+Não documente valores. `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY` é client-exposed por
+design e é entregue ao SDK no browser. Ela não é server-side secret, mas é uma
+integration credential que não deve entrar em Git, logs, docs, screenshots,
+issues ou output compartilhado.
+
+Em produção, alterar `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY` exige rebuild/redeploy do
+frontend. Em desenvolvimento local, faça restart limpo do dev server depois de
+alterar a configuração local.
+
+## Notas operacionais de rotação
+
+Para zero-downtime rotation da Cred Marvi:
+
+```text
+Create B no Atrium Admin
+  -> atualizar NEXT_PUBLIC_ATRIUM_PUBLIC_KEY fora do Git
+  -> restart/rebuild/redeploy
+  -> smoke /analise
+  -> confirmação humana
+  -> revoke A no Atrium Admin
+  -> smoke /analise novamente
+```
+
+Não recupere ou reexponha a raw da key antiga apenas para provar overlap. Se a
+key antiga já era a key funcional do consumer, valide a nova key pelo consumer e
+revogue a antiga somente após aprovação humana.
+
+Rotação não recria tenant, flow, theme, locale, origin ou membership. Para local
+development, a origin versionada permanece `http://localhost:3000` e o flow
+permanece `credit-analysis`.
+
+O smoke lifecycle sintético da Stage 14C4 deve ocorrer em checkpoint separado,
+com tenant exclusivamente sintético/local, sem Supabase real, sem deployment e
+sem tocar na key real da Cred Marvi.
+
 ## Runbook local — 13B2B
 
 1. Subir o PostgreSQL Atrium.

@@ -86,3 +86,29 @@ Os itens abaixo foram validados manualmente pelo navegador e não fazem parte da
 - [x] loading sem duplo envio evidente.
 
 Não foram validados nesta execução: desistência/retomada, origin proibida, falha provocada no meio de uma conversa, staging ou produção. Os testes unitários continuam mockando apenas o boundary do SDK e não simulam Engine ou perguntas.
+
+## Smoke planejado pós-Stage 14C
+
+Após o fechamento documental dos runbooks de public key lifecycle da Atrium, o
+smoke de regressão da Cred Marvi deve permanecer separado do smoke lifecycle
+sintético da Atrium.
+
+Objetivo do smoke Cred Marvi:
+
+```text
+/analise
+  -> configuration
+  -> conversation
+  -> respostas sintéticas
+  -> completion
+```
+
+Esse smoke não exige rotação da key real da Cred Marvi. Ele deve usar a
+configuração local existente sem revelar valores e somente dados sintéticos:
+
+- nome: `Test User`;
+- WhatsApp: `<synthetic-valid-e164>`, usando número reservado/isolado de teste
+  compatível com o validator e que não receba WhatsApp real;
+- consent: `true` apenas como fixture de fluxo.
+
+Não usar CPF, CNPJ, RG, renda, telefone pessoal, e-mail pessoal ou nome real.
