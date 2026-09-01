@@ -41,6 +41,98 @@ WhatsApp / atendimento humano
 
 O código da Web está integrado aos contratos públicos reais. A página continua um Server Component e renderiza um boundary cliente restrito ao SDK. A Web não conhece perguntas, não decide branching, não calcula progresso, não antecipa completion e não persiste token ou respostas.
 
+## Public key e lifecycle operacional
+
+A Cred Marvi consome a Atrium Public API por meio das variáveis públicas de
+frontend:
+
+- `NEXT_PUBLIC_ATRIUM_API_URL`
+- `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY`
+
+Não documente nem versione os valores dessas variáveis.
+
+A public key Atrium é fornecida ao browser/SDK por design. `NEXT_PUBLIC_*` é
+client-exposed no Next.js; portanto a key pode ser observada em DevTools/network
+durante a jornada. Isso não a transforma em server-side secret, mas ela continua
+uma integration credential controlada pelo lifecycle da Atrium e não deve ser
+copiada para Git, docs, logs, screenshots, issues ou conversas.
+
+Stage 14C da Atrium definiu que:
+
+- a rotação normal usa controlled overlap: criar nova key, atualizar consumer,
+  validar e depois revogar a antiga;
+- `Replace immediately` não é zero-downtime rotation;
+- revogar a última active key é permitido e suspende autenticação pública até
+  nova key ser configurada;
+- provisioning é bootstrap/ensure e não rotation management.
+
+O runbook genérico fica no repositório Atrium em
+`docs/runbooks/public-key-operations.md`. Este documento registra apenas notas
+consumer-specific da Cred Marvi.
+
+## Notas de zero-downtime rotation para a Cred Marvi
+
+Não executar sem aprovação operacional específica.
+
+Fluxo específico do consumer:
+
+1. Criar key `B` no Atrium Admin.
+2. Capturar `B` uma única vez e armazenar fora do Git.
+3. Atualizar `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY` fora do repositório.
+4. Fazer restart limpo no desenvolvimento local ou rebuild/redeploy em ambiente
+   publicado.
+5. Executar smoke de `/analise` com dados sintéticos.
+6. Obter confirmação humana antes de revogar a key antiga `A`.
+7. Revogar `A` no Atrium Admin.
+8. Executar smoke de `/analise` novamente.
+
+`REVOKE A` é o point of no return: depois disso, `A` não pode ser reativada.
+
+Trocar `NEXT_PUBLIC_ATRIUM_PUBLIC_KEY` em produção exige rebuild/redeploy porque
+o valor público é incorporado à configuração do frontend. Em desenvolvimento
+local, reinicie o servidor dev depois de alterar a configuração local para evitar
+validar com estado antigo.
+
+Rotação de public key não muda:
+
+- allowed origin;
+- tenant;
+- flow;
+- locale;
+- theme;
+- membership.
+
+Para desenvolvimento local, a origin continua `http://localhost:3000` e o flow
+continua `credit-analysis`.
+
+## Smoke consumer-specific planejado
+
+Este smoke não foi executado pela Stage 14C4 documental.
+
+Smoke futuro proporcional:
+
+```text
+/analise
+  -> configuration
+  -> conversation
+  -> respostas sintéticas
+  -> completion
+```
+
+Dados permitidos:
+
+- nome: `Test User`;
+- WhatsApp: `<synthetic-valid-e164>`, usando número reservado/isolado de teste
+  compatível com o validator e que não receba WhatsApp real;
+- consent: `true` apenas como fixture de fluxo.
+
+Não usar CPF, CNPJ, RG, renda, telefone pessoal, e-mail pessoal ou nome real.
+Esse consent de smoke não representa consentimento legal real.
+
+O smoke de regressão da Cred Marvi é separado do smoke lifecycle sintético da
+Atrium. Ele pode validar que a integração atual não foi quebrada sem rotacionar a
+key real da Cred Marvi.
+
 ### Flow local publicado
 
 `credit-analysis` possui definição canônica inline em `config/atrium/development.json` e versão 1 publicada no ambiente local Atrium. O arquivo versionado não contém a public key bruta.
@@ -93,6 +185,7 @@ Foram usados somente dados fictícios de smoke, que não são reproduzidos nesta
 
 - staging e produção;
 - publicação futura dos packages em registry privado;
+- smoke de regressão pós-14C sem rotação da key real;
 - refinamento de UX pós-conclusão descrito em [Web](web.md).
 
 O smoke local não representa aprovação de produção.
