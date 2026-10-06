@@ -93,3 +93,63 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Commercial layouts: imagery supports goals; the brand stays in the header. */
+.home-hero {
+  background-image: radial-gradient(
+    ellipse at 80% 20%,
+    rgb(210 163 77 / 12%),
+    transparent 55%
+  );
+}
+.hero-home-photo {
+  height: 460px;
+}
+.hero-vehicle-card {
+  bottom: -24px;
+  left: -28px;
+  right: 36px;
+}
+.solution-card {
+  transition:
+    border-color 200ms,
+    box-shadow 200ms;
+}
+.solution-card:hover {
+  border-color: var(--cm-color-accent);
+  box-shadow: var(--cm-shadow-control);
+}
+.solution-card:focus-within,
+.business-card:focus-within {
+  outline: 2px solid var(--cm-color-focus-on-light);
+  outline-offset: 3px;
+}
+.business-card:focus-within {
+  outline-color: var(--cm-color-focus-on-dark);
+}
+.solution-card-featured {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  min-height: 290px;
+}
+.solution-card-featured .solution-card-content {
+  grid-area: 1 / 1;
+}
+.solution-card-photo {
+  grid-area: 1 / 2;
+  min-height: 100%;
+}
+@media (max-width: 639px) {
+  .solution-card-featured {
+    grid-template-columns: 1.35fr 0.65fr;
+    min-height: 270px;
+  }
+  .solution-card-featured .solution-card-content {
+    padding: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .solution-card {
+    transition: none;
+  }
+}

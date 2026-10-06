@@ -1,28 +1,22 @@
 import {
   ArrowRight,
-  BriefcaseBusiness,
-  Building2,
-  CarFront,
+  ArrowUpRight,
+  Check,
   ChevronDown,
-  Handshake,
-  Home,
-  Landmark,
-  Shield,
-  Sprout,
-  Umbrella,
-  WalletCards,
+  MessageCircle,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { WhatsAppLink } from "@/components/contact/whatsapp-link";
+import {
+  SolutionCard,
+  SolutionIcon,
+} from "@/components/solutions/solution-card";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 import { faqItems } from "@/content/faq";
-import {
-  businessHighlights,
-  homeSolutions,
-  type Solution,
-} from "@/content/solutions";
+import { businessHighlights, homeSolutions } from "@/content/solutions";
+import { whatsappHref } from "@/lib/whatsapp";
 
 function Eyebrow({
   children,
@@ -33,94 +27,99 @@ function Eyebrow({
 }) {
   return (
     <p
-      className={`text-xs font-bold uppercase tracking-[var(--cm-letter-spacing-eyebrow)] ${inverse ? "text-accent" : "text-accent-text"}`}
+      className={`text-xs font-bold uppercase tracking-[.16em] ${inverse ? "text-accent" : "text-accent-text"}`}
     >
       {children}
     </p>
   );
 }
 
-function SectionTitle({
-  children,
-  inverse = false,
-}: {
-  children: React.ReactNode;
-  inverse?: boolean;
-}) {
-  return (
-    <h2
-      className={`mt-3 max-w-4xl font-serif text-3xl font-semibold leading-[var(--cm-line-height-heading)] sm:text-5xl ${inverse ? "text-inverse" : "text-foreground"}`}
-    >
-      {children}
-    </h2>
-  );
-}
-
-const icons = {
-  "vehicle-financing": CarFront,
-  "property-financing": Home,
-  "personal-credit": WalletCards,
-  consortium: Landmark,
-  "auto-insurance": Shield,
-  "home-insurance": Umbrella,
-  "working-capital": BriefcaseBusiness,
-  "agro-guidance": Sprout,
-  bndes: Building2,
-  pronampe: WalletCards,
-} as const;
-
-function SolutionIcon({ solution }: { solution: Solution }) {
-  const Icon = icons[solution.id as keyof typeof icons] ?? Handshake;
-  return <Icon aria-hidden="true" />;
-}
-
 export function Hero() {
   return (
-    <section className="bg-background py-12 sm:py-20 lg:py-24">
-      <Container className="grid items-center gap-10 lg:grid-cols-[1.15fr_.85fr]">
+    <section className="home-hero relative overflow-hidden bg-surface-inverse text-inverse">
+      <Container className="relative grid items-center gap-12 py-10 sm:py-16 lg:grid-cols-[1.08fr_.92fr] lg:gap-16 lg:py-20">
         <div>
-          <Eyebrow>Crédito, conquistas e proteção</Eyebrow>
-          <h1 className="mt-5 max-w-3xl font-serif text-[2.4rem] font-semibold leading-[1.08] sm:text-5xl lg:text-6xl">
-            Seu próximo passo começa com a{" "}
-            <span className="text-accent-text">orientação certa.</span>
+          <Eyebrow inverse>Crédito, conquistas e proteção</Eyebrow>
+          <h1 className="mt-5 max-w-2xl font-serif text-[2.65rem] font-semibold leading-[1.09] tracking-tight sm:text-6xl lg:text-[4.25rem]">
+            Seus planos merecem{" "}
+            <span className="text-accent">um próximo passo.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-muted sm:text-lg sm:leading-8">
-            Para comprar um imóvel, trocar de veículo, planejar uma conquista ou
-            proteger o que você construiu. A Marlise ajuda você a entender as
-            alternativas e os próximos passos.
+          <p className="mt-6 max-w-lg text-base leading-7 text-inverse-muted sm:text-lg sm:leading-8">
+            Comprar seu imóvel. Trocar de veículo. Proteger o que é seu.
+            Encontre alternativas para cada momento, com a orientação da
+            Marlise.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="#solucoes">
-              Conhecer as soluções <ArrowRight size={18} aria-hidden="true" />
+              Encontrar minha solução{" "}
+              <ArrowRight size={18} aria-hidden="true" />
             </ButtonLink>
-            <WhatsAppLink variant="secondary">Falar com a Marlise</WhatsAppLink>
+            <WhatsAppLink variant="inverse">Falar com a Marlise</WhatsAppLink>
           </div>
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+          <p className="mt-5 flex items-center gap-2 text-sm text-inverse-muted">
+            <Check size={16} className="text-accent" aria-hidden="true" />{" "}
+            Atendimento humano, sem cadastro para começar.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 border-t border-inverse/15 pt-5 text-sm">
             <Link
-              href="/solucoes"
-              className="font-bold text-accent-text underline-offset-4 hover:underline"
+              href="/solucoes?profile=PERSON"
+              className="inline-flex min-h-11 items-center gap-2 font-semibold hover:text-accent"
             >
-              Já sei o que procuro
+              Para você <ArrowUpRight size={16} aria-hidden="true" />
             </Link>
-            <span className="text-muted">
-              Atendimento com Marlise Euleoterio
-            </span>
+            <Link
+              href="/solucoes?profile=BUSINESS"
+              className="inline-flex min-h-11 items-center gap-2 font-semibold hover:text-accent"
+            >
+              Para empresas e agro <ArrowUpRight size={16} aria-hidden="true" />
+            </Link>
           </div>
         </div>
-        <div className="relative mx-auto w-full max-w-lg overflow-hidden rounded-feature bg-surface-inverse p-8 shadow-elevated sm:p-12">
-          <div className="absolute -right-16 -top-16 size-48 rounded-full bg-accent/10" />
-          <Image
-            src="/brand/cred-marvi-symbol.png"
-            alt=""
-            width={505}
-            height={505}
-            loading="eager"
-            sizes="(max-width: 1024px) 80vw, 34vw"
-            className="relative mx-auto h-auto w-full max-w-sm rounded-full"
-          />
-          <p className="relative mt-7 text-center font-serif text-2xl text-inverse">
-            Orientação próxima para decisões mais conscientes.
-          </p>
+        <div className="hero-editorial relative hidden sm:block">
+          <div className="hero-home-photo relative overflow-hidden rounded-feature">
+            <Image
+              src="/images/home.jpg"
+              alt="Casa contemporânea, ilustrando planos de aquisição de imóvel"
+              fill
+              preload
+              sizes="(max-width: 1023px) 90vw, 42vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-7 pb-28 pt-20 text-white">
+              <p className="text-xs font-semibold uppercase tracking-widest">
+                Uma conquista de cada vez
+              </p>
+              <p className="mt-2 max-w-xs font-serif text-3xl leading-tight">
+                O lugar dos seus novos começos.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/solucoes/financiamento-de-veiculo"
+            className="hero-vehicle-card absolute flex items-center gap-4 rounded-card border border-border bg-surface p-3 text-foreground shadow-elevated"
+          >
+            <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-control">
+              <Image
+                src="/images/vehicle.jpg"
+                alt=""
+                fill
+                sizes="96px"
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-accent-text">
+                E os planos seguem.
+              </p>
+              <p className="mt-1 font-serif text-lg font-semibold">
+                Seu próximo veículo
+              </p>
+              <span className="mt-2 flex items-center gap-2 text-xs font-bold">
+                Conheça as alternativas{" "}
+                <ArrowRight size={15} aria-hidden="true" />
+              </span>
+            </div>
+          </Link>
         </div>
       </Container>
     </section>
@@ -128,56 +127,53 @@ export function Hero() {
 }
 
 export function SolutionsPreview() {
+  const featured = homeSolutions.filter((solution) => solution.image);
+  const others = homeSolutions.filter((solution) => !solution.image);
   return (
-    <section
-      id="solucoes"
-      className="scroll-mt-24 bg-surface-subtle py-[var(--cm-space-section)] sm:py-[var(--cm-space-section-lg)]"
-    >
+    <section id="solucoes" className="scroll-mt-24 py-12 sm:py-16 lg:py-20">
       <Container>
-        <Eyebrow>Serviços para você</Eyebrow>
-        <SectionTitle>O que você quer realizar ou proteger?</SectionTitle>
-        <p className="mt-5 max-w-2xl leading-7 text-muted">
-          Explore uma solução ou leve o assunto direto para a conversa. Você não
-          precisa preencher cadastro para começar.
-        </p>
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {homeSolutions.map((solution) => (
-            <article
-              key={solution.id}
-              className="flex min-h-full flex-col rounded-card border border-border bg-surface p-6 shadow-card transition duration-[var(--cm-duration-normal)] hover:-translate-y-1 hover:shadow-elevated motion-reduce:transform-none"
-            >
-              <span className="grid size-11 place-items-center rounded-control bg-surface-soft text-accent-text">
-                <SolutionIcon solution={solution} />
-              </span>
-              <h3 className="mt-5 font-serif text-2xl font-semibold">
-                {solution.name}
-              </h3>
-              <p className="mt-3 flex-1 leading-7 text-muted">
-                {solution.description}
-              </p>
-              {solution.slug ? (
-                <Link
-                  href={`/solucoes/${solution.slug}`}
-                  className="mt-5 inline-flex min-h-[var(--cm-target-min)] items-center gap-2 font-bold text-accent-text"
-                >
-                  Entender a solução
-                  <ArrowRight size={17} aria-hidden="true" />
-                </Link>
-              ) : (
-                <WhatsAppLink
-                  context={{ subject: solution.shortName }}
-                  variant="secondary"
-                  className="mt-5 px-4"
-                >
-                  Conversar sobre esta solução
-                </WhatsAppLink>
-              )}
-            </article>
+        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+          <div>
+            <Eyebrow>Soluções para você</Eyebrow>
+            <h2 className="mt-3 max-w-2xl font-serif text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
+              Para cada plano, um caminho.
+            </h2>
+            <p className="mt-4 max-w-xl leading-7 text-muted">
+              Da próxima conquista ao cuidado com o que você já tem. Comece pelo
+              que faz sentido para você.
+            </p>
+          </div>
+          <Link
+            href="/solucoes"
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm font-bold text-accent-text"
+          >
+            Ver todos os serviços <ArrowUpRight size={18} aria-hidden="true" />
+          </Link>
+        </div>
+        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          {featured.map((solution) => (
+            <SolutionCard key={solution.id} solution={solution} featured />
           ))}
         </div>
-        <ButtonLink href="/solucoes" variant="secondary" className="mt-8">
-          Ver todos os serviços
-        </ButtonLink>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {others.map((solution) => (
+            <SolutionCard key={solution.id} solution={solution} />
+          ))}
+        </div>
+        <div className="mt-7 flex flex-col gap-2 rounded-control border-l-2 border-accent bg-surface-soft px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-muted">
+            <strong className="text-foreground">
+              Ainda não sabe por onde começar?
+            </strong>{" "}
+            A Marlise ajuda você a entender as opções.
+          </p>
+          <Link
+            href="/analise"
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 text-sm font-bold text-accent-text"
+          >
+            Encontrar um caminho <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
       </Container>
     </section>
   );
@@ -185,49 +181,67 @@ export function SolutionsPreview() {
 
 export function BusinessSection() {
   return (
-    <section className="bg-surface-inverse-alt py-[var(--cm-space-section)] text-inverse sm:py-[var(--cm-space-section-lg)]">
-      <Container>
-        <Eyebrow inverse>Empresas e Agro</Eyebrow>
-        <SectionTitle inverse>
-          Sua empresa e sua atividade também precisam de planejamento.
-        </SectionTitle>
-        <p className="mt-5 max-w-2xl leading-7 text-inverse-muted">
-          Converse sobre alternativas para o caixa, investimentos e necessidades
-          da sua atividade. Produtores rurais também podem atuar como pessoa
-          física.
-        </p>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {businessHighlights.map((solution) => (
-            <article
-              key={solution.id}
-              className="flex flex-col rounded-card border border-inverse/10 bg-inverse/5 p-6"
-            >
-              <span className="grid size-10 place-items-center rounded-control bg-accent text-accent-foreground">
-                <SolutionIcon solution={solution} />
-              </span>
-              <h3 className="mt-5 font-serif text-xl font-semibold">
-                {solution.name}
-              </h3>
-              <p className="mt-3 flex-1 text-sm leading-6 text-inverse-muted">
-                {solution.description}
-              </p>
-              <WhatsAppLink
-                context={{ subject: solution.shortName, profile: "BUSINESS" }}
-                variant="inverse"
-                className="mt-5 px-4"
-              >
-                Conversar sobre o assunto
-              </WhatsAppLink>
-            </article>
-          ))}
+    <section
+      id="empresas"
+      className="scroll-mt-24 bg-surface-inverse-alt py-12 text-inverse sm:py-16 lg:py-20"
+    >
+      <Container className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+        <div>
+          <Eyebrow inverse>Empresas e Agro</Eyebrow>
+          <h2 className="mt-4 font-serif text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
+            O seu negócio tem planos.
+            <br />
+            <span className="text-accent">Vamos olhar para eles.</span>
+          </h2>
+          <p className="mt-5 max-w-md leading-7 text-inverse-muted">
+            Do caixa do dia a dia ao investimento na sua atividade: orientação
+            para entender o próximo movimento.
+          </p>
+          <Link
+            href="/solucoes?profile=BUSINESS"
+            className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-accent"
+          >
+            Ver soluções para empresas e agro{" "}
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
         </div>
-        <Link
-          href="/solucoes?profile=BUSINESS"
-          className="mt-8 inline-flex min-h-[var(--cm-target-min)] items-center gap-2 font-bold text-accent"
-        >
-          Ver soluções para empresas e agro
-          <ArrowRight size={17} aria-hidden="true" />
-        </Link>
+        <div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {businessHighlights.map((solution) => (
+              <article
+                key={solution.id}
+                className="business-card group relative rounded-card border border-inverse/15 bg-inverse/5 p-5 sm:p-6"
+              >
+                <span className="text-accent">
+                  <SolutionIcon solution={solution} />
+                </span>
+                <h3 className="mt-4 font-serif text-xl font-semibold">
+                  {solution.name}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-inverse-muted">
+                  {solution.description}
+                </p>
+                <a
+                  href={whatsappHref({
+                    subject: solution.shortName,
+                    profile:
+                      solution.category === "agro" ? undefined : "BUSINESS",
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Conversar sobre ${solution.name} — abre o WhatsApp`}
+                  className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-accent after:absolute after:inset-0 after:content-['']"
+                >
+                  Conversar sobre o assunto{" "}
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                </a>
+              </article>
+            ))}
+          </div>
+          <p className="mt-4 text-sm leading-6 text-inverse-muted">
+            Agro também atende produtores pessoa física.
+          </p>
+        </div>
       </Container>
     </section>
   );
@@ -235,41 +249,54 @@ export function BusinessSection() {
 
 export function SpecialistSection() {
   return (
-    <section
-      id="marlise"
-      className="scroll-mt-24 py-[var(--cm-space-section)] sm:py-[var(--cm-space-section-lg)]"
-    >
-      <Container className="grid items-center gap-10 lg:grid-cols-[.8fr_1.2fr]">
-        <div className="rounded-feature bg-surface-soft p-8 text-center shadow-card sm:p-10">
-          <Image
-            src="/brand/cred-marvi-symbol.png"
-            alt=""
-            width={505}
-            height={505}
-            sizes="(max-width: 1024px) 70vw, 28vw"
-            className="mx-auto h-auto w-full max-w-xs rounded-full"
-          />
-          <p className="mt-6 font-serif text-2xl font-semibold">
-            Marlise Euleoterio
-          </p>
-          <p className="mt-2 text-sm text-muted">Atendimento consultivo</p>
-        </div>
+    <section id="marlise" className="scroll-mt-24 py-12 sm:py-16 lg:py-20">
+      <Container className="grid items-start gap-8 lg:grid-cols-[1.1fr_.9fr] lg:gap-16">
         <div>
-          <Eyebrow>Atendimento humano</Eyebrow>
-          <SectionTitle>
-            Uma conversa com quem acompanha o seu objetivo.
-          </SectionTitle>
-          <p className="mt-5 max-w-2xl leading-7 text-muted">
-            Com Marlise Euleoterio, você esclarece dúvidas, entende
-            possibilidades e organiza os próximos passos com atendimento humano.
+          <Eyebrow>Com você, do primeiro contato ao próximo passo</Eyebrow>
+          <h2 className="mt-4 font-serif text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
+            Você fala com a Marlise.
+            <br />
+            <span className="text-accent-text">E ela começa ouvindo você.</span>
+          </h2>
+          <p className="mt-5 max-w-xl leading-7 text-muted">
+            Por trás da Cred Marvi está Marlise Euleoterio. Uma conversa para
+            entender seu momento, esclarecer dúvidas e orientar suas escolhas.
           </p>
-          <p className="mt-4 max-w-2xl leading-7 text-muted">
-            A orientação começa pelo seu contexto, sem promessas de aprovação ou
-            pressão para contratar.
-          </p>
-          <WhatsAppLink variant="whatsapp" className="mt-7">
-            Falar com a Marlise
-          </WhatsAppLink>
+          <WhatsAppLink className="mt-7">Falar com a Marlise</WhatsAppLink>
+        </div>
+        <div className="rounded-feature border border-border bg-surface p-6 sm:p-8">
+          <div className="flex items-center gap-4">
+            <span className="grid size-12 shrink-0 place-items-center rounded-full bg-surface-soft text-accent-text">
+              <MessageCircle aria-hidden="true" />
+            </span>
+            <div>
+              <h3 className="font-serif text-2xl font-semibold">
+                Marlise Euleoterio
+              </h3>
+              <p className="mt-1 text-sm text-muted">
+                Seu contato na Cred Marvi
+              </p>
+            </div>
+          </div>
+          <ul className="mt-6 space-y-4 border-t border-border pt-6">
+            {[
+              "Seu objetivo vem antes do produto.",
+              "Você esclarece as condições antes de decidir.",
+              "A conversa continua com uma pessoa.",
+            ].map((text) => (
+              <li
+                key={text}
+                className="flex items-start gap-3 text-sm leading-6"
+              >
+                <Check
+                  size={18}
+                  className="mt-1 shrink-0 text-accent-text"
+                  aria-hidden="true"
+                />
+                {text}
+              </li>
+            ))}
+          </ul>
         </div>
       </Container>
     </section>
@@ -277,52 +304,46 @@ export function SpecialistSection() {
 }
 
 export function HowItWorks() {
-  const steps = [
-    [
-      "01",
-      "Escolha um assunto",
-      "Explore as soluções ou diga o que deseja realizar.",
-    ],
-    [
-      "02",
-      "Converse com a Marlise",
-      "Abra o WhatsApp; se quiser, escolha antes um contexto simples no site.",
-    ],
-    [
-      "03",
-      "Entenda os próximos passos",
-      "Condições e adequação são esclarecidas no atendimento, conforme a modalidade e a instituição responsável.",
-    ],
-  ] as const;
-
   return (
     <section
       id="como-funciona"
-      className="scroll-mt-24 bg-surface-soft py-[var(--cm-space-section)] sm:py-[var(--cm-space-section-lg)]"
+      className="scroll-mt-24 border-y border-border bg-surface-soft py-10 sm:py-12"
     >
-      <Container>
-        <Eyebrow>Como funciona</Eyebrow>
-        <SectionTitle>
-          Comece do jeito que fizer sentido para você.
-        </SectionTitle>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {steps.map(([number, title, text]) => (
-            <article
-              key={number}
-              className="rounded-card border border-border bg-surface p-6 shadow-card"
-            >
-              <span className="font-serif text-3xl font-semibold text-accent-text">
-                {number}
-              </span>
-              <h3 className="mt-5 text-lg font-bold">{title}</h3>
-              <p className="mt-3 leading-7 text-muted">{text}</p>
-            </article>
-          ))}
+      <Container className="grid gap-7 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+        <div>
+          <Eyebrow>Simples para começar</Eyebrow>
+          <h2 className="mt-3 font-serif text-3xl font-semibold">
+            Um assunto.
+            <br />
+            Uma conversa.
+            <br />
+            Um próximo passo.
+          </h2>
         </div>
-        <p className="mt-6 text-sm leading-6 text-muted">
-          Também é possível começar pelo contato direto. O site não transmite
-          cadastro nem realiza análise financeira.
-        </p>
+        <ol className="grid gap-6 sm:grid-cols-3">
+          {[
+            [
+              "Escolha seu objetivo",
+              "Explore as soluções ou comece direto pela conversa.",
+            ],
+            [
+              "Fale com a Marlise",
+              "Conte o que procura e esclareça suas dúvidas pelo WhatsApp.",
+            ],
+            [
+              "Entenda as opções",
+              "Conheça condições e próximos passos antes de decidir.",
+            ],
+          ].map(([title, text], index) => (
+            <li key={title}>
+              <span className="font-serif text-2xl text-accent-text">
+                0{index + 1}
+              </span>
+              <h3 className="mt-3 font-bold">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
+            </li>
+          ))}
+        </ol>
       </Container>
     </section>
   );
@@ -330,21 +351,29 @@ export function HowItWorks() {
 
 export function FaqPreview() {
   return (
-    <section className="py-[var(--cm-space-section)] sm:py-[var(--cm-space-section-lg)]">
-      <Container className="max-w-[var(--cm-container-content)]">
-        <Eyebrow>Dúvidas essenciais</Eyebrow>
-        <SectionTitle>Informação clara antes da conversa.</SectionTitle>
-        <div className="mt-9 divide-y divide-border rounded-card border border-border bg-surface px-5 sm:px-8">
+    <section className="py-12 sm:py-16">
+      <Container className="grid gap-7 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+        <div>
+          <Eyebrow>Dúvidas frequentes</Eyebrow>
+          <h2 className="mt-3 font-serif text-3xl font-semibold sm:text-4xl">
+            Clareza desde o início.
+          </h2>
+          <p className="mt-4 max-w-sm leading-7 text-muted">
+            Se a sua dúvida não estiver aqui, leve ela para a conversa.
+          </p>
+        </div>
+        <div className="divide-y divide-border border-y border-border">
           {faqItems.map((item) => (
-            <details key={item.question} className="group py-5">
-              <summary className="flex min-h-[var(--cm-target-min)] cursor-pointer list-none items-center justify-between gap-4 font-bold">
+            <details key={item.question} className="group py-3">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 text-sm font-bold sm:text-base">
                 {item.question}
                 <ChevronDown
+                  size={18}
                   className="shrink-0 transition group-open:rotate-180 motion-reduce:transform-none"
                   aria-hidden="true"
                 />
               </summary>
-              <p className="mt-3 max-w-3xl leading-7 text-muted">
+              <p className="pb-3 pt-2 text-sm leading-7 text-muted">
                 {item.answer}
               </p>
             </details>
@@ -357,18 +386,15 @@ export function FaqPreview() {
 
 export function FinalCallToAction() {
   return (
-    <section className="bg-surface-inverse py-[var(--cm-space-section)] text-center text-inverse">
-      <Container>
-        <h2 className="font-serif text-3xl font-semibold sm:text-4xl">
-          Quer entender qual caminho faz sentido para você?
-        </h2>
-        <p className="mx-auto mt-4 max-w-xl leading-7 text-inverse-muted">
-          Converse diretamente com a Marlise e leve apenas o contexto que você
-          quiser compartilhar.
-        </p>
-        <WhatsAppLink variant="primary" className="mt-8">
-          Falar com a Marlise
-        </WhatsAppLink>
+    <section className="bg-surface-inverse py-12 text-inverse sm:py-16">
+      <Container className="flex flex-col items-start justify-between gap-7 sm:flex-row sm:items-center">
+        <div>
+          <Eyebrow inverse>Vamos conversar?</Eyebrow>
+          <h2 className="mt-3 max-w-2xl font-serif text-3xl font-semibold sm:text-4xl">
+            O próximo passo pode começar com uma boa conversa.
+          </h2>
+        </div>
+        <WhatsAppLink className="shrink-0">Falar com a Marlise</WhatsAppLink>
       </Container>
     </section>
   );

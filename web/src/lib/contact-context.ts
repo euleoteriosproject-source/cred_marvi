@@ -26,6 +26,11 @@ const productAliases: Readonly<Record<string, string>> = {
   bndes: "bndes",
   pronampe: "pronampe",
   duplicatas: "receivables",
+  "real-estate": "property-financing",
+  real_estate_financing: "property-financing",
+  vehicle_person: "vehicle-financing",
+  vehicle_business: "vehicle-financing",
+  credit_business: "working-capital",
 };
 
 const legacySolutions: Readonly<Record<string, string>> = {
@@ -39,17 +44,47 @@ const legacySolutions: Readonly<Record<string, string>> = {
   BNDES: "bndes",
   PRONAMPE: "pronampe",
   RECEIVABLES: "receivables",
+  VEHICLE: "vehicle-financing",
+  VEHICLE_PERSON: "vehicle-financing",
+  VEHICLE_BUSINESS: "vehicle-financing",
+  REAL_ESTATE_FINANCING: "property-financing",
+  CREDIT_BUSINESS: "working-capital",
 };
 
 const objectives: Readonly<Record<string, { id: string; subject?: string }>> = {
-  imovel: { id: "property", subject: "financiamento imobiliário" },
-  veiculo: { id: "vehicle", subject: "financiamento de veículos" },
+  imovel: { id: "property", subject: "aquisição de um imóvel" },
+  veiculo: { id: "vehicle", subject: "compra ou troca de veículo" },
   credito: { id: "credit", subject: "uma necessidade de crédito" },
   consorcio: { id: "consortium", subject: "consórcio" },
   protecao: { id: "protection", subject: "alternativas de proteção" },
   empresa: { id: "business", subject: "as alternativas para minha empresa" },
   agro: { id: "agro", subject: "crédito para o Agro" },
   indefinido: { id: "unknown" },
+  // Published master URLs retain the objective, without choosing a product.
+  "buy-home": { id: "property", subject: "aquisição de um imóvel" },
+  "buy-vehicle": { id: "vehicle", subject: "compra ou troca de veículo" },
+  "get-credit": { id: "credit", subject: "uma necessidade de crédito" },
+  "organize-debt": { id: "credit", subject: "organização de dívidas" },
+  "plan-purchase": { id: "planning", subject: "planejamento de uma compra" },
+  "protect-family": { id: "protection", subject: "alternativas de proteção" },
+  "reduce-personal-costs": { id: "costs", subject: "organização de gastos" },
+  "health-wellbeing": { id: "health", subject: "saúde e benefícios" },
+  "plan-trip": { id: "travel", subject: "planejamento de viagem" },
+  "cash-flow": { id: "business", subject: "fluxo de caixa da empresa" },
+  "working-capital": { id: "business", subject: "capital de giro" },
+  "business-vehicle": {
+    id: "vehicle",
+    subject: "aquisição de veículo para empresa",
+  },
+  expand: { id: "business", subject: "investimento na empresa" },
+  "reduce-costs": {
+    id: "business",
+    subject: "organização de custos da empresa",
+  },
+  "protect-business": { id: "business", subject: "proteção da empresa" },
+  "people-benefits": { id: "business", subject: "benefícios para a equipe" },
+  "unsure-person": { id: "unknown" },
+  "unsure-business": { id: "business", subject: "alternativas para a empresa" },
 };
 
 function first(value: SearchValue) {

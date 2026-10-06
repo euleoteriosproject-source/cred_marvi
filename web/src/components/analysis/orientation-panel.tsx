@@ -157,13 +157,14 @@ export function OrientationPanel({
         <WhatsAppLink context={context} variant="whatsapp">
           Conversar no WhatsApp
         </WhatsAppLink>
-        <WhatsAppLink context={initialContext} variant="secondary">
+        <WhatsAppLink context={context} variant="secondary">
           Prefiro conversar com a Marlise
         </WhatsAppLink>
       </div>
       <p className="text-sm leading-6 text-muted">
         O link abre uma mensagem pronta para você revisar e enviar no WhatsApp.
-        Nenhuma resposta é cadastrada ou transmitida pelo site.
+        As escolhas opcionais ficam no texto da mensagem. O site não salva um
+        cadastro.
       </p>
     </div>
   );

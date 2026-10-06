@@ -43,7 +43,11 @@ export default async function SolutionPage({
   return (
     <PageShell>
       <main id="conteudo">
-        <PageHero eyebrow="Serviço" title={solution.name}>
+        <PageHero
+          eyebrow="Solução para o seu objetivo"
+          title={solution.name}
+          image={solution.image}
+        >
           <p>{solution.description}</p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <WhatsAppLink context={contactContext} variant="primary">
@@ -102,8 +106,8 @@ export default async function SolutionPage({
               Quer conversar sobre {solution.name.toLowerCase()}?
             </h2>
             <p className="mt-4 max-w-2xl leading-7 text-inverse-muted">
-              Abra uma mensagem contextualizada, revise o texto e envie apenas
-              quando quiser.
+              Conte o que você procura e esclareça as possibilidades para o seu
+              momento, com atendimento humano.
             </p>
             <WhatsAppLink
               context={contactContext}

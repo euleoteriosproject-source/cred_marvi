@@ -40,6 +40,16 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/privacidade",
+        destination: "/politica-de-privacidade",
+        permanent: true,
+      },
+      { source: "/termos", destination: "/termos-de-uso", permanent: true },
+    ];
+  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

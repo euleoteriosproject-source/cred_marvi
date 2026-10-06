@@ -14,7 +14,7 @@ test("home apresenta a vitrine, WhatsApp direto e acessibilidade", async ({
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: /seu próximo passo começa com a orientação certa/i,
+      name: /seus planos merecem um próximo passo/i,
     }),
   ).toBeVisible();
   await expect(

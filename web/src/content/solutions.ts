@@ -15,6 +15,8 @@ export type Solution = {
   order: number;
   homeFeature?: boolean;
   businessFeature?: boolean;
+  headline?: string;
+  image?: { src: string; alt: string };
   introduction?: string;
   useCase?: string;
   conversation?: string;
@@ -24,11 +26,16 @@ export type Solution = {
 export const solutions: readonly Solution[] = [
   {
     id: "vehicle-financing",
+    headline: "Seu próximo veículo começa aqui.",
+    image: {
+      src: "/images/vehicle.jpg",
+      alt: "Carro estacionado, ilustrando a aquisição de veículo",
+    },
     slug: "financiamento-de-veiculo",
     name: "Financiamento de veículos",
     shortName: "financiamento de veículos",
     description:
-      "Para comprar ou trocar seu veículo e entender as alternativas para essa aquisição.",
+      "Motos, carros, utilitários e caminhões: conheça os caminhos para comprar ou trocar.",
     audience: ["PERSON", "BUSINESS"],
     category: "acquisition",
     status: "ACTIVE",
@@ -55,11 +62,16 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "property-financing",
+    headline: "Um novo endereço para seus planos.",
+    image: {
+      src: "/images/home.jpg",
+      alt: "Fachada de uma casa contemporânea",
+    },
     slug: "financiamento-de-imovel",
     name: "Financiamento imobiliário",
     shortName: "financiamento imobiliário",
     description:
-      "Para organizar a compra do imóvel e conversar sobre os próximos passos.",
+      "Da primeira casa ao próximo imóvel: entenda as possibilidades para sua compra.",
     audience: ["PERSON"],
     category: "acquisition",
     status: "ACTIVE",
@@ -86,10 +98,11 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "personal-credit",
+    headline: "Crédito com uma decisão bem pensada.",
     name: "Empréstimo",
     shortName: "empréstimo",
     description:
-      "Para avaliar uma necessidade de crédito com orientação antes de decidir.",
+      "Precisa de crédito? Entenda as alternativas antes de assumir um compromisso.",
     audience: ["PERSON"],
     category: "credit",
     status: "ACTIVE",
@@ -98,11 +111,12 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "consortium",
+    headline: "Planeje a sua próxima conquista.",
     slug: "consorcio",
     name: "Consórcio",
     shortName: "consórcio",
     description:
-      "Para planejar a aquisição de um bem ou serviço e entender como funciona a contemplação.",
+      "Imóveis, veículos, pesados e serviços: conheça uma alternativa de compra planejada.",
     audience: ["PERSON", "BUSINESS"],
     category: "acquisition",
     status: "ACTIVE",
@@ -129,9 +143,11 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "auto-insurance",
+    headline: "Proteja o carro que acompanha você.",
     name: "Seguro Auto",
     shortName: "seguro auto",
-    description: "Para conhecer alternativas de proteção para o seu carro.",
+    description:
+      "Conheça alternativas de proteção para o seu carro e esclareça as suas dúvidas.",
     audience: ["PERSON"],
     category: "protection",
     status: "ACTIVE",
@@ -140,10 +156,11 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "home-insurance",
+    headline: "Cuide do lugar que você chama de lar.",
     name: "Seguro Residencial",
     shortName: "seguro residencial",
     description:
-      "Para conversar sobre a proteção da sua casa e os cuidados que fazem sentido para ela.",
+      "Conheça alternativas de proteção para a sua casa e esclareça as suas dúvidas.",
     audience: ["PERSON"],
     category: "protection",
     status: "ACTIVE",
@@ -152,11 +169,12 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "working-capital",
+    headline: "Mais planejamento para o caixa.",
     slug: "capital-de-giro",
     name: "Capital de giro",
     shortName: "capital de giro",
     description:
-      "Alternativas para necessidades de caixa e operação da empresa.",
+      "Estoque, despesas e operação: converse sobre crédito para o dia a dia da empresa.",
     audience: ["BUSINESS"],
     category: "business",
     status: "ACTIVE",
@@ -182,10 +200,11 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "agro-guidance",
+    headline: "Crédito para os planos no campo.",
     name: "Crédito para o Agro",
     shortName: "crédito para o Agro",
     description:
-      "Converse sobre crédito para as necessidades da sua atividade no campo.",
+      "Orientação para as necessidades da atividade rural, para produtores e empresas.",
     audience: ["PERSON", "BUSINESS"],
     category: "agro",
     status: "ACTIVE",
@@ -205,10 +224,11 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "bndes",
+    headline: "Investimentos com orientação.",
     name: "Linhas BNDES",
     shortName: "linhas BNDES",
     description:
-      "Atendimento para entender possibilidades relacionadas ao BNDES, sem promessa de acesso ou linha específica.",
+      "Entenda as possibilidades de financiamento ligadas ao BNDES para sua empresa.",
     audience: ["BUSINESS"],
     category: "business",
     status: "ACTIVE",
@@ -217,10 +237,11 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "pronampe",
+    headline: "Um caminho para pequenos negócios.",
     name: "Pronampe",
     shortName: "Pronampe",
     description:
-      "Converse sobre o programa; enquadramento, disponibilidade e condições são esclarecidos no atendimento.",
+      "Saiba mais sobre o programa e esclareça o enquadramento da sua empresa.",
     audience: ["BUSINESS"],
     category: "business",
     status: "ACTIVE",

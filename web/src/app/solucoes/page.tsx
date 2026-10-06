@@ -1,10 +1,10 @@
-import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WhatsAppLink } from "@/components/contact/whatsapp-link";
 import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/ui/container";
+import { SolutionCard } from "@/components/solutions/solution-card";
 import {
   activeSolutions,
   otherPossibilities,
@@ -50,11 +50,11 @@ export default async function SolutionsPage({
       <main id="conteudo">
         <PageHero
           eyebrow="Serviços"
-          title="Alternativas para diferentes objetivos."
+          title="Encontre o caminho para o seu próximo plano."
         >
           <p>
-            Explore produtos reconhecíveis e converse sobre o que faz sentido
-            para você, sua empresa ou sua atividade no campo.
+            Comprar, planejar, proteger ou investir na sua atividade. Conheça as
+            soluções e converse com a Marlise sobre o que você procura.
           </p>
         </PageHero>
         <Container className="py-[var(--cm-space-section)]">
@@ -71,49 +71,43 @@ export default async function SolutionsPage({
             ))}
           </nav>
 
-          <div className="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {visibleSolutions.map((item) => (
-              <article
-                key={item.id}
-                className="flex flex-col rounded-card border border-border bg-surface p-6 shadow-card"
-              >
-                <p className="text-xs font-bold uppercase tracking-[var(--cm-letter-spacing-eyebrow)] text-accent-text">
-                  {item.category === "agro"
-                    ? "Agro"
-                    : item.audience.length === 2
-                      ? "Pessoas e empresas"
-                      : item.audience[0] === "BUSINESS"
-                        ? "Empresas"
-                        : "Para você"}
-                </p>
-                <h2 className="mt-3 font-serif text-2xl font-semibold">
-                  {item.name}
-                </h2>
-                <p className="mt-3 flex-1 leading-7 text-muted">
-                  {item.description}
-                </p>
-                {item.slug ? (
-                  <Link
-                    href={`/solucoes/${item.slug}`}
-                    className="mt-5 inline-flex min-h-[var(--cm-target-min)] items-center gap-2 font-bold text-accent-text"
-                  >
-                    Entender a solução
-                    <ArrowRight size={16} aria-hidden="true" />
-                  </Link>
-                ) : (
-                  <WhatsAppLink
-                    context={{
-                      subject: item.shortName,
-                      profile: filter === "ALL" ? undefined : filter,
-                    }}
-                    variant="secondary"
-                    className="mt-5 px-4"
-                  >
-                    Conversar sobre esta solução
-                  </WhatsAppLink>
-                )}
-              </article>
-            ))}
+          <div className="mt-10 space-y-12">
+            {[
+              ["acquisition", "Comprar e planejar"],
+              ["credit", "Crédito para o seu momento"],
+              ["protection", "Proteger o que é seu"],
+              ["business", "Soluções para o seu negócio"],
+              ["agro", "Para quem produz no campo"],
+            ].map(([category, title]) => {
+              const items = visibleSolutions.filter(
+                (item) => item.category === category,
+              );
+              if (!items.length) return null;
+              return (
+                <section key={category}>
+                  <h2 className="mb-5 font-serif text-2xl font-semibold sm:text-3xl">
+                    {title}
+                  </h2>
+                  {category === "agro" ? (
+                    <p className="mb-5 max-w-2xl text-sm leading-6 text-muted">
+                      Crédito para o Agro é a entrada para necessidades da
+                      atividade. Crédito Rural trata das finalidades específicas
+                      dessa modalidade. Produtores pessoa física também podem
+                      conversar sobre essas possibilidades.
+                    </p>
+                  ) : null}
+                  <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                    {items.map((item) => (
+                      <SolutionCard
+                        key={item.id}
+                        solution={item}
+                        profile={filter === "ALL" ? undefined : filter}
+                      />
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
           </div>
 
           <section className="mt-14 rounded-feature bg-surface-soft p-6 sm:p-9">
@@ -121,8 +115,8 @@ export default async function SolutionsPage({
               Outras possibilidades
             </h2>
             <p className="mt-4 max-w-2xl leading-7 text-muted">
-              Consulte a Marlise sobre o escopo e a disponibilidade. Estas
-              categorias não representam produtos ou parceiros confirmados.
+              Consulte a Marlise sobre o escopo e a disponibilidade. O escopo
+              dessas categorias é esclarecido no atendimento.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               {otherPossibilities.map((item) => (
@@ -139,7 +133,6 @@ export default async function SolutionsPage({
           </section>
 
           <p className="mt-8 max-w-3xl text-sm leading-6 text-muted">
-            Produtos publicados indicam temas para atendimento consultivo.
             Disponibilidade, aprovação, limites, taxas e demais condições
             dependem dos critérios das instituições responsáveis.
           </p>

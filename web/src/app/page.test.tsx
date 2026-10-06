@@ -9,12 +9,12 @@ describe("Home", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: /seu próximo passo começa com a orientação certa/i,
+        name: /seus planos merecem um próximo passo/i,
       }),
     ).toBeTruthy();
     expect(
       screen.getByRole("heading", {
-        name: /o que você quer realizar ou proteger/i,
+        name: /para cada plano, um caminho/i,
       }),
     ).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Consórcio" })).toBeTruthy();
