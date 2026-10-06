@@ -1,16 +1,10 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+  base = "."
+  command = "pnpm build"
+  publish = "web/.next"
 
 [build.environment]
-  NODE_VERSION = "22"
+  NODE_VERSION = "24"
 
-[context.production.environment]
-  NEXT_PUBLIC_SITE_URL = "https://credmarvi.netlify.app"
-  NEXT_PUBLIC_APP_ENV = "production"
-
-[context.branch-deploy.environment]
-  NEXT_PUBLIC_APP_ENV = "development"
-
-[context.deploy-preview.environment]
-  NEXT_PUBLIC_APP_ENV = "development"
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

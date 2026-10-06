@@ -1,2 +1,0 @@
-import {ReactNode} from "react"; import {Header} from "./Header"; import {Footer} from "./Footer"; import {Container} from "../common/Container";
-export function LegalPage({eyebrow,title,children}:{eyebrow:string,title:string,children:ReactNode}){return <><Header/><main><section className="bg-cream py-16"><Container className="max-w-4xl"><p className="eyebrow">{eyebrow}</p><h1 className="mt-4 font-serif text-4xl font-semibold sm:text-5xl">{title}</h1></Container></section><Container className="legal max-w-4xl py-14">{children}</Container></main><Footer/></>}

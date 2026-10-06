@@ -1,0 +1,162 @@
+{
+  "tenant": {
+    "slug": "cred-marvi",
+    "displayName": "Cred Marvi",
+    "active": true
+  },
+  "theme": {
+    "displayName": "Cred Marvi",
+    "locale": "pt-BR",
+    "supportedLocales": ["pt-BR"]
+  },
+  "origins": ["http://localhost:3000"],
+  "publicKey": {
+    "ensure": true
+  },
+  "flow": {
+    "flowKey": "credit-analysis",
+    "publish": true,
+    "definition": {
+      "schemaVersion": "1.0",
+      "entryStepId": "person-type",
+      "allowCycles": false,
+      "steps": [
+        {
+          "id": "person-type",
+          "question": {
+            "id": "person-type-question",
+            "variableKey": "personType",
+            "type": "SELECT",
+            "title": "Como você gostaria de iniciar seu atendimento?",
+            "description": "Essa escolha apenas adapta as opções apresentadas e não representa análise ou decisão de crédito.",
+            "options": [
+              { "value": "PERSON", "label": "Pessoa Física" },
+              { "value": "BUSINESS", "label": "Empresa" }
+            ],
+            "validations": [{ "kind": "REQUIRED" }],
+            "sensitive": false,
+            "includeInSummary": false
+          },
+          "transitions": [
+            {
+              "kind": "STEP",
+              "targetStepId": "person-need",
+              "condition": {
+                "kind": "PREDICATE",
+                "variableKey": "personType",
+                "operator": "EQ",
+                "value": "PERSON"
+              }
+            },
+            {
+              "kind": "STEP",
+              "targetStepId": "business-need",
+              "condition": {
+                "kind": "PREDICATE",
+                "variableKey": "personType",
+                "operator": "EQ",
+                "value": "BUSINESS"
+              }
+            }
+          ]
+        },
+        {
+          "id": "person-need",
+          "question": {
+            "id": "person-need-question",
+            "variableKey": "personNeed",
+            "type": "SELECT",
+            "title": "Qual solução você procura?",
+            "options": [
+              {
+                "value": "PROPERTY_FINANCING",
+                "label": "Financiamento de imóvel"
+              },
+              {
+                "value": "VEHICLE_FINANCING",
+                "label": "Financiamento de veículo"
+              },
+              { "value": "CONSORTIUM", "label": "Consórcio" }
+            ],
+            "validations": [{ "kind": "REQUIRED" }],
+            "sensitive": false,
+            "includeInSummary": false
+          },
+          "transitions": [{ "kind": "STEP", "targetStepId": "name" }]
+        },
+        {
+          "id": "business-need",
+          "question": {
+            "id": "business-need-question",
+            "variableKey": "businessNeed",
+            "type": "SELECT",
+            "title": "Qual solução sua empresa procura?",
+            "description": "As opções apoiam o direcionamento do atendimento e não representam análise de elegibilidade.",
+            "options": [
+              {
+                "value": "VEHICLE_FINANCING",
+                "label": "Financiamento de veículo"
+              },
+              { "value": "WORKING_CAPITAL", "label": "Capital de giro" },
+              { "value": "CONSORTIUM", "label": "Consórcio" }
+            ],
+            "validations": [{ "kind": "REQUIRED" }],
+            "sensitive": false,
+            "includeInSummary": false
+          },
+          "transitions": [{ "kind": "STEP", "targetStepId": "name" }]
+        },
+        {
+          "id": "name",
+          "question": {
+            "id": "name-question",
+            "variableKey": "contactName",
+            "type": "TEXT",
+            "title": "Como podemos chamar você?",
+            "description": "Informe apenas o nome que prefere usar no atendimento.",
+            "validations": [
+              { "kind": "REQUIRED" },
+              { "kind": "LENGTH", "min": 1, "max": 80 }
+            ],
+            "sensitive": true,
+            "includeInSummary": false
+          },
+          "transitions": [{ "kind": "STEP", "targetStepId": "whatsapp" }]
+        },
+        {
+          "id": "whatsapp",
+          "question": {
+            "id": "whatsapp-question",
+            "variableKey": "contactWhatsapp",
+            "type": "PHONE",
+            "title": "Qual é o seu WhatsApp para contato?",
+            "description": "Use o formato internacional com código do país e DDD, por exemplo +5511999999999.",
+            "validations": [{ "kind": "REQUIRED" }],
+            "sensitive": true,
+            "includeInSummary": false,
+            "ui": { "inputMode": "TEL", "width": "FULL" }
+          },
+          "transitions": [{ "kind": "STEP", "targetStepId": "consent" }]
+        },
+        {
+          "id": "consent",
+          "question": {
+            "id": "consent-question",
+            "variableKey": "contactConsent",
+            "type": "CONSENT",
+            "title": "Autorizo o uso das informações fornecidas para a análise inicial da minha solicitação e para contato da equipe Cred Marvi.",
+            "validations": [{ "kind": "ACCEPTED" }],
+            "sensitive": false,
+            "includeInSummary": false
+          },
+          "transitions": [{ "kind": "COMPLETE" }]
+        }
+      ],
+      "completion": {
+        "title": "Informações recebidas",
+        "message": "A etapa inicial foi concluída. A continuidade do atendimento será apresentada pela Cred Marvi.",
+        "showSummary": false
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "atriumCommit": "5e991956111e74e932752e06ad4a0d1769486fad",
+  "packages": [
+    {
+      "name": "@atrium/common",
+      "version": "1.0.0",
+      "file": "atrium-common-1.0.0.tgz",
+      "sha256": "521992873affd265116b383b3a09f691a0a8abf0d2a98ebee1a146935f92406f"
+    },
+    {
+      "name": "@atrium/sdk-js",
+      "version": "0.1.0",
+      "file": "atrium-sdk-js-0.1.0.tgz",
+      "sha256": "4117e575d70c95231e64381fc73fc527209359954069b6862579c39968fcb5e9"
+    },
+    {
+      "name": "@atrium/sdk-react",
+      "version": "0.1.0",
+      "file": "atrium-sdk-react-0.1.0.tgz",
+      "sha256": "b2cd71e2358b4f531083c81e5d5af0a49fbec4219c9e7c6f516ec8ccaa7e74d2"
+    }
+  ],
+  "commands": [
+    "corepack pnpm check",
+    "corepack pnpm pack:smoke",
+    "corepack pnpm --dir atrium-common pack --pack-destination vendor/atrium/5e99195",
+    "corepack pnpm --dir atrium-sdk-js pack --pack-destination vendor/atrium/5e99195",
+    "corepack pnpm --dir atrium-sdk-react pack --pack-destination vendor/atrium/5e99195"
+  ]
+}

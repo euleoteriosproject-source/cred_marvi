@@ -1,2 +1,0 @@
-"use client"; import { MessageCircle } from "lucide-react"; import { siteContactMessage,whatsappUrl } from "@/lib/whatsapp"; import { trackEvent } from "@/lib/analytics";
-export function WhatsAppButton({label="Falar com a especialista",className=""}:{label?:string,className?:string}){return <a href={whatsappUrl(siteContactMessage())} target="_blank" rel="noreferrer" onClick={()=>trackEvent("whatsapp_click",{location:"site"})} className={`btn-secondary ${className}`}><MessageCircle size={18} aria-hidden/>{label}</a>}
