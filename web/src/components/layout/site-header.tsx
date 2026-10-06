@@ -37,14 +37,14 @@ export function SiteHeader({
         <Brand />
         <nav
           aria-label="Principal"
-          className="hidden items-center gap-5 lg:flex"
+          className="hidden items-center gap-2 lg:flex xl:gap-5"
         >
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={pathname === item.href ? "page" : undefined}
-              className="inline-flex min-h-[var(--cm-target-min)] items-center rounded-control px-2 text-sm font-semibold text-muted transition hover:bg-background hover:text-accent-text aria-[current=page]:bg-background aria-[current=page]:text-accent-text"
+              className="inline-flex min-h-[var(--cm-target-min)] items-center rounded-control px-1.5 text-sm font-semibold text-muted transition hover:bg-background hover:text-accent-text aria-[current=page]:bg-background aria-[current=page]:text-accent-text xl:px-2"
             >
               {item.label}
             </Link>
@@ -55,7 +55,7 @@ export function SiteHeader({
             <WhatsAppLink
               context={contactContext}
               variant="primary"
-              className="px-4"
+              className="px-3 xl:px-4"
             >
               Falar com a Marlise
             </WhatsAppLink>
