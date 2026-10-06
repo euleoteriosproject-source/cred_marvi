@@ -104,7 +104,7 @@ body {
 .solution-card:hover,
 .hero-tile:hover {
   border-color: var(--cm-color-accent-text);
-  box-shadow: var(--cm-shadow-control);
+  box-shadow: 0 8px 24px rgb(28 28 30 / 8%);
 }
 .solution-card:focus-within {
   outline: 2px solid var(--cm-color-focus-on-light);
@@ -112,6 +112,32 @@ body {
 }
 summary::-webkit-details-marker {
   display: none;
+}
+
+.home-opening {
+  background: linear-gradient(
+    115deg,
+    var(--cm-color-surface) 35%,
+    var(--cm-color-background)
+  );
+}
+
+.solution-card {
+  box-shadow: 0 2px 8px rgb(28 28 30 / 3%);
+}
+
+.page-opening {
+  background: linear-gradient(
+    115deg,
+    var(--cm-color-surface) 60%,
+    var(--cm-color-background)
+  );
+}
+
+@media (max-width: 39.99rem) {
+  .specialist-portrait {
+    max-width: 19rem;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .solution-card,

@@ -6,9 +6,12 @@ import {
   MessageCircle,
   ShieldCheck,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { WhatsAppLink } from "@/components/contact/whatsapp-link";
+import {
+  SpecialistIdentity,
+  SpecialistPortrait,
+} from "@/components/brand/specialist";
 import { SolutionCard } from "@/components/solutions/solution-card";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
@@ -24,19 +27,22 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 export function Hero() {
   return (
-    <section className="bg-surface">
-      <Container className="grid items-center gap-8 py-8 sm:py-12 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:py-14">
+    <section className="home-opening">
+      <Container className="grid items-center gap-8 py-9 sm:py-12 lg:grid-cols-[1.1fr_.9fr] lg:gap-16 lg:py-14">
         <div>
           <Eyebrow>Crédito • conquistas • proteção</Eyebrow>
-          <h1 className="mt-4 max-w-xl font-serif text-[2.6rem] font-semibold leading-[1.12] tracking-tight sm:text-5xl lg:text-[3.75rem]">
+          <h1 className="mt-4 max-w-xl font-serif text-[2.3rem] font-semibold leading-[1.12] tracking-tight sm:text-5xl lg:text-[3.5rem]">
             Seu imóvel. Seu carro.
             <br />
             <span className="text-accent-text">Seus planos, mais perto.</span>
           </h1>
           <p className="mt-5 max-w-lg text-base leading-7 text-muted sm:text-lg">
-            Financiamento, consórcio, crédito e seguros. Escolha seu objetivo e
-            conte com a Marlise para entender as opções.
+            Financiamento, consórcio, crédito e seguros. Entenda as opções com
+            quem vai acompanhar você na próxima decisão.
           </p>
+          <div className="mt-6 lg:hidden">
+            <SpecialistIdentity />
+          </div>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="#solucoes">
               Encontrar minha solução{" "}
@@ -44,97 +50,49 @@ export function Hero() {
             </ButtonLink>
             <WhatsAppLink variant="secondary">Falar com a Marlise</WhatsAppLink>
           </div>
-          <p className="mt-4 flex items-center gap-2 text-xs text-muted">
-            <Check size={15} aria-hidden="true" />
-            Sem cadastro. Você conversa com uma pessoa.
+          <p className="mt-4 flex items-center gap-2 text-xs leading-5 text-muted">
+            <Check size={15} aria-hidden="true" /> Sem cadastro. Você conversa
+            com uma pessoa.
           </p>
+          <nav
+            aria-label="Explore seus objetivos"
+            className="mt-7 flex flex-wrap gap-x-5 gap-y-1 border-t border-border pt-4"
+          >
+            {[
+              ["/solucoes?category=acquisition", "Comprar e planejar"],
+              ["/solucoes?category=credit", "Crédito"],
+              ["/solucoes?category=protection", "Seguros"],
+            ].map(([href, label]) => (
+              <Link
+                key={href}
+                href={href}
+                className="inline-flex min-h-11 items-center gap-2 text-xs font-bold text-accent-text"
+              >
+                {label}
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </Link>
+            ))}
+          </nav>
         </div>
-        <div
-          className="grid grid-cols-[1.15fr_.85fr] gap-3 sm:gap-4"
-          aria-label="Explore seus objetivos"
-        >
-          <Link
-            href="/solucoes/financiamento-de-imovel"
-            className="hero-tile group row-span-2 overflow-hidden rounded-feature border border-border bg-background"
-          >
-            <div className="relative h-[220px] sm:h-[340px] lg:h-[350px]">
-              <Image
-                src="/images/home.jpg"
-                alt="Casa com jardim e fachada iluminada pelo sol"
-                fill
-                preload
-                sizes="(max-width: 1023px) 53vw, 28vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="flex items-center justify-between gap-2 px-4 py-4 sm:px-5">
-              <div>
-                <p className="text-xs text-muted">Um novo endereço</p>
-                <p className="mt-1 text-sm font-bold sm:text-base">
-                  Conquiste seu imóvel
-                </p>
-              </div>
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </div>
-          </Link>
-          <Link
-            href="/solucoes/financiamento-de-veiculo"
-            className="hero-tile group overflow-hidden rounded-card border border-border bg-background"
-          >
-            <div className="relative h-[100px] sm:h-[153px]">
-              <Image
-                src="/images/car.jpg"
-                alt="Carro compacto azul em uma rua durante o dia"
-                fill
-                sizes="(max-width: 1023px) 38vw, 21vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="flex items-center justify-between gap-1 p-3 sm:p-4">
-              <p className="text-xs font-bold sm:text-sm">
-                Seu próximo veículo
-              </p>
-              <ArrowUpRight size={16} aria-hidden="true" />
-            </div>
-          </Link>
-          <Link
-            href="/solucoes?category=protection"
-            className="hero-tile group overflow-hidden rounded-card border border-border bg-background"
-          >
-            <div className="relative h-[100px] sm:h-[153px]">
-              <Image
-                src="/images/living.jpg"
-                alt="Sala de estar clara e acolhedora"
-                fill
-                sizes="(max-width: 1023px) 38vw, 21vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="flex items-center justify-between gap-1 p-3 sm:p-4">
-              <p className="text-xs font-bold sm:text-sm">
-                Proteja o que é seu
-              </p>
-              <ArrowUpRight size={16} aria-hidden="true" />
-            </div>
-          </Link>
+        <div className="hidden lg:block">
+          <SpecialistPortrait preload />
         </div>
       </Container>
-      <div className="border-y border-border bg-background">
+      <div className="border-y border-border bg-surface">
         <Container className="flex flex-wrap justify-between gap-x-6 gap-y-2 py-3 text-xs font-semibold text-muted sm:text-sm">
           <span className="flex items-center gap-2">
-            <MessageCircle size={16} aria-hidden="true" />
-            Atendimento com a Marlise
+            <MessageCircle size={16} aria-hidden="true" /> Atendimento com a
+            Marlise
           </span>
           <span className="flex items-center gap-2">
-            <Check size={16} aria-hidden="true" />
-            Para pessoas e empresas
+            <Check size={16} aria-hidden="true" /> Para pessoas e empresas
           </span>
           <Link
             href="/seguranca-e-privacidade"
             className="inline-flex min-h-8 items-center gap-2 text-accent-text"
           >
-            <ShieldCheck size={16} aria-hidden="true" />
-            Seus dados merecem cuidado
+            <ShieldCheck size={16} aria-hidden="true" /> Seus dados merecem
+            cuidado
           </Link>
         </Container>
       </div>
@@ -162,7 +120,7 @@ export function SolutionsPreview() {
             Ver todas as soluções <ArrowUpRight size={17} aria-hidden="true" />
           </Link>
         </div>
-        <div className="mt-7 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
           {homeSolutions.map((s) => (
             <SolutionCard key={s.id} solution={s} />
           ))}
@@ -207,7 +165,7 @@ export function BusinessSection() {
             Todas as soluções <ArrowUpRight size={17} aria-hidden="true" />
           </Link>
         </div>
-        <div className="mt-7 grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-4">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-6 xl:grid-cols-4">
           {businessHighlights.map((s) => (
             <SolutionCard
               key={s.id}
@@ -252,17 +210,10 @@ export function SpecialistSection() {
           </Link>
         </div>
         <div className="rounded-feature border border-border bg-surface p-6 sm:p-8">
-          <MessageCircle
-            className="text-accent-text"
-            size={28}
-            aria-hidden="true"
-          />
-          <h3 className="mt-4 font-serif text-2xl font-semibold">
-            Marlise Euleoterio
-          </h3>
-          <p className="mt-2 text-sm text-muted">
+          <SpecialistIdentity />
+          <h3 className="mt-6 font-serif text-2xl font-semibold">
             Seu objetivo é o ponto de partida.
-          </p>
+          </h3>
           <ul className="my-5 space-y-3">
             {[
               "Conversa direta, sem formulário de cadastro.",

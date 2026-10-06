@@ -18,4 +18,9 @@ Arquivos locais, servidos pelo Next Image; nenhuma chamada ao Unsplash no navega
 | `small-business.jpg` | https://images.unsplash.com/photo-1556742049-0cfed4f6a45d    |
 | `receivables.jpg`    | https://images.unsplash.com/photo-1554224155-6726b3ff858f    |
 
-O mesmo carro ilustra financiamento e seguro; o nome e o objetivo de cada cartão distinguem as modalidades. Nenhuma marca automotiva é apresentada como parceira.
+Cada produto ativo utiliza uma imagem distinta. Nenhuma marca automotiva é apresentada como parceira.
+
+## Imagens aprovadas e ilustrações novas
+
+- `people/marlise.png`: foto de Marlise enviada e autorizada pelo usuário em 06/10/2026. Arquivo original preservado, sem edição da identidade ou aparência. Usado na home, sobre, contato e junto ao atendimento dos produtos.
+- `vehicle-insurance.webp`: composição ilustrativa gerada por IA em 06/10/2026, com moto, carro e caminhão. Arquivo otimizado em WebP; não representa veículos à venda, clientes, parceiros ou uma cobertura contratada. A imagem diferencia seguro de veículos e financiamento.

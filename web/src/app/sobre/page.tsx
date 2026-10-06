@@ -4,6 +4,7 @@ import { WhatsAppLink } from "@/components/contact/whatsapp-link";
 import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/ui/container";
+import { SpecialistPortrait } from "@/components/brand/specialist";
 
 export const metadata: Metadata = {
   title: "Sobre",
@@ -36,12 +37,16 @@ export default function AboutPage() {
         <PageHero
           eyebrow="Marlise Euleoterio"
           title="Seu contato tem nome: Marlise."
+          visual={<SpecialistPortrait preload showProfileLink={false} />}
         >
           <p>
             Marlise Euleoterio atende pessoas e empresas na Cred Marvi. Seu
             objetivo orienta a conversa, do primeiro contato aos próximos
             passos.
           </p>
+          <WhatsAppLink variant="primary" className="mt-6">
+            Falar com a Marlise
+          </WhatsAppLink>
         </PageHero>
         <Container className="py-[var(--cm-space-section)]">
           <section className="max-w-[var(--cm-container-content)]">
