@@ -23,6 +23,11 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
       });
       expect(response?.ok(), `${name} ${width}`).toBe(true);
       await page.evaluate(() => document.fonts.ready);
+      await page.locator("main img").evaluateAll((images) => {
+        for (const image of images)
+          (image as HTMLImageElement).loading = "eager";
+      });
+      await page.waitForLoadState("networkidle");
       for (const photo of await page.locator("main img:visible").all()) {
         await photo.scrollIntoViewIfNeeded();
         const source = await photo.getAttribute("src");

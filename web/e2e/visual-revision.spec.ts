@@ -22,6 +22,10 @@ test("vitrine mantém produtos, contexto Agro e imagens locais em todas as largu
     ).toBeVisible();
     await expect(page.locator("#solucoes article")).toHaveCount(6);
     // Images must load, including lazy product photos after scrolling into view.
+    await page.locator("#solucoes img").evaluateAll((images) => {
+      for (const image of images) (image as HTMLImageElement).loading = "eager";
+    });
+    await page.waitForLoadState("networkidle");
     await page.locator("#solucoes").scrollIntoViewIfNeeded();
     for (const image of await page.locator("#solucoes img").all()) {
       await image.scrollIntoViewIfNeeded();
