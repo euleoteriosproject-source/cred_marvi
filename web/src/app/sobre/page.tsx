@@ -35,11 +35,12 @@ export default function AboutPage() {
       <main id="conteudo">
         <PageHero
           eyebrow="Marlise Euleoterio"
-          title="Atendimento próximo para organizar o seu próximo passo."
+          title="Seu contato tem nome: Marlise."
         >
           <p>
-            A Cred Marvi oferece orientação e intermediação consultiva para
-            pessoas e empresas, sem se apresentar como banco.
+            Marlise Euleoterio atende pessoas e empresas na Cred Marvi. Seu
+            objetivo orienta a conversa, do primeiro contato aos próximos
+            passos.
           </p>
         </PageHero>
         <Container className="py-[var(--cm-space-section)]">

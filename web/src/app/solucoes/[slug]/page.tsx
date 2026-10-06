@@ -1,3 +1,5 @@
+import Link from "next/link";
+import type { Audience } from "@/content/solutions";
 import { ChevronDown } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -32,34 +34,48 @@ export async function generateMetadata({
 
 export default async function SolutionPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ profile?: string | string[] }>;
 }) {
   const solution = solutionBySlug((await params).slug);
   if (!solution) notFound();
 
-  const contactContext = { subject: solution.shortName };
+  const requested = (await searchParams).profile;
+  const profile: Audience | undefined =
+    (requested === "PERSON" || requested === "BUSINESS") &&
+    solution.audience.includes(requested)
+      ? requested
+      : undefined;
+  const contactContext = { subject: solution.shortName, profile };
 
   return (
-    <PageShell>
+    <PageShell contactContext={contactContext}>
       <main id="conteudo">
         <PageHero
-          eyebrow="Solução para o seu objetivo"
-          title={solution.name}
+          eyebrow={solution.name}
+          title={solution.headline ?? solution.name}
           image={solution.image}
         >
           <p>{solution.description}</p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <WhatsAppLink context={contactContext} variant="primary">
-              Falar sobre {solution.name}
+              {`Falar sobre ${solution.name}`}
             </WhatsAppLink>
-            <ButtonLink href="#como-funciona" variant="inverse">
+            <ButtonLink href="#como-funciona" variant="secondary">
               Entender como funciona
             </ButtonLink>
           </div>
         </PageHero>
 
-        <Container className="max-w-[var(--cm-container-content)] py-[var(--cm-space-section)]">
+        <Container className="py-[var(--cm-space-section)]">
+          <Link
+            href={profile ? `/solucoes?profile=${profile}` : "/solucoes"}
+            className="mb-6 inline-flex min-h-11 items-center text-sm font-bold text-accent-text"
+          >
+            ← Voltar às soluções
+          </Link>
           <div
             id="como-funciona"
             className="grid scroll-mt-24 gap-5 md:grid-cols-3"
@@ -101,11 +117,11 @@ export default async function SolutionPage({
             </section>
           ) : null}
 
-          <section className="mt-12 rounded-feature bg-surface-inverse p-7 text-inverse sm:p-10">
+          <section className="mt-12 rounded-feature border border-border bg-surface-soft p-7 sm:p-10">
             <h2 className="font-serif text-3xl font-semibold">
               Quer conversar sobre {solution.name.toLowerCase()}?
             </h2>
-            <p className="mt-4 max-w-2xl leading-7 text-inverse-muted">
+            <p className="mt-4 max-w-2xl leading-7 text-muted">
               Conte o que você procura e esclareça as possibilidades para o seu
               momento, com atendimento humano.
             </p>

@@ -1,6 +1,7 @@
 export const navigation = [
-  { label: "Serviços", href: "/solucoes" },
-  { label: "Para empresas", href: "/solucoes?profile=BUSINESS" },
-  { label: "Como funciona", href: "/#como-funciona" },
-  { label: "Marlise", href: "/#marlise" },
+  { label: "Soluções", href: "/solucoes" },
+  { label: "Empresas", href: "/solucoes?profile=BUSINESS" },
+  { label: "Agro", href: "/solucoes?category=agro" },
+  { label: "Sobre a Marlise", href: "/sobre" },
+  { label: "Contato", href: "/contato" },
 ] as const;
