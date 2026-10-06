@@ -160,10 +160,10 @@ export const solutions: readonly Solution[] = [
   },
   {
     id: "auto-insurance",
-    name: "Seguro Auto",
-    shortName: "seguro auto",
+    name: "Seguro de veículos",
+    shortName: "seguro de veículos",
     description:
-      "Conheça alternativas de proteção para o seu carro e esclareça as suas dúvidas.",
+      "Moto, carro ou caminhão: entenda as opções de seguro para o seu veículo.",
     audience: ["PERSON"],
     category: "protection",
     status: "ACTIVE",
@@ -171,14 +171,15 @@ export const solutions: readonly Solution[] = [
     homeFeature: true,
     label: "Seu veículo",
     image: {
-      src: "/images/car.jpg",
-      alt: "Carro compacto estacionado durante o dia, ilustrando proteção veicular",
+      src: "/images/vehicle-insurance.webp",
+      alt: "Moto, carro e caminhão em uma composição ilustrativa de seguros de veículos",
     },
     slug: "seguro-auto",
-    headline: "Seu carro faz parte da sua vida. Cuide dele.",
+    headline: "Mais cuidado com o veículo que move seus planos.",
     introduction:
-      "Seguro Auto oferece proteção ao veículo conforme as coberturas e condições contratadas na apólice.",
-    useCase: "Quando você quer conhecer opções de proteção para seu carro.",
+      "O seguro de veículos pode abranger motos, carros e caminhões. As opções e a proteção aplicável dependem do veículo, da seguradora e das condições contratadas na apólice.",
+    useCase:
+      "Quando você quer conhecer opções de proteção para sua moto, seu carro ou seu caminhão.",
     conversation:
       "Esclareça coberturas, exclusões, franquias e condições aplicáveis ao seu veículo.",
   },

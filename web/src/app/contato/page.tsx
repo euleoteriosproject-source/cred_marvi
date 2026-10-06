@@ -6,6 +6,7 @@ import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/ui/container";
 import { site } from "@/config/site";
+import { SpecialistPortrait } from "@/components/brand/specialist";
 import {
   resolveContactContext,
   type ContactSearchParams,
@@ -25,10 +26,25 @@ export default async function ContactPage({
   return (
     <PageShell contactContext={context}>
       <main id="conteudo">
-        <PageHero eyebrow="Contato" title="Fale com a Marlise">
+        <PageHero
+          eyebrow="Contato humano"
+          title="Fale com a Marlise"
+          visual={<SpecialistPortrait preload />}
+        >
           <p>
             Já sabe o que procura ou quer ajuda para escolher? A conversa pode
             começar agora, pelo WhatsApp.
+          </p>
+          {context.subject ? (
+            <p className="mt-4 rounded-control border border-border bg-background px-4 py-3 text-sm">
+              Seu assunto: <strong>{context.subject}</strong>
+            </p>
+          ) : null}
+          <WhatsAppLink context={context} className="mt-6">
+            Falar com a Marlise
+          </WhatsAppLink>
+          <p className="mt-3 text-xs leading-6">
+            Você revisa a mensagem antes de enviá-la no WhatsApp.
           </p>
         </PageHero>
         <Container className="grid gap-7 py-[var(--cm-space-section)] lg:grid-cols-[1.1fr_.9fr]">
@@ -44,17 +60,6 @@ export default async function ContactPage({
             <p className="mt-3 max-w-lg leading-7 text-muted">
               Conte seu objetivo e esclareça as possibilidades com quem vai
               atender você.
-            </p>
-            {context.subject ? (
-              <p className="mt-4 rounded-control bg-surface-soft p-3 text-sm">
-                Seu assunto: <strong>{context.subject}</strong>
-              </p>
-            ) : null}
-            <WhatsAppLink context={context} className="mt-6">
-              Falar com a Marlise
-            </WhatsAppLink>
-            <p className="mt-3 text-xs leading-6 text-muted">
-              Você revisa a mensagem antes de enviá-la no WhatsApp.
             </p>
             {site.contactEmail ? (
               <a

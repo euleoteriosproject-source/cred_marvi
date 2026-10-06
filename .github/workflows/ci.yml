@@ -42,3 +42,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @cred-marvi/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-review
+          path: web/test-results/ui
+          if-no-files-found: ignore
+          retention-days: 5

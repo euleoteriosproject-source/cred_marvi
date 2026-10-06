@@ -44,7 +44,7 @@ export function SiteHeader({
               key={item.href}
               href={item.href}
               aria-current={pathname === item.href ? "page" : undefined}
-              className="inline-flex min-h-[var(--cm-target-min)] items-center text-sm font-semibold text-muted transition hover:text-accent-text"
+              className="inline-flex min-h-[var(--cm-target-min)] items-center rounded-control px-2 text-sm font-semibold text-muted transition hover:bg-background hover:text-accent-text aria-[current=page]:bg-background aria-[current=page]:text-accent-text"
             >
               {item.label}
             </Link>
@@ -84,6 +84,7 @@ export function SiteHeader({
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
+              aria-current={pathname === item.href ? "page" : undefined}
               className="flex min-h-[var(--cm-target-min)] items-center rounded-control px-3 font-semibold text-muted hover:bg-surface-soft hover:text-accent-text"
             >
               {item.label}

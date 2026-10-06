@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { WhatsAppLink } from "@/components/contact/whatsapp-link";
+import { SpecialistIdentity } from "@/components/brand/specialist";
 import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -118,7 +119,8 @@ export default async function SolutionPage({
           ) : null}
 
           <section className="mt-12 rounded-feature border border-border bg-surface-soft p-7 sm:p-10">
-            <h2 className="font-serif text-3xl font-semibold">
+            <SpecialistIdentity />
+            <h2 className="mt-6 font-serif text-3xl font-semibold">
               Quer conversar sobre {solution.name.toLowerCase()}?
             </h2>
             <p className="mt-4 max-w-2xl leading-7 text-muted">

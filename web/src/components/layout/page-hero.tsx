@@ -8,18 +8,20 @@ export function PageHero({
   title,
   children,
   image,
+  visual,
 }: {
   eyebrow: string;
   title: string;
   children?: ReactNode;
   image?: { src: string; alt: string };
+  visual?: ReactNode;
 }) {
   return (
-    <section className="border-b border-border bg-surface py-8 sm:py-12">
+    <section className="page-opening border-b border-border bg-surface py-6 sm:py-10">
       <Container>
         <nav
           aria-label="Localização"
-          className="mb-7 flex flex-wrap items-center gap-2 text-xs text-muted"
+          className="mb-5 flex flex-wrap items-center gap-2 text-xs text-muted"
         >
           <Link
             href="/"
@@ -43,14 +45,16 @@ export function PageHero({
         </nav>
         <div
           className={
-            image ? "grid items-center gap-8 lg:grid-cols-2 lg:gap-14" : ""
+            image || visual
+              ? "grid items-center gap-7 lg:grid-cols-[1.1fr_.9fr] lg:gap-14"
+              : ""
           }
         >
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-accent-text">
               {eyebrow}
             </p>
-            <h1 className="mt-3 max-w-3xl font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+            <h1 className="mt-3 max-w-3xl font-serif text-[2.15rem] font-semibold leading-[1.15] tracking-tight sm:text-5xl">
               {title}
             </h1>
             {children ? (
@@ -60,7 +64,7 @@ export function PageHero({
             ) : null}
           </div>
           {image ? (
-            <div className="relative aspect-[4/3] overflow-hidden rounded-feature bg-surface-soft">
+            <div className="relative aspect-[8/5] overflow-hidden rounded-feature border border-border bg-surface-soft">
               <Image
                 src={image.src}
                 alt={image.alt}
@@ -71,6 +75,7 @@ export function PageHero({
               />
             </div>
           ) : null}
+          {visual}
         </div>
       </Container>
     </section>
