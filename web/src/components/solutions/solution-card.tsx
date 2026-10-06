@@ -35,9 +35,11 @@ export function SolutionIcon({ solution }: { solution: Solution }) {
 export function SolutionCard({
   solution,
   profile,
+  preload = false,
 }: {
   solution: Solution;
   profile?: Audience;
+  preload?: boolean;
 }) {
   return (
     <article className="solution-card group relative flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface">
@@ -48,6 +50,7 @@ export function SolutionCard({
             alt={solution.image.alt}
             fill
             unoptimized={solution.image.unoptimized}
+            preload={preload}
             sizes="(max-width: 639px) 44vw, (max-width: 1023px) 45vw, 30vw"
             className="object-cover transition-transform duration-300 group-hover:scale-[1.035] motion-reduce:transform-none"
           />
