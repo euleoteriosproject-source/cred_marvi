@@ -49,6 +49,11 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
     }
     await expect(page.locator('main img[src*="marlise"]')).not.toHaveCount(0);
   }
+  await expect(
+    page
+      .getByRole("navigation", { name: "Principal", exact: true })
+      .getByRole("link", { name: "Pessoa Física", exact: true }),
+  ).toBeVisible();
   await page.goto("/solucoes/seguro-auto");
   await expect(
     page.locator('main img[alt*="Moto, carro e caminhão"]'),
@@ -64,5 +69,18 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
   expect(decodeURIComponent((await contact.getAttribute("href"))!)).toContain(
     "consórcio para mim",
   );
+  await page.goto("/sobre");
+  await expect(
+    page.getByRole("heading", {
+      name: "Vivência bancária aplicada a um atendimento consultivo.",
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("CPA-10 ativa", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Certificação CORBAN", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Corretora de Seguros", { exact: true }),
+  ).toBeVisible();
   expect(errors).toEqual([]);
 });
