@@ -2,7 +2,7 @@
 
 Fotografias de apoio aos objetivos de cada produto, sem sobreposição escura. Não representam imóveis/veículos à venda, clientes, a Marlise, parceiros ou condições contratadas.
 
-Arquivos locais, servidos pelo Next Image; nenhuma chamada ao Unsplash no navegador. Fotografias obtidas do CDN público do Unsplash sob a [licença Unsplash](https://unsplash.com/license). Não foram geradas por IA.
+Arquivos locais, sem chamadas ao Unsplash no navegador. As fotografias da tabela abaixo foram obtidas do CDN público do Unsplash sob a [licença Unsplash](https://unsplash.com/license) e não foram geradas por IA.
 
 | Arquivo              | Origem                                                       |
 | -------------------- | ------------------------------------------------------------ |
@@ -23,4 +23,5 @@ Cada produto ativo utiliza uma imagem distinta. Nenhuma marca automotiva é apre
 ## Imagens aprovadas e ilustrações novas
 
 - `people/marlise.png`: foto de Marlise enviada e autorizada pelo usuário em 06/10/2026. Arquivo original preservado, sem edição da identidade ou aparência. Usado na home, sobre, contato e junto ao atendimento dos produtos.
+- `vehicle-financing.webp`: composição automotiva gerada por IA em 06/10/2026, com SUV genérico azul petróleo em cenário urbano. Arquivo otimizado em WebP; não representa veículo à venda, cliente, parceiro, marca ou condição de financiamento.
 - `vehicle-insurance.webp`: composição ilustrativa gerada por IA em 06/10/2026, com moto, carro e caminhão. Arquivo otimizado em WebP; não representa veículos à venda, clientes, parceiros ou uma cobertura contratada. A imagem diferencia seguro de veículos e financiamento.

@@ -58,8 +58,9 @@ export const solutions: readonly Solution[] = [
     ],
     label: "Comprar ou trocar",
     image: {
-      src: "/images/car.jpg",
-      alt: "Carro compacto azul em uma rua durante o dia",
+      src: "/images/vehicle-financing.webp",
+      alt: "SUV azul moderno em uma avenida ao entardecer",
+      unoptimized: true,
     },
   },
   {

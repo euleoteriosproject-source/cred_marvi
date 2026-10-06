@@ -9,7 +9,8 @@ Data: 06/10/2026. Base: `develop`, commit `9130b64`.
 - Cartões com finalidade fora da imagem, títulos alinhados, ações claras, foco visível e imagens sem sobreposição de texto.
 - Cabeçalhos internos mais compactos, imagens com proporção consistente e navegação ativa também no menu móvel.
 - Seguro de veículos tem imagem exclusiva de moto, carro e caminhão. O texto reflete as categorias indicadas pelo usuário, sem prometer cobertura, taxa ou contratação. A URL `/solucoes/seguro-auto` foi mantida.
-- Todos os produtos ativos possuem imagens distintas. A imagem de seguros é uma composição ilustrativa gerada por IA, documentada no inventário de imagens.
+- Financiamento de veículos ganhou uma imagem exclusiva de SUV moderno, mais aspiracional e sem marca visível.
+- Todos os produtos ativos possuem imagens distintas. As imagens de financiamento e seguros são composições ilustrativas geradas por IA, documentadas no inventário de imagens.
 
 ## UX e desenvolvimento
 
