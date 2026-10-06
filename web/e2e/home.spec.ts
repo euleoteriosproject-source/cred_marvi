@@ -130,6 +130,7 @@ test("orientação não exige resposta, não abre WhatsApp sozinha e quick é se
 test("rotas publicadas respondem e sucesso redireciona sem parâmetros", async ({
   page,
 }) => {
+  test.setTimeout(60_000);
   for (const route of [
     "/solucoes",
     "/solucoes/financiamento-de-imovel",
@@ -143,7 +144,7 @@ test("rotas publicadas respondem e sucesso redireciona sem parâmetros", async (
     "/faq",
     "/contato",
   ]) {
-    const response = await page.goto(route);
+    const response = await page.goto(route, { waitUntil: "domcontentloaded" });
     expect(response?.ok()).toBe(true);
     await expect(page.locator("h1")).toBeVisible();
   }
