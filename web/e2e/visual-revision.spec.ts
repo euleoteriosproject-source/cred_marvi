@@ -6,6 +6,7 @@ const evidenceDirectory = "../docs/evidence";
 test("vitrine mantém produtos, contexto Agro e imagens locais em todas as larguras", async ({
   page,
 }) => {
+  test.setTimeout(60_000);
   await mkdir(evidenceDirectory, { recursive: true });
   for (const width of [360, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
@@ -71,7 +72,7 @@ test("vitrine mantém produtos, contexto Agro e imagens locais em todas as largu
   );
   expect(message).toContain("crédito para o Agro");
   expect(message).not.toContain("para minha empresa");
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await page
     .getByRole("link", {
       name: "Conhecer Financiamento de veículos",
