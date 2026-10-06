@@ -11,6 +11,12 @@ test("home apresenta a vitrine, WhatsApp direto e acessibilidade", async ({
   await page.goto("/");
 
   await expect(page).toHaveTitle("Cred Marvi");
+  const favicon = page.locator('link[rel="icon"][href*="/icon"]').first();
+  await expect(favicon).toHaveAttribute("href", /\/icon(?:\.png)?\?/);
+  const faviconHref = await favicon.getAttribute("href");
+  const faviconResponse = await page.request.get(faviconHref!);
+  expect(faviconResponse.ok()).toBe(true);
+  expect(faviconResponse.headers()["content-type"]).toContain("image/png");
   await expect(
     page.getByRole("heading", {
       level: 1,
