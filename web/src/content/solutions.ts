@@ -17,7 +17,7 @@ export type Solution = {
   businessFeature?: boolean;
   headline?: string;
   label?: string;
-  image?: { src: string; alt: string };
+  image?: { src: string; alt: string; unoptimized?: boolean };
   introduction?: string;
   useCase?: string;
   conversation?: string;
@@ -173,6 +173,7 @@ export const solutions: readonly Solution[] = [
     image: {
       src: "/images/vehicle-insurance.webp",
       alt: "Moto, carro e caminhão em uma composição ilustrativa de seguros de veículos",
+      unoptimized: true,
     },
     slug: "seguro-auto",
     headline: "Mais cuidado com o veículo que move seus planos.",

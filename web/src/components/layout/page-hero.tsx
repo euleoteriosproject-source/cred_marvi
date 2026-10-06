@@ -13,7 +13,7 @@ export function PageHero({
   eyebrow: string;
   title: string;
   children?: ReactNode;
-  image?: { src: string; alt: string };
+  image?: { src: string; alt: string; unoptimized?: boolean };
   visual?: ReactNode;
 }) {
   return (
@@ -69,6 +69,7 @@ export function PageHero({
                 src={image.src}
                 alt={image.alt}
                 fill
+                unoptimized={image.unoptimized}
                 preload
                 sizes="(max-width: 1023px) 92vw, 46vw"
                 className="object-cover"

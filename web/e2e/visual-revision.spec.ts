@@ -25,6 +25,9 @@ test("vitrine mantém produtos, contexto Agro e imagens locais em todas as largu
     await page.locator("#solucoes").scrollIntoViewIfNeeded();
     for (const image of await page.locator("#solucoes img").all()) {
       await image.scrollIntoViewIfNeeded();
+      const source = await image.evaluate(
+        (element) => (element as HTMLImageElement).currentSrc,
+      );
       await expect
         .poll(
           () =>
@@ -33,7 +36,10 @@ test("vitrine mantém produtos, contexto Agro e imagens locais em todas as largu
                 (element as HTMLImageElement).complete &&
                 (element as HTMLImageElement).naturalWidth > 0,
             ),
-          { timeout: 15_000 },
+          {
+            message: `Imagem da vitrine não carregou em ${width}: ${source}`,
+            timeout: 15_000,
+          },
         )
         .toBe(true);
     }
