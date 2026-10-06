@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export function Brand() {
+export function Brand({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link
       href="/"
@@ -19,10 +19,14 @@ export function Brand() {
         />
       </span>
       <span className="leading-none">
-        <span className="block text-[0.625rem] font-bold tracking-[var(--cm-letter-spacing-eyebrow)] text-inverse-muted">
+        <span
+          className={`block text-[0.625rem] font-bold tracking-[var(--cm-letter-spacing-eyebrow)] ${inverse ? "text-inverse-muted" : "text-muted"}`}
+        >
           CRED
         </span>
-        <span className="mt-1 block font-serif text-xl font-semibold tracking-[0.08em] text-accent">
+        <span
+          className={`mt-1 block font-serif text-xl font-semibold tracking-[0.08em] ${inverse ? "text-accent" : "text-foreground"}`}
+        >
           MARVI
         </span>
       </span>

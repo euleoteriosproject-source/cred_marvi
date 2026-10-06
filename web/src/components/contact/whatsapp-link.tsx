@@ -1,11 +1,11 @@
 import { MessageCircle } from "lucide-react";
-import type { AnchorHTMLAttributes, ReactNode } from "react";
+import type { AnchorHTMLAttributes } from "react";
 import type { WhatsAppContext } from "@/lib/whatsapp";
 import { whatsappHref } from "@/lib/whatsapp";
 
 type Props = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   context?: WhatsAppContext;
-  children?: ReactNode;
+  children?: string;
   variant?: "primary" | "secondary" | "inverse" | "whatsapp";
 };
 
@@ -37,7 +37,7 @@ export function WhatsAppLink({
         ? {
             target: "_blank",
             rel: "noopener noreferrer",
-            "aria-label": `${String(children)} — abre o WhatsApp`,
+            "aria-label": `${children} — abre o WhatsApp`,
           }
         : {})}
       className={`inline-flex min-h-[var(--cm-target-min)] items-center justify-center gap-2 rounded-control border px-6 py-3 text-sm font-extrabold transition duration-[var(--cm-duration-normal)] ease-[var(--cm-ease-standard)] hover:-translate-y-0.5 active:scale-[.98] motion-reduce:transform-none ${variants[variant]} ${className}`}

@@ -6,7 +6,7 @@ import { site } from "@/config/site";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-surface-inverse py-14 text-inverse-muted">
+    <footer className="border-t border-border bg-surface py-10 text-muted">
       <Container>
         <div className="grid gap-10 md:grid-cols-3">
           <div>
@@ -16,55 +16,64 @@ export function SiteFooter() {
             </p>
           </div>
           <div>
-            <h2 className="font-semibold text-inverse">Navegação</h2>
+            <h2 className="font-semibold text-foreground">Navegação</h2>
             <div className="mt-4 grid gap-1 text-sm">
-              <Link href="/solucoes" className="w-fit py-2 hover:text-accent">
+              <Link
+                href="/solucoes"
+                className="w-fit py-2 hover:text-accent-text"
+              >
                 Serviços
               </Link>
               <Link
                 href="/solucoes?profile=BUSINESS"
-                className="w-fit py-2 hover:text-accent"
+                className="w-fit py-2 hover:text-accent-text"
               >
                 Para empresas
               </Link>
-              <Link href="/#marlise" className="w-fit py-2 hover:text-accent">
+              <Link
+                href="/#marlise"
+                className="w-fit py-2 hover:text-accent-text"
+              >
                 Marlise
               </Link>
-              <Link href="/contato" className="w-fit py-2 hover:text-accent">
+              <Link
+                href="/contato"
+                className="w-fit py-2 hover:text-accent-text"
+              >
                 Contato
               </Link>
             </div>
           </div>
           <div>
-            <h2 className="font-semibold text-inverse">Canais oficiais</h2>
+            <h2 className="font-semibold text-foreground">Canais oficiais</h2>
             <div className="mt-4 grid justify-items-start gap-2 text-sm">
-              <WhatsAppLink variant="inverse" className="px-4">
+              <WhatsAppLink variant="secondary" className="px-4">
                 WhatsApp
               </WhatsAppLink>
               {site.contactEmail ? (
                 <a
                   href={`mailto:${site.contactEmail}`}
-                  className="break-all py-2 hover:text-accent"
+                  className="break-all py-2 hover:text-accent-text"
                 >
                   {site.contactEmail}
                 </a>
               ) : null}
               <Link
                 href="/politica-de-privacidade"
-                className="w-fit py-2 hover:text-accent"
+                className="w-fit py-2 hover:text-accent-text"
               >
                 Privacidade
               </Link>
               <Link
                 href="/termos-de-uso"
-                className="w-fit py-2 hover:text-accent"
+                className="w-fit py-2 hover:text-accent-text"
               >
                 Termos
               </Link>
             </div>
           </div>
         </div>
-        <p className="mt-12 border-t border-inverse/10 pt-7 text-xs leading-5">
+        <p className="mt-8 border-t border-border pt-7 text-xs leading-5">
           A Cred Marvi não é banco. Aprovação, taxas, limites, prazos e demais
           condições dependem dos critérios das instituições responsáveis. ©{" "}
           {new Date().getFullYear()} Cred Marvi.

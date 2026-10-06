@@ -1,14 +1,21 @@
-# Imagens editoriais da vitrine
+# Imagens ilustrativas
 
-Estas imagens ilustram objetivos de aquisição. Não representam bens à venda,
-clientes, parceiros, imóveis financiados ou um retrato da Marlise.
+Fotografias de apoio aos objetivos de cada produto, sem sobreposição escura. Não representam imóveis/veículos à venda, clientes, a Marlise, parceiros ou condições contratadas.
 
-Origem: Unsplash. Referência de licença: https://unsplash.com/license.
-Os arquivos são servidos localmente; o site não faz requests ao Unsplash.
+Arquivos locais, servidos pelo Next Image; nenhuma chamada ao Unsplash no navegador. Fotografias obtidas do CDN público do Unsplash sob a [licença Unsplash](https://unsplash.com/license). Não foram geradas por IA.
 
-- `home.jpg`: https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde
-- `vehicle.jpg`: https://images.unsplash.com/photo-1492144534655-ae79c964c9d7
+| Arquivo              | Origem                                                       |
+| -------------------- | ------------------------------------------------------------ |
+| `home.jpg`           | https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde |
+| `car.jpg`            | https://images.unsplash.com/photo-1549317661-bd32c8ce0db2    |
+| `planning.jpg`       | https://images.unsplash.com/photo-1450101499163-c8848c66ca85 |
+| `consortium.jpg`     | https://images.unsplash.com/photo-1560518883-ce09059eeffa    |
+| `living.jpg`         | https://images.unsplash.com/photo-1600210492486-724fe5c67fb0 |
+| `store.jpg`          | https://images.unsplash.com/photo-1556740749-887f6717d7e4    |
+| `agro.jpg`           | https://images.unsplash.com/photo-1500382017468-9049fed747ef |
+| `rural.jpg`          | https://images.unsplash.com/photo-1625246333195-78d9c38ad449 |
+| `investment.jpg`     | https://images.unsplash.com/photo-1504307651254-35680f356dfd |
+| `small-business.jpg` | https://images.unsplash.com/photo-1556742049-0cfed4f6a45d    |
+| `receivables.jpg`    | https://images.unsplash.com/photo-1554224155-6726b3ff858f    |
 
-Download em 06/10/2026, com largura de 1200 e 1000 pixels respectivamente.
-O Next Image entrega tamanhos adequados à tela. As imagens oficiais de marca
-permanecem intactas em `public/brand`.
+O mesmo carro ilustra financiamento e seguro; o nome e o objetivo de cada cartão distinguem as modalidades. Nenhuma marca automotiva é apresentada como parceira.

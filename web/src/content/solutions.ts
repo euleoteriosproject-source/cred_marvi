@@ -16,6 +16,7 @@ export type Solution = {
   homeFeature?: boolean;
   businessFeature?: boolean;
   headline?: string;
+  label?: string;
   image?: { src: string; alt: string };
   introduction?: string;
   useCase?: string;
@@ -27,10 +28,6 @@ export const solutions: readonly Solution[] = [
   {
     id: "vehicle-financing",
     headline: "Seu próximo veículo começa aqui.",
-    image: {
-      src: "/images/vehicle.jpg",
-      alt: "Carro estacionado, ilustrando a aquisição de veículo",
-    },
     slug: "financiamento-de-veiculo",
     name: "Financiamento de veículos",
     shortName: "financiamento de veículos",
@@ -59,14 +56,15 @@ export const solutions: readonly Solution[] = [
           "Não. Aprovação e condições dependem da análise da instituição responsável.",
       },
     ],
+    label: "Comprar ou trocar",
+    image: {
+      src: "/images/car.jpg",
+      alt: "Carro compacto azul em uma rua durante o dia",
+    },
   },
   {
     id: "property-financing",
     headline: "Um novo endereço para seus planos.",
-    image: {
-      src: "/images/home.jpg",
-      alt: "Fachada de uma casa contemporânea",
-    },
     slug: "financiamento-de-imovel",
     name: "Financiamento imobiliário",
     shortName: "financiamento imobiliário",
@@ -95,10 +93,11 @@ export const solutions: readonly Solution[] = [
           "Não. Esta página não solicita documentos nem realiza cadastro.",
       },
     ],
+    label: "Seu imóvel",
+    image: { src: "/images/home.jpg", alt: "Casa com jardim durante o dia" },
   },
   {
     id: "personal-credit",
-    headline: "Crédito com uma decisão bem pensada.",
     name: "Empréstimo",
     shortName: "empréstimo",
     description:
@@ -108,6 +107,19 @@ export const solutions: readonly Solution[] = [
     status: "ACTIVE",
     order: 30,
     homeFeature: true,
+    label: "Seu momento",
+    image: {
+      src: "/images/planning.jpg",
+      alt: "Pessoa organizando documentos e anotando seus planos",
+    },
+    slug: "emprestimo",
+    headline: "Crédito para organizar seu próximo passo.",
+    introduction:
+      "Empréstimo é uma alternativa de crédito para necessidades pessoais. Modalidade, condições e aprovação precisam ser avaliadas pela instituição responsável.",
+    useCase:
+      "Quando você quer entender as opções de crédito e como elas se encaixam no seu orçamento.",
+    conversation:
+      "Esclareça o custo total, as parcelas, os prazos e os critérios antes de assumir um compromisso.",
   },
   {
     id: "consortium",
@@ -140,10 +152,14 @@ export const solutions: readonly Solution[] = [
           "Sim. O contexto pode ser de pessoa física ou empresa, sem mudar o produto escolhido.",
       },
     ],
+    label: "Compra planejada",
+    image: {
+      src: "/images/consortium.jpg",
+      alt: "Chaves de imóvel em uma conversa sobre aquisição",
+    },
   },
   {
     id: "auto-insurance",
-    headline: "Proteja o carro que acompanha você.",
     name: "Seguro Auto",
     shortName: "seguro auto",
     description:
@@ -153,10 +169,21 @@ export const solutions: readonly Solution[] = [
     status: "ACTIVE",
     order: 50,
     homeFeature: true,
+    label: "Seu veículo",
+    image: {
+      src: "/images/car.jpg",
+      alt: "Carro compacto estacionado durante o dia, ilustrando proteção veicular",
+    },
+    slug: "seguro-auto",
+    headline: "Seu carro faz parte da sua vida. Cuide dele.",
+    introduction:
+      "Seguro Auto oferece proteção ao veículo conforme as coberturas e condições contratadas na apólice.",
+    useCase: "Quando você quer conhecer opções de proteção para seu carro.",
+    conversation:
+      "Esclareça coberturas, exclusões, franquias e condições aplicáveis ao seu veículo.",
   },
   {
     id: "home-insurance",
-    headline: "Cuide do lugar que você chama de lar.",
     name: "Seguro Residencial",
     shortName: "seguro residencial",
     description:
@@ -166,6 +193,19 @@ export const solutions: readonly Solution[] = [
     status: "ACTIVE",
     order: 60,
     homeFeature: true,
+    label: "Seu lar",
+    image: {
+      src: "/images/living.jpg",
+      alt: "Sala de estar iluminada e acolhedora",
+    },
+    slug: "seguro-residencial",
+    headline: "Mais cuidado com o lugar que é seu.",
+    introduction:
+      "Seguro Residencial oferece proteção ao imóvel conforme as coberturas e condições contratadas na apólice.",
+    useCase:
+      "Quando você quer conhecer possibilidades de proteção para sua residência.",
+    conversation:
+      "Esclareça quais coberturas fazem sentido, suas exclusões e os critérios da apólice.",
   },
   {
     id: "working-capital",
@@ -197,10 +237,14 @@ export const solutions: readonly Solution[] = [
         answer: "Não. O site apenas abre um canal para a conversa inicial.",
       },
     ],
+    label: "Dia a dia do negócio",
+    image: {
+      src: "/images/store.jpg",
+      alt: "Atendimento no caixa de um pequeno estabelecimento comercial",
+    },
   },
   {
     id: "agro-guidance",
-    headline: "Crédito para os planos no campo.",
     name: "Crédito para o Agro",
     shortName: "crédito para o Agro",
     description:
@@ -210,6 +254,16 @@ export const solutions: readonly Solution[] = [
     status: "ACTIVE",
     order: 80,
     businessFeature: true,
+    label: "Sua produção",
+    image: { src: "/images/agro.jpg", alt: "Campo cultivado sob a luz do sol" },
+    slug: "credito-agro",
+    headline: "Seu trabalho no campo tem novos planos.",
+    introduction:
+      "Crédito para o Agro é a porta de entrada para conversar sobre as necessidades financeiras da atividade rural. A modalidade adequada depende do caso.",
+    useCase:
+      "Quando o produtor ou a empresa quer entender alternativas para sua atividade.",
+    conversation:
+      "Converse sobre a finalidade do crédito e entenda quais alternativas podem ser avaliadas.",
   },
   {
     id: "rural-credit",
@@ -221,10 +275,22 @@ export const solutions: readonly Solution[] = [
     category: "agro",
     status: "ACTIVE",
     order: 90,
+    label: "Atividade rural",
+    image: {
+      src: "/images/rural.jpg",
+      alt: "Plantação de milho com folhas verdes",
+    },
+    slug: "credito-rural",
+    headline: "Um próximo passo para a sua produção.",
+    introduction:
+      "Crédito Rural reúne finalidades ligadas a custeio, investimento, comercialização e industrialização rural, conforme regras e critérios aplicáveis.",
+    useCase:
+      "Quando você quer entender uma necessidade específica da atividade rural.",
+    conversation:
+      "Esclareça a finalidade, o enquadramento e as condições da modalidade com a Marlise.",
   },
   {
     id: "bndes",
-    headline: "Investimentos com orientação.",
     name: "Linhas BNDES",
     shortName: "linhas BNDES",
     description:
@@ -234,10 +300,19 @@ export const solutions: readonly Solution[] = [
     status: "ACTIVE",
     order: 100,
     businessFeature: true,
+    label: "Investir no negócio",
+    image: { src: "/images/investment.jpg", alt: "Trabalhadores em uma obra" },
+    slug: "linhas-bndes",
+    headline: "Investimentos para os planos da sua empresa.",
+    introduction:
+      "Linhas ligadas ao BNDES podem financiar investimentos empresariais conforme o escopo e o enquadramento de cada modalidade.",
+    useCase:
+      "Quando sua empresa está planejando investir e quer conhecer possibilidades de financiamento.",
+    conversation:
+      "Esclareça a finalidade do investimento, o enquadramento e os critérios da instituição responsável.",
   },
   {
     id: "pronampe",
-    headline: "Um caminho para pequenos negócios.",
     name: "Pronampe",
     shortName: "Pronampe",
     description:
@@ -247,6 +322,19 @@ export const solutions: readonly Solution[] = [
     status: "ACTIVE",
     order: 110,
     businessFeature: true,
+    label: "Pequenos negócios",
+    image: {
+      src: "/images/small-business.jpg",
+      alt: "Atendimento em um pequeno estabelecimento comercial",
+    },
+    slug: "pronampe",
+    headline: "Seu pequeno negócio, com novos caminhos.",
+    introduction:
+      "O Pronampe é um programa voltado a pequenos negócios. Enquadramento, disponibilidade e condições precisam ser esclarecidos no atendimento.",
+    useCase:
+      "Quando você quer entender se sua empresa pode ser avaliada no programa.",
+    conversation:
+      "Converse sobre os critérios de enquadramento e as condições aplicáveis, sem aprovação antecipada.",
   },
   {
     id: "receivables",
@@ -258,6 +346,19 @@ export const solutions: readonly Solution[] = [
     category: "business",
     status: "ACTIVE",
     order: 120,
+    label: "Organizar o caixa",
+    image: {
+      src: "/images/receivables.jpg",
+      alt: "Documentos e calculadora para organização financeira",
+    },
+    slug: "antecipacao-de-recebiveis",
+    headline: "Organize o caixa olhando para suas vendas.",
+    introduction:
+      "A antecipação por desconto de duplicatas permite avaliar recebíveis da empresa para necessidades de caixa, conforme critérios da instituição responsável.",
+    useCase:
+      "Quando a empresa quer conversar sobre recebíveis e organização do caixa.",
+    conversation:
+      "Esclareça quais duplicatas podem ser avaliadas, os custos e as condições da operação.",
   },
   {
     id: "fgi-peac",

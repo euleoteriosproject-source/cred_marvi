@@ -44,23 +44,28 @@ test("vitrine mantém produtos, contexto Agro e imagens locais em todas as largu
     await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
     if (width === 390 || width === 1440) {
       await page.screenshot({
-        path: `${evidenceDirectory}/v2-revision-${width}.png`,
+        path: `${evidenceDirectory}/ux-review-${width}.png`,
         fullPage: true,
       });
       await page.screenshot({
-        path: `${evidenceDirectory}/v2-revision-first-screen-${width}.png`,
+        path: `${evidenceDirectory}/ux-review-first-screen-${width}.png`,
       });
     }
   }
-  const agroContact = page.getByRole("link", {
-    name: "Conversar sobre Crédito para o Agro — abre o WhatsApp",
-    exact: true,
-  });
+  await page
+    .getByRole("link", { name: "Conhecer Crédito para o Agro", exact: true })
+    .click();
   const message = decodeURIComponent(
-    (await agroContact.getAttribute("href")) ?? "",
+    (await page
+      .getByRole("link", {
+        name: "Falar sobre Crédito para o Agro — abre o WhatsApp",
+        exact: true,
+      })
+      .getAttribute("href")) ?? "",
   );
   expect(message).toContain("crédito para o Agro");
   expect(message).not.toContain("para minha empresa");
+  await page.goto("/");
   await page
     .getByRole("link", {
       name: "Conhecer Financiamento de veículos",
@@ -77,7 +82,7 @@ test("saída direta da orientação conserva assunto e categoria escolhidos", as
   await page.getByRole("button", { name: "Imóvel", exact: true }).click();
   await page.getByRole("button", { name: "Para mim", exact: true }).click();
   const contact = page.getByRole("link", {
-    name: /prefiro conversar com a marlise/i,
+    name: /conversar no whatsapp/i,
   });
   const message = decodeURIComponent(
     (await contact.getAttribute("href")) ?? "",

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { WhatsAppLink } from "@/components/contact/whatsapp-link";
 import {
@@ -157,9 +158,12 @@ export function OrientationPanel({
         <WhatsAppLink context={context} variant="whatsapp">
           Conversar no WhatsApp
         </WhatsAppLink>
-        <WhatsAppLink context={context} variant="secondary">
-          Prefiro conversar com a Marlise
-        </WhatsAppLink>
+        <Link
+          href="/solucoes"
+          className="inline-flex min-h-11 items-center justify-center rounded-control border border-border px-5 text-sm font-bold"
+        >
+          Voltar às soluções
+        </Link>
       </div>
       <p className="text-sm leading-6 text-muted">
         O link abre uma mensagem pronta para você revisar e enviar no WhatsApp.

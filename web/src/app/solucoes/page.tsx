@@ -37,20 +37,43 @@ const filters: readonly { id: Filter; label: string; href: string }[] = [
 export default async function SolutionsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ profile?: string | string[] }>;
+  searchParams: Promise<{
+    profile?: string | string[];
+    category?: string | string[];
+  }>;
 }) {
-  const filter = normalizeFilter((await searchParams).profile);
-  const visibleSolutions =
+  const params = await searchParams;
+  const filter = normalizeFilter(params.profile);
+  const category = [
+    "acquisition",
+    "credit",
+    "protection",
+    "business",
+    "agro",
+  ].includes(String(params.category))
+    ? String(params.category)
+    : undefined;
+  const audienceSolutions =
     filter === "ALL"
       ? activeSolutions
       : activeSolutions.filter((item) => item.audience.includes(filter));
+
+  const visibleSolutions = category
+    ? audienceSolutions.filter((item) => item.category === category)
+    : audienceSolutions;
 
   return (
     <PageShell>
       <main id="conteudo">
         <PageHero
           eyebrow="Serviços"
-          title="Encontre o caminho para o seu próximo plano."
+          title={
+            category === "agro"
+              ? "Soluções para quem produz."
+              : category === "protection"
+                ? "Cuide do que você conquistou."
+                : "Encontre sua próxima solução."
+          }
         >
           <p>
             Comprar, planejar, proteger ou investir na sua atividade. Conheça as
@@ -62,7 +85,12 @@ export default async function SolutionsPage({
             {filters.map((item) => (
               <Link
                 key={item.id}
-                href={item.href}
+                href={
+                  item.href +
+                  (category
+                    ? `${item.id === "ALL" ? "?" : "&"}category=${category}`
+                    : "")
+                }
                 aria-current={filter === item.id ? "page" : undefined}
                 className={`inline-flex min-h-[var(--cm-target-min)] items-center rounded-control border px-5 py-2 text-sm font-bold transition ${filter === item.id ? "border-accent bg-accent text-accent-foreground" : "border-border-interactive bg-surface hover:bg-surface-soft"}`}
               >
@@ -71,7 +99,46 @@ export default async function SolutionsPage({
             ))}
           </nav>
 
-          <div className="mt-10 space-y-12">
+          <nav
+            aria-label="Filtrar por objetivo"
+            className="mt-4 flex flex-wrap gap-2"
+          >
+            {[
+              ["", "Todos os objetivos"],
+              ["acquisition", "Comprar e planejar"],
+              ["credit", "Crédito"],
+              ["protection", "Seguros"],
+              ["business", "Negócios"],
+              ["agro", "Agro"],
+            ].map(([id, label]) => (
+              <Link
+                key={id}
+                href={`/solucoes?${filter !== "ALL" ? `profile=${filter}&` : ""}${id ? `category=${id}` : ""}`}
+                aria-current={(category ?? "") === id ? "page" : undefined}
+                className={`inline-flex min-h-11 items-center rounded-full border px-4 text-xs font-bold ${category === id || (!category && !id) ? "border-accent-text bg-surface-soft text-accent-text" : "border-border bg-surface text-muted"}`}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+          {visibleSolutions.length === 0 ? (
+            <section className="mt-8 rounded-card border border-border bg-surface p-6">
+              <h2 className="font-serif text-2xl font-semibold">
+                Vamos encontrar outro caminho.
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-muted">
+                Nenhum produto deste catálogo combina com os filtros escolhidos.
+                Veja todas as soluções ou converse com a Marlise.
+              </p>
+              <Link
+                href="/solucoes"
+                className="mt-4 inline-flex min-h-11 items-center font-bold text-accent-text"
+              >
+                Limpar filtros
+              </Link>
+            </section>
+          ) : null}
+          <div className="mt-8 space-y-10">
             {[
               ["acquisition", "Comprar e planejar"],
               ["credit", "Crédito para o seu momento"],
@@ -96,7 +163,7 @@ export default async function SolutionsPage({
                       conversar sobre essas possibilidades.
                     </p>
                   ) : null}
-                  <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
                     {items.map((item) => (
                       <SolutionCard
                         key={item.id}
