@@ -1,0 +1,35 @@
+@import "../../../assets/brand/tokens.css";
+
+@theme inline {
+  --color-background: var(--cm-color-background);
+  --color-surface: var(--cm-color-surface);
+  --color-surface-subtle: var(--cm-color-surface-subtle);
+  --color-surface-soft: var(--cm-color-surface-soft);
+  --color-surface-inverse: var(--cm-color-surface-inverse);
+  --color-surface-inverse-alt: var(--cm-color-surface-inverse-alt);
+  --color-foreground: var(--cm-color-text);
+  --color-muted: var(--cm-color-text-muted);
+  --color-inverse: var(--cm-color-text-inverse);
+  --color-inverse-muted: var(--cm-color-text-inverse-muted);
+  --color-accent: var(--cm-color-accent);
+  --color-accent-hover: var(--cm-color-accent-hover);
+  --color-accent-foreground: var(--cm-color-accent-foreground);
+  --color-accent-text: var(--cm-color-accent-text);
+  --color-border: var(--cm-color-border);
+  --color-border-interactive: var(--cm-color-border-interactive);
+  --color-success: var(--cm-color-success);
+  --color-warning: var(--cm-color-warning);
+  --color-danger: var(--cm-color-danger);
+  --color-whatsapp: var(--cm-color-whatsapp);
+  --color-whatsapp-hover: var(--cm-color-whatsapp-hover);
+  --font-sans: var(--cm-font-family-sans);
+  --font-serif: var(--cm-font-family-serif);
+  --radius-control: var(--cm-radius-control);
+  --radius-option: var(--cm-radius-option);
+  --radius-card: var(--cm-radius-card);
+  --radius-feature: var(--cm-radius-feature);
+  --shadow-control: var(--cm-shadow-control);
+  --shadow-card: var(--cm-shadow-card);
+  --shadow-elevated: var(--cm-shadow-elevated);
+  --shadow-accent: var(--cm-shadow-accent);
+}

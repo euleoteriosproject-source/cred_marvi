@@ -1,1 +1,0 @@
-import type {MetadataRoute} from "next"; export default function manifest():MetadataRoute.Manifest{return{name:"Cred Marvi",short_name:"Cred Marvi",description:"Soluções financeiras para pessoas e empresas",start_url:"/",display:"standalone",background_color:"#F7F2E8",theme_color:"#0B0B0C",icons:[]}}

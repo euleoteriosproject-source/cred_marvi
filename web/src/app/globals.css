@@ -1,0 +1,155 @@
+@import "tailwindcss";
+@import "../styles/theme.css";
+
+:root {
+  background: var(--cm-color-background);
+  color: var(--cm-color-text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cm-color-background);
+  color: var(--cm-color-text);
+  font-family: var(--cm-font-family-sans);
+  overflow-wrap: anywhere;
+}
+
+::selection {
+  background: var(--cm-color-accent);
+  color: var(--cm-color-accent-foreground);
+}
+
+:focus-visible {
+  outline: var(--cm-focus-width) solid var(--cm-color-focus-on-light);
+  outline-offset: var(--cm-focus-offset);
+}
+
+.bg-surface-inverse :focus-visible,
+.bg-surface-inverse-alt :focus-visible {
+  outline-color: var(--cm-color-focus-on-dark);
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  min-height: var(--cm-target-min);
+  padding: 0.75rem 1rem;
+  border-radius: var(--cm-radius-control);
+  background: var(--cm-color-surface);
+  color: var(--cm-color-text);
+  font-weight: 700;
+  transform: translateY(-150%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.legal-content {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.legal-content h2 {
+  font-family: var(--cm-font-family-serif);
+  font-size: var(--cm-font-size-heading-sm);
+  font-weight: var(--cm-font-weight-semibold);
+  line-height: var(--cm-line-height-heading);
+}
+
+.legal-content p {
+  margin-top: 0.75rem;
+  color: var(--cm-color-text-muted);
+  line-height: var(--cm-line-height-body);
+}
+
+@media (max-height: 34rem) and (max-width: 47.99rem) {
+  .mobile-contact-bar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Commercial layouts: imagery supports goals; the brand stays in the header. */
+.home-hero {
+  background-image: radial-gradient(
+    ellipse at 80% 20%,
+    rgb(210 163 77 / 12%),
+    transparent 55%
+  );
+}
+.hero-home-photo {
+  height: 460px;
+}
+.hero-vehicle-card {
+  bottom: -24px;
+  left: -28px;
+  right: 36px;
+}
+.solution-card {
+  transition:
+    border-color 200ms,
+    box-shadow 200ms;
+}
+.solution-card:hover {
+  border-color: var(--cm-color-accent);
+  box-shadow: var(--cm-shadow-control);
+}
+.solution-card:focus-within,
+.business-card:focus-within {
+  outline: 2px solid var(--cm-color-focus-on-light);
+  outline-offset: 3px;
+}
+.business-card:focus-within {
+  outline-color: var(--cm-color-focus-on-dark);
+}
+.solution-card-featured {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  min-height: 290px;
+}
+.solution-card-featured .solution-card-content {
+  grid-area: 1 / 1;
+}
+.solution-card-photo {
+  grid-area: 1 / 2;
+  min-height: 100%;
+}
+@media (max-width: 639px) {
+  .solution-card-featured {
+    grid-template-columns: 1.35fr 0.65fr;
+    min-height: 270px;
+  }
+  .solution-card-featured .solution-card-content {
+    padding: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .solution-card {
+    transition: none;
+  }
+}

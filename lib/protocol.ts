@@ -1,1 +1,0 @@
-export function createProtocol(date=new Date(),random=()=>Math.random()){const stamp=date.toISOString().slice(2,10).replaceAll("-","");const suffix=Math.floor(random()*0x10000).toString(16).toUpperCase().padStart(4,"0");return `CM-${stamp}-${suffix}`}
