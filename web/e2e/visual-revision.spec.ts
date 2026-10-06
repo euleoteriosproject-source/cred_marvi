@@ -7,9 +7,9 @@ test("vitrine mantém produtos, contexto Agro e imagens locais em todas as largu
   page,
 }) => {
   await mkdir(evidenceDirectory, { recursive: true });
-  await page.goto("/");
   for (const width of [360, 390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.evaluate(() => document.fonts.ready);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     expect(
@@ -23,19 +23,20 @@ test("vitrine mantém produtos, contexto Agro e imagens locais em todas as largu
     await expect(page.locator("#solucoes article")).toHaveCount(6);
     // Images must load, including lazy product photos after scrolling into view.
     await page.locator("#solucoes").scrollIntoViewIfNeeded();
-    await expect
-      .poll(() =>
-        page
-          .locator("#solucoes img")
-          .evaluateAll((images) =>
-            images.every(
-              (image) =>
-                (image as HTMLImageElement).complete &&
-                (image as HTMLImageElement).naturalWidth > 0,
+    for (const image of await page.locator("#solucoes img").all()) {
+      await image.scrollIntoViewIfNeeded();
+      await expect
+        .poll(
+          () =>
+            image.evaluate(
+              (element) =>
+                (element as HTMLImageElement).complete &&
+                (element as HTMLImageElement).naturalWidth > 0,
             ),
-          ),
-      )
-      .toBe(true);
+          { timeout: 15_000 },
+        )
+        .toBe(true);
+    }
     await page.evaluate(() => {
       if (document.activeElement instanceof HTMLElement)
         document.activeElement.blur();

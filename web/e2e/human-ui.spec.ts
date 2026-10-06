@@ -5,7 +5,7 @@ import { mkdir } from "node:fs/promises";
 test("foto real, seguros distintos e contato humano permanecem acessíveis", async ({
   page,
 }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(180_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   const directory = "test-results/ui";
@@ -16,20 +16,30 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
     ["sobre", "/sobre"],
     ["seguros", "/solucoes/seguro-auto"],
   ]) {
-    await page.goto(route);
     for (const width of [390, 1440]) {
       await page.setViewportSize({ width, height: 900 });
+      const response = await page.goto(route, {
+        waitUntil: "domcontentloaded",
+      });
+      expect(response?.ok(), `${name} ${width}`).toBe(true);
       await page.evaluate(() => document.fonts.ready);
-      for (const photo of await page.locator("main img").all()) {
-        if (!(await photo.isVisible())) continue;
+      for (const photo of await page.locator("main img:visible").all()) {
         await photo.scrollIntoViewIfNeeded();
+        const source = await photo.getAttribute("src");
         await expect
-          .poll(() =>
-            photo.evaluate(
-              (element) => (element as HTMLImageElement).naturalWidth,
-            ),
+          .poll(
+            () =>
+              photo.evaluate(
+                (element) =>
+                  (element as HTMLImageElement).complete &&
+                  (element as HTMLImageElement).naturalWidth > 0,
+              ),
+            {
+              message: `Imagem não carregou em ${name} ${width}: ${source}`,
+              timeout: 15_000,
+            },
           )
-          .toBeGreaterThan(0);
+          .toBe(true);
       }
       await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
       expect(
