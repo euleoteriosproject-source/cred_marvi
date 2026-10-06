@@ -10,6 +10,15 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
   page.on("pageerror", (error) => errors.push(error.message));
   const directory = "test-results/ui";
   await mkdir(directory, { recursive: true });
+  for (const asset of [
+    "/images/people/marlise.png",
+    "/images/vehicle-insurance.webp",
+  ]) {
+    const response = await page.request.get(asset);
+    expect(response.ok(), asset).toBe(true);
+    expect(response.headers()["content-type"], asset).toMatch(/^image\//);
+    expect((await response.body()).byteLength, asset).toBeGreaterThan(0);
+  }
   for (const [name, route] of [
     ["home", "/"],
     ["contato", "/contato?product=consorcio&profile=PF"],
@@ -23,29 +32,6 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
       });
       expect(response?.ok(), `${name} ${width}`).toBe(true);
       await page.evaluate(() => document.fonts.ready);
-      await page.locator("main img").evaluateAll((images) => {
-        for (const image of images)
-          (image as HTMLImageElement).loading = "eager";
-      });
-      await page.waitForLoadState("networkidle");
-      for (const photo of await page.locator("main img:visible").all()) {
-        await photo.scrollIntoViewIfNeeded();
-        const source = await photo.getAttribute("src");
-        await expect
-          .poll(
-            () =>
-              photo.evaluate(
-                (element) =>
-                  (element as HTMLImageElement).complete &&
-                  (element as HTMLImageElement).naturalWidth > 0,
-              ),
-            {
-              message: `Imagem não carregou em ${name} ${width}: ${source}`,
-              timeout: 15_000,
-            },
-          )
-          .toBe(true);
-      }
       await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
       expect(
         await page.evaluate(

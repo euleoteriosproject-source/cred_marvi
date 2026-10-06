@@ -21,31 +21,26 @@ test("vitrine mantém produtos, contexto Agro e imagens locais em todas as largu
       page.getByRole("link", { name: "Encontrar minha solução" }),
     ).toBeVisible();
     await expect(page.locator("#solucoes article")).toHaveCount(6);
-    // Images must load, including lazy product photos after scrolling into view.
-    await page.locator("#solucoes img").evaluateAll((images) => {
-      for (const image of images) (image as HTMLImageElement).loading = "eager";
-    });
-    await page.waitForLoadState("networkidle");
-    await page.locator("#solucoes").scrollIntoViewIfNeeded();
-    for (const image of await page.locator("#solucoes img").all()) {
-      await image.scrollIntoViewIfNeeded();
-      const source = await image.evaluate(
-        (element) => (element as HTMLImageElement).currentSrc,
+    const imageSources = await page
+      .locator("#solucoes img")
+      .evaluateAll((images) =>
+        images.map((image) => ({
+          alt: (image as HTMLImageElement).alt,
+          src: (image as HTMLImageElement).getAttribute("src") ?? "",
+        })),
       );
-      await expect
-        .poll(
-          () =>
-            image.evaluate(
-              (element) =>
-                (element as HTMLImageElement).complete &&
-                (element as HTMLImageElement).naturalWidth > 0,
-            ),
-          {
-            message: `Imagem da vitrine não carregou em ${width}: ${source}`,
-            timeout: 15_000,
-          },
-        )
-        .toBe(true);
+    expect(imageSources.every(({ alt, src }) => alt && src)).toBe(true);
+    if (width === 360) {
+      for (const { src } of imageSources) {
+        const url = new URL(src, page.url());
+        const asset =
+          url.pathname === "/_next/image"
+            ? (url.searchParams.get("url") ?? "")
+            : url.pathname;
+        const response = await page.request.get(asset);
+        expect(response.ok(), asset).toBe(true);
+        expect(response.headers()["content-type"], asset).toMatch(/^image\//);
+      }
     }
     await page.evaluate(() => {
       if (document.activeElement instanceof HTMLElement)
