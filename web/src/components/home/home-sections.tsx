@@ -121,8 +121,8 @@ export function SolutionsPreview() {
           </Link>
         </div>
         <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
-          {homeSolutions.map((s) => (
-            <SolutionCard key={s.id} solution={s} />
+          {homeSolutions.map((s, index) => (
+            <SolutionCard key={s.id} solution={s} preload={index < 3} />
           ))}
         </div>
         <div className="mt-6 flex flex-col justify-between gap-3 rounded-card border border-border bg-surface px-5 py-4 sm:flex-row sm:items-center">
