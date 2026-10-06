@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Brand } from "@/components/brand/brand";
-import { ButtonLink } from "@/components/ui/button-link";
+import { WhatsAppLink } from "@/components/contact/whatsapp-link";
 import { Container } from "@/components/ui/container";
 import { navigation } from "@/content/navigation";
 
@@ -30,7 +30,7 @@ export function SiteHeader() {
         <Brand />
         <nav
           aria-label="Principal"
-          className="hidden items-center gap-6 lg:flex"
+          className="hidden items-center gap-5 lg:flex"
         >
           {navigation.map((item) => (
             <Link
@@ -43,9 +43,11 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <ButtonLink href="/analise" className="hidden sm:inline-flex">
-            Iniciar análise
-          </ButtonLink>
+          <div className="hidden lg:block">
+            <WhatsAppLink variant="primary" className="px-4">
+              Falar com a Marlise
+            </WhatsAppLink>
+          </div>
           <button
             ref={buttonRef}
             type="button"
@@ -75,13 +77,9 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <ButtonLink
-            href="/analise"
-            onClick={() => setOpen(false)}
-            className="mt-3 w-full"
-          >
-            Iniciar análise
-          </ButtonLink>
+          <WhatsAppLink onClick={() => setOpen(false)} className="mt-3 w-full">
+            Falar com a Marlise
+          </WhatsAppLink>
         </nav>
       ) : null}
     </header>

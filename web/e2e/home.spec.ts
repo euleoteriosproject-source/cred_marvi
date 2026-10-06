@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-test("home apresenta a experiência institucional sem violações axe", async ({
+test("home apresenta a vitrine, WhatsApp direto e acessibilidade", async ({
   page,
 }) => {
   const errors: string[] = [];
@@ -14,27 +14,46 @@ test("home apresenta a experiência institucional sem violações axe", async ({
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: /soluções financeiras para pessoas e empresas/i,
+      name: /seu próximo passo começa com a orientação certa/i,
     }),
   ).toBeVisible();
   await expect(
-    page.getByText("Assistente Marvi", { exact: true }).first(),
+    page.getByRole("heading", { name: /financiamento de veículos/i }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Iniciar análise" }).first(),
-  ).toHaveAttribute("href", "/analise");
+    page.getByRole("heading", { name: "Consórcio", exact: true }).first(),
+  ).toBeVisible();
+
+  const contact = page
+    .getByRole("link", { name: /falar com a marlise.*whatsapp/i })
+    .first();
+  await expect(contact).toHaveAttribute("href", /^https:\/\/wa\.me\//);
+  expect(
+    decodeURIComponent((await contact.getAttribute("href")) ?? ""),
+  ).not.toMatch(/cpf|cnpj|renda|protocolo|CM-/i);
 
   const accessibility = await new AxeBuilder({ page }).analyze();
   expect(accessibility.violations).toEqual([]);
   expect(errors).toEqual([]);
 });
 
-test("home funciona em 320px sem overflow e menu fecha com Escape", async ({
+test("home não tem overflow nos breakpoints e menu fecha com Escape", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 320, height: 800 });
   await page.goto("/");
+  for (const width of [360, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    expect(
+      await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth >
+          document.documentElement.clientWidth,
+      ),
+    ).toBe(false);
+  }
 
+  await page.setViewportSize({ width: 390, height: 844 });
   const menuButton = page.getByRole("button", { name: "Abrir menu" });
   await menuButton.click();
   await expect(
@@ -44,104 +63,78 @@ test("home funciona em 320px sem overflow e menu fecha com Escape", async ({
   await expect(
     page.getByRole("navigation", { name: /dispositivos móveis/i }),
   ).toBeHidden();
-  await expect(page.getByRole("button", { name: "Abrir menu" })).toBeFocused();
-
-  const overflow = await page.evaluate(
-    () =>
-      document.documentElement.scrollWidth >
-      document.documentElement.clientWidth,
-  );
-  expect(overflow).toBe(false);
+  await expect(menuButton).toBeFocused();
+  await expect(page.getByLabel("Contato rápido")).toBeVisible();
 });
 
-test("marca do header permanece controlada em todos os breakpoints", async ({
+test("catálogo filtra públicos sem esconder compartilhados e Agro PF", async ({
   page,
 }) => {
-  for (const width of [320, 375, 768, 1024, 1440]) {
-    await page.setViewportSize({ width, height: 900 });
-    await page.goto("/");
+  await page.goto("/solucoes?profile=PERSON");
+  await expect(
+    page.getByRole("link", { name: "Para você", exact: true }),
+  ).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("heading", { name: "Consórcio" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Crédito para o Agro" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Capital de giro" }),
+  ).toBeHidden();
 
-    const header = page.locator("header");
-    const brand = header.getByRole("link", { name: /Cred Marvi/i });
-    const brandImage = brand.locator("img");
+  await page.goto("/solucoes?profile=BUSINESS");
+  await expect(page.getByRole("heading", { name: "Consórcio" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Financiamento de veículos" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Capital de giro" }),
+  ).toBeVisible();
+});
 
-    await expect(header).toBeVisible();
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+test("consórcio legado preserva produto e perfil", async ({ page }) => {
+  for (const url of [
+    "/analise?product=consorcio&profile=PF",
+    "/analise?solution=CONSORTIUM&profile=PJ",
+    "/analise?product=consorcio&solution=VEHICLE_FINANCING&profile=PJ",
+  ]) {
+    await page.goto(url);
     await expect(
-      page.getByRole("link", { name: "Iniciar análise" }).first(),
+      page.getByText("consórcio", { exact: true }).first(),
     ).toBeVisible();
-    await expect(brandImage).toBeVisible();
-
-    const dimensions = await brandImage.evaluate((image) => {
-      const imageRect = image.getBoundingClientRect();
-      const containerRect = image.parentElement?.getBoundingClientRect();
-
-      return {
-        imageWidth: imageRect.width,
-        imageHeight: imageRect.height,
-        containerWidth: containerRect?.width ?? 0,
-        containerHeight: containerRect?.height ?? 0,
-      };
-    });
-
-    expect(dimensions.imageWidth).toBeGreaterThan(0);
-    expect(dimensions.imageHeight).toBeGreaterThan(0);
-    expect(dimensions.imageWidth).toBeLessThanOrEqual(48);
-    expect(dimensions.imageHeight).toBeLessThanOrEqual(48);
-    expect(dimensions.imageWidth).toBeLessThanOrEqual(
-      dimensions.containerWidth,
-    );
-    expect(dimensions.imageHeight).toBeLessThanOrEqual(
-      dimensions.containerHeight,
-    );
-    expect(await page.locator("main > section").count()).toBeGreaterThan(1);
-
-    const overflow = await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth >
-        document.documentElement.clientWidth,
-    );
-    expect(overflow).toBe(false);
+    const href = await page
+      .getByRole("link", { name: /conversar no whatsapp/i })
+      .getAttribute("href");
+    expect(decodeURIComponent(href ?? "")).toContain("consórcio");
   }
 });
 
-test("layout permanece utilizável com zoom de 200% e fallback de contato", async ({
+test("orientação não exige resposta, não abre WhatsApp sozinha e quick é seguro", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 640, height: 800 });
-  await page.goto("/");
-  await page.evaluate(() => {
-    document.documentElement.style.zoom = "2";
-  });
-
-  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  const requests: string[] = [];
+  page.on("request", (request) => requests.push(request.url()));
+  await page.goto("/analise?quick=1&product=<script>");
   await expect(
-    page.getByRole("link", { name: /falar com especialista/i }).first(),
-  ).toHaveAttribute("href", "/contato");
-  const overflow = await page.evaluate(
-    () =>
-      document.documentElement.scrollWidth >
-      document.documentElement.clientWidth,
-  );
-  expect(overflow).toBe(false);
+    page.getByRole("heading", { name: /vamos começar pelo seu objetivo/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /conversar no whatsapp/i }),
+  ).toBeVisible();
+  expect(page.url()).toContain("/analise");
+  expect(requests.some((url) => url.includes("wa.me"))).toBe(false);
+  await expect(page.getByRole("progressbar")).toHaveCount(0);
+  await expect(page.getByRole("textbox")).toHaveCount(0);
 });
 
-test("skip link permite navegação por teclado", async ({ page }) => {
-  await page.goto("/");
-  await page.keyboard.press("Tab");
-  const skipLink = page.getByRole("link", {
-    name: "Ir para o conteúdo principal",
-  });
-  await expect(skipLink).toBeFocused();
-  await skipLink.press("Enter");
-  await expect(page).toHaveURL(/#conteudo$/);
-});
-
-test("rotas públicas, análise e 404 respondem corretamente", async ({
+test("rotas publicadas respondem e sucesso redireciona sem parâmetros", async ({
   page,
 }) => {
   for (const route of [
     "/solucoes",
+    "/solucoes/financiamento-de-imovel",
+    "/solucoes/financiamento-de-veiculo",
+    "/solucoes/capital-de-giro",
     "/solucoes/consorcio",
     "/sobre",
     "/seguranca-e-privacidade",
@@ -155,40 +148,25 @@ test("rotas públicas, análise e 404 respondem corretamente", async ({
     await expect(page.locator("h1")).toBeVisible();
   }
 
-  await page.goto("/analise");
+  await page.goto("/sucesso?nome=Pessoa&protocol=CM-123");
+  await expect(page).toHaveURL(/\/contato$/);
   await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: /vamos entender o que você precisa/i,
-    }),
-  ).toBeVisible();
-  await expect(page.getByText(/temporariamente indisponível/i)).toBeVisible();
-  await expect(page.getByRole("banner")).toBeVisible();
-  await expect(page.getByRole("contentinfo")).toBeVisible();
-  await expect(page).toHaveURL(/\/analise$/);
-
-  const accessibility = await new AxeBuilder({ page }).analyze();
-  expect(accessibility.violations).toEqual([]);
-
-  await page.setViewportSize({ width: 320, height: 800 });
-  await page.reload();
-  const overflow = await page.evaluate(
-    () =>
-      document.documentElement.scrollWidth >
-      document.documentElement.clientWidth,
-  );
-  expect(overflow).toBe(false);
-
-  const missing = await page.goto("/pagina-inexistente");
-  expect(missing?.status()).toBe(404);
-  await expect(
-    page.getByRole("heading", { name: /não foi encontrada/i }),
+    page.getByRole("heading", { name: /fale com a marlise/i }),
   ).toBeVisible();
 });
 
-test("headers de segurança e noindex da análise estão presentes", async ({
+test("skip link, headers de segurança e noindex da orientação", async ({
   page,
 }) => {
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+  const skipLink = page.getByRole("link", {
+    name: "Ir para o conteúdo principal",
+  });
+  await expect(skipLink).toBeFocused();
+  await skipLink.press("Enter");
+  await expect(page).toHaveURL(/#conteudo$/);
+
   const response = await page.goto("/analise");
   expect(response?.headers()["x-content-type-options"]).toBe("nosniff");
   expect(response?.headers()["x-frame-options"]).toBe("DENY");

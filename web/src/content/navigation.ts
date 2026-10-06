@@ -1,7 +1,6 @@
 export const navigation = [
-  { label: "Soluções", href: "/solucoes" },
+  { label: "Serviços", href: "/solucoes" },
+  { label: "Para empresas", href: "/solucoes?profile=BUSINESS" },
   { label: "Como funciona", href: "/#como-funciona" },
-  { label: "Sobre", href: "/sobre" },
-  { label: "Segurança", href: "/seguranca-e-privacidade" },
-  { label: "Dúvidas", href: "/faq" },
+  { label: "Marlise", href: "/#marlise" },
 ] as const;

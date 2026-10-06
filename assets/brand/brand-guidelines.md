@@ -16,9 +16,7 @@ O grafite `#1C1C1E` substitui a hipótese histórica de navy azulado. Os nomes d
 
 - Marca: **Cred Marvi**.
 - Grupo: **Grupo Marvi**.
-- Assistente: **Assistente Marvi**.
-
-“Assistente Cred Marvi” não é uma denominação aprovada.
+- Especialista: **Marlise Euleoterio**.
 
 ## Logo
 

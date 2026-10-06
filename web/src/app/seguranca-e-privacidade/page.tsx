@@ -11,6 +11,24 @@ export const metadata: Metadata = {
 };
 
 export default function SecurityPage() {
+  const items = [
+    [
+      LockKeyhole,
+      "O site não coleta documentos",
+      "Nenhum upload, cadastro, protocolo ou formulário de retorno está disponível nesta versão.",
+    ],
+    [
+      KeyRound,
+      "Nunca compartilhe credenciais",
+      "Não informe senhas, tokens, códigos de autenticação, biometria ou dados completos de cartão.",
+    ],
+    [
+      ShieldCheck,
+      "Você confirma a mensagem",
+      "O site apenas abre o WhatsApp. Revise o texto e envie somente quando quiser.",
+    ],
+  ] as const;
+
   return (
     <PageShell>
       <main id="conteudo">
@@ -25,49 +43,17 @@ export default function SecurityPage() {
         </PageHero>
         <Container className="py-[var(--cm-space-section)]">
           <div className="grid gap-5 md:grid-cols-3">
-            {[
-              [
-                LockKeyhole,
-                "O site não coleta documentos",
-                "Nenhum upload de documento, imagem ou comprovante está disponível nesta versão.",
-              ],
-              [
-                KeyRound,
-                "Nunca compartilhe credenciais",
-                "Não informe senhas, tokens, códigos de autenticação, biometria ou dados completos de cartão.",
-              ],
-              [
-                ShieldCheck,
-                "Confirme o canal",
-                "Antes de compartilhar qualquer informação futuramente, verifique se está usando um canal oficial.",
-              ],
-            ].map(([Icon, title, text]) => {
-              const ItemIcon = Icon as typeof LockKeyhole;
-              return (
-                <article
-                  key={String(title)}
-                  className="rounded-card border border-border bg-surface p-6 shadow-card"
-                >
-                  <ItemIcon className="text-accent-text" aria-hidden="true" />
-                  <h2 className="mt-5 font-bold">{String(title)}</h2>
-                  <p className="mt-3 text-sm leading-6 text-muted">
-                    {String(text)}
-                  </p>
-                </article>
-              );
-            })}
+            {items.map(([Icon, title, text]) => (
+              <article
+                key={title}
+                className="rounded-card border border-border bg-surface p-6 shadow-card"
+              >
+                <Icon className="text-accent-text" aria-hidden="true" />
+                <h2 className="mt-5 font-bold">{title}</h2>
+                <p className="mt-3 text-sm leading-6 text-muted">{text}</p>
+              </article>
+            ))}
           </div>
-          <section className="mt-10 max-w-[var(--cm-container-content)] rounded-card bg-surface-soft p-6 sm:p-8">
-            <h2 className="font-serif text-2xl font-semibold">
-              Comportamento atual
-            </h2>
-            <p className="mt-4 leading-7 text-muted">
-              O Assistente Marvi usa o Atrium para conduzir a jornada inicial.
-              Não envie documentos, credenciais ou dados bancários. O WhatsApp,
-              quando configurado, abre somente uma mensagem fixa e segura, sem
-              transportar as respostas da análise.
-            </p>
-          </section>
         </Container>
       </main>
     </PageShell>

@@ -1,12 +1,11 @@
 import {
-  AudienceSection,
+  BusinessSection,
   FaqPreview,
   FinalCallToAction,
   Hero,
   HowItWorks,
-  HumanService,
-  SecurityPreview,
   SolutionsPreview,
+  SpecialistSection,
 } from "@/components/home/home-sections";
 import { PageShell } from "@/components/layout/page-shell";
 
@@ -15,11 +14,10 @@ export default function Home() {
     <PageShell>
       <main id="conteudo">
         <Hero />
-        <AudienceSection />
         <SolutionsPreview />
+        <BusinessSection />
+        <SpecialistSection />
         <HowItWorks />
-        <HumanService />
-        <SecurityPreview />
         <FaqPreview />
         <FinalCallToAction />
       </main>

@@ -1,16 +1,9 @@
 import type { NextConfig } from "next";
-import { normalizeAtriumBaseUrl } from "./src/config/atrium-url";
 
 const isProduction = process.env.NODE_ENV === "production";
 const enableHsts = isProduction && process.env.SITE_URL?.startsWith("https://");
-const atriumBaseUrl = normalizeAtriumBaseUrl(
-  process.env.NEXT_PUBLIC_ATRIUM_API_URL ?? "",
-);
-const atriumOrigin = atriumBaseUrl ? new URL(atriumBaseUrl).origin : undefined;
 const developmentConnections = isProduction ? [] : ["ws://localhost:3000"];
-const connectSources = ["'self'", ...developmentConnections, atriumOrigin]
-  .filter((source): source is string => Boolean(source))
-  .join(" ");
+const connectSources = ["'self'", ...developmentConnections].join(" ");
 
 const contentSecurityPolicy = [
   "default-src 'self'",

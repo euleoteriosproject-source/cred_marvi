@@ -20,6 +20,8 @@
   --color-success: var(--cm-color-success);
   --color-warning: var(--cm-color-warning);
   --color-danger: var(--cm-color-danger);
+  --color-whatsapp: var(--cm-color-whatsapp);
+  --color-whatsapp-hover: var(--cm-color-whatsapp-hover);
   --font-sans: var(--cm-font-family-sans);
   --font-serif: var(--cm-font-family-serif);
   --radius-control: var(--cm-radius-control);

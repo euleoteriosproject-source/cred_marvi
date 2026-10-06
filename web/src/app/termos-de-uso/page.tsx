@@ -11,30 +11,30 @@ export default function TermsPage() {
     <LegalPage
       eyebrow="Condições de acesso"
       title="Termos de Uso"
-      intro="Termos informativos da versão atual, sujeitos a revisão jurídica antes da publicação em produção."
+      intro="Termos informativos da versão atual, sujeitos a revisão jurídica antes da publicação definitiva."
     >
       <section>
         <h2>1. Natureza do site</h2>
         <p>
-          O site oferece informação institucional e acesso inicial a canais de
-          atendimento. Seu uso não constitui proposta, contratação ou concessão
-          de crédito.
+          A Cred Marvi oferece orientação e intermediação consultiva; não é
+          banco. O site apresenta informações e acesso a canais de atendimento.
+          Seu uso não constitui proposta, contratação ou concessão de crédito.
         </p>
       </section>
       <section>
         <h2>2. Sem garantia de aprovação</h2>
         <p>
-          A Cred Marvi não garante aprovação, taxas, limites, prazos ou
-          resultados. Toda condição depende de análise e dos critérios das
-          instituições responsáveis.
+          A Cred Marvi não garante aprovação, taxas, limites, prazos,
+          contemplação ou resultados. Condições dependem da modalidade, da
+          análise aplicável e dos critérios das instituições responsáveis.
         </p>
       </section>
       <section>
-        <h2>3. Assistente Marvi</h2>
+        <h2>3. Orientação e contato</h2>
         <p>
-          A área de análise oferece uma jornada inicial conduzida pelo Atrium. A
-          jornada organiza informações para atendimento e não representa
-          aprovação, proposta, contratação ou decisão de crédito.
+          A área de orientação é opcional, não realiza análise financeira e não
+          cadastra respostas. Links de contato abrem uma mensagem para o
+          visitante revisar e enviar no próprio WhatsApp.
         </p>
       </section>
       <section>
@@ -55,15 +55,9 @@ export default function TermsPage() {
       <section>
         <h2>6. Disponibilidade</h2>
         <p>
-          O site pode passar por mudanças, manutenção ou interrupções. Canais só
-          são exibidos quando estiverem configurados.
-        </p>
-      </section>
-      <section>
-        <h2>7. Atualizações</h2>
-        <p>
-          Estes termos deverão ser revisados sempre que o comportamento do
-          serviço ou suas integrações mudar.
+          O site e seus canais podem passar por mudanças, manutenção ou
+          interrupções. A publicação de um tema no catálogo não garante
+          disponibilidade comercial.
         </p>
       </section>
     </LegalPage>

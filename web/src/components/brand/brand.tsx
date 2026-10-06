@@ -14,7 +14,7 @@ export function Brand() {
           alt=""
           width={42}
           height={42}
-          priority
+          loading="eager"
           className="object-contain"
         />
       </span>

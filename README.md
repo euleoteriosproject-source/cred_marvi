@@ -1,21 +1,26 @@
 # Cred Marvi
 
-Aplicação cliente da **Cred Marvi**, marca do **Grupo Marvi**, construída do zero e mantida separadamente da plataforma Atrium.
+Aplicação cliente da **Cred Marvi**, separada do core Atrium. A V2 rápida é uma
+vitrine comercial responsiva para pessoas, empresas e atividade rural, com
+contato direto com Marlise Euleoterio pelo WhatsApp.
 
-## Estado
+## Estado atual
 
-- **IMPLEMENTADO:** workspace pnpm, Brand System, Web institucional, catálogo editorial, quatro páginas detalhadas de solução, canal humano opcional, shell visual do Assistente Marvi e configuração versionada de provisioning Atrium para desenvolvimento.
-- **PLANEJADO:** execução local do provisioning, integração pública com Atrium na Etapa 13 e hardening aprofundado na Etapa 14.
-- **ADIADO:** formulários locais, coleta de documentos, analytics, leads/admin automatizados, webhooks, e-mail transacional e IA generativa.
+- catálogo editorial com filtros **Todos**, **Para você** e **Para empresas**;
+- seis destaques pessoais e entrada específica para Empresas e Agro;
+- quatro páginas comerciais nas URLs já publicadas;
+- orientação opcional em `/analise`, sem cadastro, protocolo ou análise financeira;
+- contato direto por WhatsApp com mensagem mínima e contextualizada;
+- páginas de contato, FAQ, segurança, privacidade e termos;
+- Next.js 16, React 19, TypeScript strict, Tailwind CSS 4, Vitest e Playwright.
 
-O MVP anterior foi referência de identidade, UX, copy, posicionamento e intenção de produto. Seu código, arquitetura, dependências e lógica não fazem parte desta aplicação.
-
-## Requisitos
-
-- Node.js 24 LTS
-- pnpm 11.4.0 via Corepack
+A Cred Marvi não é banco. A aplicação não promete aprovação, taxa, limite,
+prazo, contemplação ou disponibilidade comercial. Essas condições dependem das
+instituições responsáveis e do atendimento aplicável.
 
 ## Desenvolvimento
+
+Requisitos: Node.js 24 e pnpm 11.
 
 ```bash
 corepack enable
@@ -23,16 +28,22 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Acesse `http://localhost:3000`.
-
-## Validação
+Validação completa:
 
 ```bash
 pnpm check
 pnpm test:e2e
 ```
 
-`pnpm check` executa format, lint, typecheck, testes unitários, Brand check e build. O Playwright é executado separadamente por `pnpm test:e2e`.
+## Configuração
 
-Consulte o [índice da documentação](docs/README.md).
-O [provisioning Atrium da Cred Marvi](docs/atrium-provisioning.md) permanece não executado até a Etapa 13B2B.
+- `SITE_URL`: URL pública confirmada, usada em metadata, robots e sitemap.
+- `NEXT_PUBLIC_WHATSAPP_NUMBER`: canal público opcional; sem a variável, o
+  fallback oficial centralizado é utilizado.
+- `NEXT_PUBLIC_CONTACT_EMAIL`: e-mail público opcional.
+
+Não há variáveis Atrium, acesso a Supabase, service role, backend, CRM,
+analytics ou formulário de lead nesta versão.
+
+Consulte [docs/README.md](docs/README.md) e
+[docs/SDD-CRED-MARVI-V2.md](docs/SDD-CRED-MARVI-V2.md).

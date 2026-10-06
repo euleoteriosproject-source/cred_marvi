@@ -1,32 +1,22 @@
 export const faqItems = [
   {
-    question: "Quais soluções são atendidas?",
+    question: "Preciso saber qual produto quero?",
     answer:
-      "A Cred Marvi apresenta alternativas para pessoas e empresas, incluindo crédito, financiamentos, produtos consignados, capital de giro e consórcios. A disponibilidade depende da análise e das instituições responsáveis.",
+      "Não. Você pode explorar as soluções ou iniciar uma conversa para entender as alternativas sem escolher um produto antes.",
   },
   {
-    question: "A análise garante aprovação?",
+    question: "Preciso preencher um cadastro?",
     answer:
-      "Não. Aprovação, limites, taxas, prazos e demais condições dependem da análise e dos critérios das instituições responsáveis.",
-  },
-  {
-    question: "Preciso enviar documentos pelo site?",
-    answer:
-      "Não nesta versão. Nunca envie senhas, códigos de autenticação, dados completos de cartão ou documentos por canais não confirmados.",
-  },
-  {
-    question: "Como funciona o Assistente Marvi?",
-    answer:
-      "O Assistente Marvi conduz uma jornada inicial guiada pelo Atrium. O Atrium apresenta as perguntas e controla o andamento; o site não decide aprovação, taxa ou resultado.",
-  },
-  {
-    question: "Posso falar com uma especialista?",
-    answer:
-      "Sim. Quando o canal estiver configurado, você poderá iniciar uma conversa humana por WhatsApp. A página de contato sempre apresenta apenas os canais oficiais disponíveis.",
+      "Não. O site não exige cadastro nem formulário para abrir o WhatsApp. A mensagem só é enviada quando você confirma no próprio aplicativo.",
   },
   {
     question: "A Cred Marvi é um banco?",
     answer:
-      "Não. A Cred Marvi oferece atendimento consultivo e intermedia soluções disponibilizadas por instituições responsáveis, conforme cada caso.",
+      "Não. A Cred Marvi oferece orientação e intermediação consultiva; condições e decisões cabem às instituições responsáveis.",
+  },
+  {
+    question: "As condições são iguais para todos?",
+    answer:
+      "Não. Disponibilidade, aprovação, taxas, limites e prazos variam conforme a modalidade, a instituição responsável e a análise aplicável.",
   },
 ] as const;

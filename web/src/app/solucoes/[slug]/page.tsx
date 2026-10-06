@@ -1,6 +1,7 @@
-import { Check } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { WhatsAppLink } from "@/components/contact/whatsapp-link";
 import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -18,7 +19,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const solution = solutionBySlug((await params).slug);
   return solution
-    ? { title: solution.name, description: solution.description }
+    ? {
+        title: solution.name,
+        description: solution.description,
+        alternates: { canonical: `/solucoes/${solution.slug}` },
+      }
     : {
         title: "Solução não encontrada",
         robots: { index: false, follow: false },
@@ -32,47 +37,88 @@ export default async function SolutionPage({
 }) {
   const solution = solutionBySlug((await params).slug);
   if (!solution) notFound();
+
+  const contactContext = { subject: solution.shortName };
+
   return (
     <PageShell>
       <main id="conteudo">
-        <PageHero eyebrow="Solução financeira" title={solution.name}>
+        <PageHero eyebrow="Serviço" title={solution.name}>
           <p>{solution.description}</p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <WhatsAppLink context={contactContext} variant="primary">
+              Falar sobre {solution.name}
+            </WhatsAppLink>
+            <ButtonLink href="#como-funciona" variant="inverse">
+              Entender como funciona
+            </ButtonLink>
+          </div>
         </PageHero>
+
         <Container className="max-w-[var(--cm-container-content)] py-[var(--cm-space-section)]">
-          <section>
+          <div
+            id="como-funciona"
+            className="grid scroll-mt-24 gap-5 md:grid-cols-3"
+          >
+            {[
+              ["O que é", solution.introduction],
+              ["Quando pode fazer sentido", solution.useCase],
+              ["O que esclarecer na conversa", solution.conversation],
+            ].map(([title, text]) => (
+              <section
+                key={title}
+                className="rounded-card border border-border bg-surface p-6 shadow-card"
+              >
+                <h2 className="font-serif text-2xl font-semibold">{title}</h2>
+                <p className="mt-4 leading-7 text-muted">{text}</p>
+              </section>
+            ))}
+          </div>
+
+          {solution.faq?.length ? (
+            <section className="mt-12">
+              <h2 className="font-serif text-3xl font-semibold">
+                Dúvidas sobre {solution.name}
+              </h2>
+              <div className="mt-6 divide-y divide-border rounded-card border border-border px-5 sm:px-8">
+                {solution.faq.map((item) => (
+                  <details key={item.question} className="group py-5">
+                    <summary className="flex min-h-[var(--cm-target-min)] cursor-pointer list-none items-center justify-between gap-4 font-bold">
+                      {item.question}
+                      <ChevronDown
+                        className="shrink-0 transition group-open:rotate-180 motion-reduce:transform-none"
+                        aria-hidden="true"
+                      />
+                    </summary>
+                    <p className="mt-3 leading-7 text-muted">{item.answer}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          <section className="mt-12 rounded-feature bg-surface-inverse p-7 text-inverse sm:p-10">
             <h2 className="font-serif text-3xl font-semibold">
-              Entenda esta alternativa
+              Quer conversar sobre {solution.name.toLowerCase()}?
             </h2>
-            <p className="mt-4 leading-7 text-muted">{solution.introduction}</p>
+            <p className="mt-4 max-w-2xl leading-7 text-inverse-muted">
+              Abra uma mensagem contextualizada, revise o texto e envie apenas
+              quando quiser.
+            </p>
+            <WhatsAppLink
+              context={contactContext}
+              variant="primary"
+              className="mt-7"
+            >
+              Falar com a Marlise
+            </WhatsAppLink>
           </section>
-          <section className="mt-10 rounded-card border border-border bg-surface-subtle p-6 sm:p-8">
-            <h2 className="font-serif text-2xl font-semibold">
-              Pontos para considerar
-            </h2>
-            <ul className="mt-5 grid gap-4">
-              {solution.considerations?.map((item) => (
-                <li key={item} className="flex gap-3 leading-7">
-                  <Check
-                    className="mt-1 shrink-0 text-accent-text"
-                    size={18}
-                    aria-hidden="true"
-                  />{" "}
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </section>
+
           <p className="mt-8 text-sm leading-6 text-muted">
             Este conteúdo é informativo e não constitui proposta, contratação ou
             garantia de aprovação. Condições dependem da instituição
             responsável.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/analise">Iniciar análise</ButtonLink>
-            <ButtonLink href="/contato" variant="secondary">
-              Falar com a Cred Marvi
-            </ButtonLink>
-          </div>
         </Container>
       </main>
     </PageShell>

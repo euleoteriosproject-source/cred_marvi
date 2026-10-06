@@ -1,14 +1,14 @@
 import { Handshake, ShieldCheck, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
+import { WhatsAppLink } from "@/components/contact/whatsapp-link";
 import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
-import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 
 export const metadata: Metadata = {
   title: "Sobre",
   description:
-    "Conheça a forma consultiva e humana de atendimento da Cred Marvi.",
+    "Conheça a forma consultiva de atendimento de Marlise Euleoterio na Cred Marvi.",
 };
 
 const principles = [
@@ -20,12 +20,12 @@ const principles = [
   [
     Sparkles,
     "Clareza",
-    "Traduzir alternativas financeiras em uma conversa simples e responsável.",
+    "Apresentar possibilidades em uma conversa simples e responsável.",
   ],
   [
     ShieldCheck,
-    "Confiança",
-    "Respeitar limites, privacidade e decisões informadas em toda interação.",
+    "Decisão consciente",
+    "Respeitar limites e esclarecer que condições variam em cada caso.",
   ],
 ] as const;
 
@@ -34,24 +34,23 @@ export default function AboutPage() {
     <PageShell>
       <main id="conteudo">
         <PageHero
-          eyebrow="Sobre a Cred Marvi"
-          title="Tecnologia com proximidade humana."
+          eyebrow="Marlise Euleoterio"
+          title="Atendimento próximo para organizar o seu próximo passo."
         >
           <p>
-            A Cred Marvi aproxima pessoas e empresas de soluções financeiras por
-            meio de atendimento claro, consultivo e responsável.
+            A Cred Marvi oferece orientação e intermediação consultiva para
+            pessoas e empresas, sem se apresentar como banco.
           </p>
         </PageHero>
         <Container className="py-[var(--cm-space-section)]">
           <section className="max-w-[var(--cm-container-content)]">
             <h2 className="font-serif text-3xl font-semibold">
-              Nossa forma de atender
+              Uma conversa humana e objetiva
             </h2>
             <p className="mt-5 leading-7 text-muted">
-              Uma boa orientação começa pela compreensão do contexto. A
-              experiência digital ajuda a organizar o caminho, enquanto o
-              atendimento humano oferece espaço para conversar com cuidado e
-              clareza.
+              Com Marlise Euleoterio, você esclarece dúvidas, entende
+              possibilidades e organiza os próximos passos. O atendimento parte
+              do seu objetivo e não promete aprovação ou condição antecipada.
             </p>
           </section>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
@@ -68,9 +67,9 @@ export default function AboutPage() {
               </article>
             ))}
           </div>
-          <ButtonLink href="/contato" className="mt-10">
-            Falar com a Cred Marvi
-          </ButtonLink>
+          <WhatsAppLink variant="whatsapp" className="mt-10">
+            Falar com a Marlise
+          </WhatsAppLink>
         </Container>
       </main>
     </PageShell>

@@ -4,7 +4,7 @@ import { LegalPage } from "@/components/layout/legal-page";
 export const metadata: Metadata = {
   title: "Política de Privacidade",
   description:
-    "Entenda como esta versão do site Cred Marvi trata dados e configurações.",
+    "Entenda como a versão atual do site Cred Marvi trata dados e canais de contato.",
 };
 
 export default function PrivacyPage() {
@@ -12,64 +12,56 @@ export default function PrivacyPage() {
     <LegalPage
       eyebrow="Privacidade"
       title="Política de Privacidade"
-      intro="Este texto descreve o comportamento real da versão atual do site e requer revisão jurídica antes da publicação em produção."
+      intro="Este texto descreve o comportamento atual do site e deve passar por revisão jurídica antes de publicação definitiva."
     >
       <section>
         <h2>1. Escopo desta versão</h2>
         <p>
-          O site apresenta conteúdo institucional, soluções financeiras e canais
-          de contato. Na página de análise, o Assistente Marvi usa o Atrium para
-          conduzir uma jornada inicial estruturada.
+          O site apresenta conteúdo institucional, catálogo de serviços e links
+          para canais oficiais. Não existe cadastro, formulário de retorno,
+          protocolo, upload de documentos ou análise financeira no site.
         </p>
       </section>
       <section>
-        <h2>2. Dados informados na análise</h2>
+        <h2>2. Orientação opcional</h2>
         <p>
-          A jornada solicita classificação como Pessoa Física ou Empresa,
-          necessidade, nome preferido, WhatsApp e consentimento. Não há upload
-          de documentos, formulário de contato ou cadastro independente nesta
-          versão. O tratamento dessas informações e deste texto exige revisão
-          jurídica antes da produção.
+          A página de orientação permite escolher, de forma opcional, um
+          produto, objetivo, perfil genérico ou categoria. Essas escolhas ficam
+          apenas na tela atual e servem para montar uma mensagem curta de
+          WhatsApp. Não há campo de texto livre nem persistência dessas
+          escolhas.
         </p>
       </section>
       <section>
-        <h2>3. WhatsApp</h2>
+        <h2>3. WhatsApp e e-mail</h2>
         <p>
-          Quando configurado, o link abre uma mensagem fixa. O site não
-          acrescenta nome, documento, renda, solução escolhida, URL atual ou
-          respostas à mensagem. O envio e o tratamento posterior seguem também
-          as condições do WhatsApp.
+          O link de WhatsApp pode incluir somente o assunto, categoria e perfil
+          genérico escolhidos. A mensagem é aberta para revisão e só é enviada
+          quando o visitante confirma no próprio WhatsApp. O tratamento
+          posterior segue também as condições do canal utilizado.
         </p>
       </section>
       <section>
         <h2>4. Cookies e métricas</h2>
         <p>
-          Não há analytics, pixel de marketing ou mecanismo próprio de
-          publicidade nesta versão.
+          A inspeção desta versão não identificou analytics, pixel de marketing
+          ou mecanismo próprio de publicidade. Recursos técnicos do navegador e
+          da infraestrutura de hospedagem podem ter políticas próprias.
         </p>
       </section>
       <section>
         <h2>5. Segurança</h2>
         <p>
           Nunca envie senhas, códigos de autenticação, tokens, biometria ou
-          dados completos de cartão. Confirme o canal oficial antes de
-          compartilhar informações.
+          dados completos de cartão pelo site. Confirme o canal oficial antes de
+          compartilhar informações durante um atendimento.
         </p>
       </section>
       <section>
-        <h2>6. Integração Atrium</h2>
+        <h2>6. Contato</h2>
         <p>
-          O Atrium conduz a jornada de análise e mantém o estado da conversa. A
-          Web não decide a próxima pergunta e não armazena respostas em URL,
-          Local Storage ou Session Storage. Finalidades, bases legais, retenção
-          e agentes envolvidos precisam de validação jurídica antes da produção.
-        </p>
-      </section>
-      <section>
-        <h2>7. Contato</h2>
-        <p>
-          Os canais disponíveis são apresentados na página de contato. Nenhum
-          canal não configurado é presumido por este site.
+          Os canais oficiais disponíveis são apresentados na página de contato.
+          Não há envio automático de solicitação ou mensagem pelo site.
         </p>
       </section>
     </LegalPage>

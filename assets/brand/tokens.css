@@ -3,21 +3,21 @@
   color-scheme: light;
 
   /* Colors */
-  --cm-color-background: #ffffff;
+  --cm-color-background: #f5f2ea;
   --cm-color-surface: #ffffff;
-  --cm-color-surface-subtle: #fbfaf6;
-  --cm-color-surface-soft: #f7f2e8;
+  --cm-color-surface-subtle: #f5f2ea;
+  --cm-color-surface-soft: #efece4;
   --cm-color-surface-inverse: #1c1c1e;
   --cm-color-surface-inverse-alt: #242426;
-  --cm-color-text: #151515;
-  --cm-color-text-muted: #68645f;
+  --cm-color-text: #171719;
+  --cm-color-text-muted: #38383b;
   --cm-color-text-inverse: #ffffff;
   --cm-color-text-inverse-muted: #cbd5e1;
   --cm-color-accent: #d2a34d;
   --cm-color-accent-hover: #e4c56d;
   --cm-color-accent-foreground: #1c1c1e;
   --cm-color-accent-text: #7c5d0d;
-  --cm-color-border: #e5ddce;
+  --cm-color-border: #dad1bf;
   --cm-color-border-interactive: #9b9077;
   --cm-color-focus-on-light: #7c5d0d;
   --cm-color-focus-on-dark: #e4c56d;
