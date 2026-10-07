@@ -70,10 +70,12 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
     "consórcio para mim",
   );
   await expect(
-    page.getByText("Atendimento online em todo o Brasil."),
+    page
+      .getByRole("main")
+      .getByText("Atendimento online em todo o Brasil.", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText(/Capão da Canoa e no Litoral Norte/),
+    page.getByRole("main").getByText(/Capão da Canoa e no Litoral Norte/),
   ).toBeVisible();
   for (const [network, href] of [
     ["Instagram", "https://www.instagram.com/credmarvi"],
