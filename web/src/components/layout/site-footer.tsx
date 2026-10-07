@@ -15,10 +15,6 @@ export function SiteFooter() {
             <p className="mt-5 max-w-sm text-sm leading-6">
               {site.description}
             </p>
-            <p className="mt-3 max-w-sm text-xs leading-5">
-              {site.onlineServiceArea} Presencialmente em Capão da Canoa e no
-              Litoral Norte/RS.
-            </p>
           </div>
           <div>
             <h2 className="font-semibold text-foreground">Navegação</h2>

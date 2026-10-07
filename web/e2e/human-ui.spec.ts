@@ -88,6 +88,9 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
     await expect(socialLink).toHaveAttribute("href", href);
     await expect(socialLink).toHaveAttribute("target", "_blank");
   }
+  await expect(
+    page.getByRole("main").locator('[data-social-icon="instagram"]').first(),
+  ).toHaveAttribute("stroke", "currentColor");
   await page.goto("/sobre");
   await expect(
     page.getByRole("heading", {
