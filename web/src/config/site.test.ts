@@ -4,6 +4,7 @@ import {
   createPageMetadata,
   PUBLIC_WHATSAPP_FALLBACK,
   resolvePublicWhatsAppNumber,
+  resolveSiteUrl,
   site,
   socialProfiles,
 } from "./site";
@@ -25,6 +26,27 @@ describe("configuração de contato", () => {
 });
 
 describe("presença pública", () => {
+  it("usa a URL configurada ou a URL oficial da produção Netlify", () => {
+    expect(resolveSiteUrl({ SITE_URL: "https://credito.example/" })).toBe(
+      "https://credito.example",
+    );
+    expect(
+      resolveSiteUrl({
+        CONTEXT: "production",
+        URL: "https://credmarvi.netlify.app/",
+      }),
+    ).toBe("https://credmarvi.netlify.app");
+  });
+
+  it("não indexa deploys de preview ou branch automaticamente", () => {
+    expect(
+      resolveSiteUrl({
+        CONTEXT: "branch-deploy",
+        URL: "https://develop--credmarvi.netlify.app",
+      }),
+    ).toBeUndefined();
+  });
+
   it("mantém os canais sociais oficiais", () => {
     expect(socialProfiles.map(({ href }) => href)).toEqual([
       "https://www.instagram.com/credmarvi",

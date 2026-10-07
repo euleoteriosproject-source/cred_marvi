@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   description: site.description,
   applicationName: site.name,
   category: "financial services",
+  verification: site.googleSiteVerification
+    ? { google: site.googleSiteVerification }
+    : undefined,
   openGraph: {
     type: "website",
     locale: "pt_BR",

@@ -30,6 +30,18 @@ export function resolvePublicWhatsAppNumber(value?: string) {
     : PUBLIC_WHATSAPP_FALLBACK;
 }
 
+type SiteEnvironment = Readonly<Record<string, string | undefined>>;
+
+export function resolveSiteUrl(environment: SiteEnvironment = process.env) {
+  const configuredUrl = environment.SITE_URL?.trim().replace(/\/$/, "");
+  if (configuredUrl) return configuredUrl;
+
+  const netlifyProductionUrl = environment.URL?.trim().replace(/\/$/, "");
+  return environment.CONTEXT === "production" && netlifyProductionUrl
+    ? netlifyProductionUrl
+    : undefined;
+}
+
 export const site = {
   name: "Cred Marvi",
   homeTitle: "Cred Marvi | Crédito, consórcio e seguros",
@@ -40,7 +52,9 @@ export const site = {
   whatsappNumber: resolvePublicWhatsAppNumber(
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
   ),
-  siteUrl: process.env.SITE_URL?.replace(/\/$/, "") || undefined,
+  siteUrl: resolveSiteUrl(),
+  googleSiteVerification:
+    process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined,
   serviceHours: "Atendimento combinado diretamente com Marlise pelo WhatsApp.",
   onlineServiceArea: "Atendimento online em todo o Brasil.",
   inPersonServiceArea:
