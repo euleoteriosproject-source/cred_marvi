@@ -10,12 +10,14 @@ import {
   otherPossibilities,
   type Audience,
 } from "@/content/solutions";
+import { createPageMetadata } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Serviços",
   description:
     "Conheça alternativas de crédito, aquisição e proteção para pessoas, empresas e atividade rural.",
-};
+  path: "/solucoes",
+});
 
 type Filter = "ALL" | Audience;
 

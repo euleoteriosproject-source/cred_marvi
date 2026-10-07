@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/ui/container";
+import { createPageMetadata } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Segurança e privacidade",
   description:
     "Orientações para usar os canais da Cred Marvi com mais segurança.",
-};
+  path: "/seguranca-e-privacidade",
+});
 
 export default function SecurityPage() {
   const items = [
