@@ -14,12 +14,14 @@ import { WhatsAppLink } from "@/components/contact/whatsapp-link";
 import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/ui/container";
+import { createPageMetadata } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Sobre a Marlise",
   description:
     "Conheça a trajetória, a formação e as certificações de Marlise Euleoterio, responsável pelo atendimento da Cred Marvi.",
-};
+  path: "/sobre",
+});
 
 const credentials = [
   {
@@ -128,20 +130,26 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <aside className="rounded-feature border border-accent/30 bg-foreground p-7 text-white shadow-card sm:p-8">
-              <Building2 className="text-accent" aria-hidden="true" />
-              <h2 className="mt-5 font-serif text-2xl font-semibold">
+            <aside className="overflow-hidden rounded-feature border border-border bg-surface-soft p-7 shadow-card sm:p-8">
+              <span className="grid size-12 place-items-center rounded-full border border-accent/40 bg-surface text-accent-text">
+                <Building2 aria-hidden="true" />
+              </span>
+              <p className="mt-5 text-xs font-bold uppercase tracking-widest text-accent-text">
+                Trajetória em perspectiva
+              </p>
+              <h2 className="mt-2 font-serif text-2xl font-semibold">
                 Experiência em números
               </h2>
-              <div className="mt-7 divide-y divide-white/15">
+              <div className="mt-7 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
                 {experience.map(({ value, label }) => (
-                  <div key={value} className="py-5 first:pt-0 last:pb-0">
-                    <strong className="font-serif text-3xl font-semibold text-accent">
+                  <div
+                    key={value}
+                    className="rounded-card border border-border bg-surface px-5 py-4"
+                  >
+                    <strong className="font-serif text-3xl font-semibold text-accent-text">
                       {value}
                     </strong>
-                    <p className="mt-1 text-sm leading-6 text-white/75">
-                      {label}
-                    </p>
+                    <p className="mt-1 text-sm leading-6 text-muted">{label}</p>
                   </div>
                 ))}
               </div>

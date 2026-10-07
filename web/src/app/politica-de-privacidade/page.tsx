@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/layout/legal-page";
+import { createPageMetadata } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Política de Privacidade",
   description:
     "Entenda como a versão atual do site Cred Marvi trata dados e canais de contato.",
-};
+  path: "/politica-de-privacidade",
+});
 
 export default function PrivacyPage() {
   return (

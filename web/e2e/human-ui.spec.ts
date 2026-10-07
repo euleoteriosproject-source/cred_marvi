@@ -69,6 +69,23 @@ test("foto real, seguros distintos e contato humano permanecem acessíveis", asy
   expect(decodeURIComponent((await contact.getAttribute("href"))!)).toContain(
     "consórcio para mim",
   );
+  await expect(
+    page.getByText("Atendimento online em todo o Brasil."),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/Capão da Canoa e no Litoral Norte/),
+  ).toBeVisible();
+  for (const [network, href] of [
+    ["Instagram", "https://www.instagram.com/credmarvi"],
+    ["Facebook", "https://pt-br.facebook.com/Credmarvi/"],
+    ["TikTok", "https://www.tiktok.com/@credmarvi"],
+  ]) {
+    const socialLink = page
+      .getByRole("main")
+      .getByRole("link", { name: new RegExp(`${network} da Cred Marvi`) });
+    await expect(socialLink).toHaveAttribute("href", href);
+    await expect(socialLink).toHaveAttribute("target", "_blank");
+  }
   await page.goto("/sobre");
   await expect(
     page.getByRole("heading", {

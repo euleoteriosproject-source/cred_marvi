@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Brand } from "@/components/brand/brand";
+import { SocialLinks } from "@/components/contact/social-links";
 import { WhatsAppLink } from "@/components/contact/whatsapp-link";
 import { Container } from "@/components/ui/container";
 import { site } from "@/config/site";
@@ -8,11 +9,15 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-surface py-10 text-muted">
       <Container>
-        <div className="grid gap-10 md:grid-cols-3">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.25fr_.75fr_1fr_.75fr]">
           <div>
             <Brand />
             <p className="mt-5 max-w-sm text-sm leading-6">
               {site.description}
+            </p>
+            <p className="mt-3 max-w-sm text-xs leading-5">
+              {site.onlineServiceArea} Presencialmente em Capão da Canoa e no
+              Litoral Norte/RS.
             </p>
           </div>
           <div>
@@ -70,6 +75,15 @@ export function SiteFooter() {
               >
                 Termos
               </Link>
+            </div>
+          </div>
+          <div>
+            <h2 className="font-semibold text-foreground">Acompanhe</h2>
+            <p className="mt-4 text-sm leading-6">
+              Conteúdo e novidades nos perfis oficiais.
+            </p>
+            <div className="mt-4">
+              <SocialLinks variant="compact" />
             </div>
           </div>
         </div>

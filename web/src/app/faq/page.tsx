@@ -4,11 +4,13 @@ import { PageHero } from "@/components/layout/page-hero";
 import { PageShell } from "@/components/layout/page-shell";
 import { Container } from "@/components/ui/container";
 import { faqItems } from "@/content/faq";
+import { createPageMetadata } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Dúvidas frequentes",
   description: "Respostas claras sobre a Cred Marvi, análise e atendimento.",
-};
+  path: "/faq",
+});
 
 export default function FaqPage() {
   return (
