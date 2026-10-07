@@ -4,7 +4,15 @@ import { socialProfiles } from "@/config/site";
 function SocialIcon({ id }: { id: (typeof socialProfiles)[number]["id"] }) {
   if (id === "instagram") {
     return (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        data-social-icon="instagram"
+      >
         <rect x="3" y="3" width="18" height="18" rx="5" />
         <circle cx="12" cy="12" r="4" />
         <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
