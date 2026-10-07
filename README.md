@@ -37,7 +37,11 @@ pnpm test:e2e
 
 ## Configuração
 
-- `SITE_URL`: URL pública confirmada, usada em metadata, robots e sitemap.
+- `SITE_URL`: override opcional da URL pública usada em metadata, robots e
+  sitemap; na produção Netlify, `URL` e `CONTEXT` são detectadas
+  automaticamente.
+- `GOOGLE_SITE_VERIFICATION`: conteúdo da metatag fornecida pelo Google Search
+  Console para verificar uma propriedade de prefixo de URL.
 - `NEXT_PUBLIC_WHATSAPP_NUMBER`: canal público opcional; sem a variável, o
   fallback oficial centralizado é utilizado.
 - `NEXT_PUBLIC_CONTACT_EMAIL`: e-mail público opcional.
