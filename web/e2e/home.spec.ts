@@ -29,7 +29,9 @@ test("home apresenta a vitrine, WhatsApp direto e acessibilidade", async ({
   await expect(
     page.getByRole("heading", { name: "Consórcio", exact: true }).first(),
   ).toBeVisible();
-  await expect(page.getByText("Online em todo o Brasil")).toBeVisible();
+  await expect(
+    page.getByText("Online em todo o Brasil", { exact: true }),
+  ).toBeVisible();
 
   const contact = page
     .getByRole("link", { name: /falar com a marlise.*whatsapp/i })
