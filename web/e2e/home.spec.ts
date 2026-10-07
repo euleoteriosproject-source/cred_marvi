@@ -10,7 +10,7 @@ test("home apresenta a vitrine, WhatsApp direto e acessibilidade", async ({
   });
   await page.goto("/");
 
-  await expect(page).toHaveTitle("Cred Marvi");
+  await expect(page).toHaveTitle("Cred Marvi | Crédito, consórcio e seguros");
   const favicon = page.locator('link[rel="icon"][href*="/icon"]').first();
   await expect(favicon).toHaveAttribute("href", /\/icon(?:\.png)?\?/);
   const faviconHref = await favicon.getAttribute("href");
@@ -28,6 +28,9 @@ test("home apresenta a vitrine, WhatsApp direto e acessibilidade", async ({
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Consórcio", exact: true }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Online em todo o Brasil", { exact: true }),
   ).toBeVisible();
 
   const contact = page

@@ -3,6 +3,7 @@ import {
   ArrowUpRight,
   Check,
   ChevronDown,
+  Globe2,
   MessageCircle,
   ShieldCheck,
 } from "lucide-react";
@@ -83,6 +84,9 @@ export function Hero() {
           <span className="flex items-center gap-2">
             <MessageCircle size={16} aria-hidden="true" /> Atendimento com a
             Marlise
+          </span>
+          <span className="flex items-center gap-2">
+            <Globe2 size={16} aria-hidden="true" /> Online em todo o Brasil
           </span>
           <span className="flex items-center gap-2">
             <Check size={16} aria-hidden="true" /> Para pessoas e empresas

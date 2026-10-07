@@ -10,6 +10,7 @@ import { PageShell } from "@/components/layout/page-shell";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 import { detailedSolutions, solutionBySlug } from "@/content/solutions";
+import { createPageMetadata } from "@/config/site";
 
 export function generateStaticParams() {
   return detailedSolutions.map((solution) => ({ slug: solution.slug }));
@@ -22,11 +23,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const solution = solutionBySlug((await params).slug);
   return solution
-    ? {
+    ? createPageMetadata({
         title: solution.name,
         description: solution.description,
-        alternates: { canonical: `/solucoes/${solution.slug}` },
-      }
+        path: `/solucoes/${solution.slug}`,
+      })
     : {
         title: "Solução não encontrada",
         robots: { index: false, follow: false },

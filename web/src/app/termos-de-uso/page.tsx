@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/layout/legal-page";
+import { createPageMetadata } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Termos de Uso",
   description: "Condições para uso do site institucional da Cred Marvi.",
-};
+  path: "/termos-de-uso",
+});
 
 export default function TermsPage() {
   return (
